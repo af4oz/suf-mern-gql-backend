@@ -19,3 +19,11 @@ export const getErrorMsg = (err) => {
     return err?.message;
   }
 };
+
+export const trapSpaceKey = (e,func) => {
+  console.log('clicked but space');
+  if (e.which === 32){
+    console.log('clicked');
+    func();
+  }
+}

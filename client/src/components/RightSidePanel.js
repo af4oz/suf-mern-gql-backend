@@ -1,70 +1,62 @@
 import { useQuery } from '@apollo/client';
 import { GET_ALL_TAGS } from '../graphql/queries';
-import { Link as RouterLink } from 'react-router-dom';
 import LoadingSpinner from './LoadingSpinner';
 import { useStateContext } from '../context/state';
 import { getErrorMsg } from '../utils/helperFuncs';
+import { useMediaQuery } from 'react-responsive';
+import tw from 'twin.macro';
+import Tag, { Tags } from './Tag';
 
-import { Typography, Chip, useMediaQuery, Grid } from '@material-ui/core';
-import { useTheme } from '@material-ui/core/styles';
-import { useRightSidePanelStyles } from '../styles/muiStyles';
+const Grid = tw.div`m-0 w-1/3 mt-4 rounded-sm hidden md:block`;
+
+const Heading = tw.h3`text-purple-600 text-center`;
 
 const RightSidePanel = () => {
-  const classes = useRightSidePanelStyles();
-  const { notify } = useStateContext();
-  const theme = useTheme();
-  const isNotDesktop = useMediaQuery(theme.breakpoints.down('sm'));
-  const { data, loading } = useQuery(GET_ALL_TAGS, {
-    onError: (err) => {
-      notify(getErrorMsg(err), 'error');
-    },
-  });
+	const { notify } = useStateContext();
+	const { data, loading } = useQuery(GET_ALL_TAGS, {
+		onError: (err) => {
+			notify(getErrorMsg(err), 'error');
+		}
+	});
+	if (
+		!useMediaQuery({
+			query: '(min-device-width: 1024px)'
+		})
+	) {
+		return null;
+	}
 
-  if (isNotDesktop) return null;
-
-  return (
-    <Grid item>
-      <div className={classes.rootPanel}>
-        <div className={classes.content}>
-          <div className={classes.tagsColumn}>
-            <Typography variant="h6" color="secondary">
-              Top Tags
-            </Typography>
-            {!loading && data ? (
-              <div className={classes.tagsWrapper}>
-                {data.getAllTags.slice(0, 26).map((t) => (
-                  <div key={t.tagName}>
-                    <Chip
-                      label={
-                        t.tagName.length > 13
-                          ? t.tagName.slice(0, 13) + '...'
-                          : t.tagName
-                      }
-                      variant="outlined"
-                      color="primary"
-                      size="small"
-                      component={RouterLink}
-                      to={`/tags/${t.tagName}`}
-                      className={classes.tag}
-                      clickable
-                    />
-                    <Typography
-                      color="secondary"
-                      variant="caption"
-                    >{` × ${t.count}`}</Typography>
-                  </div>
-                ))}
-              </div>
-            ) : (
-              <div style={{ minWidth: '200px' }}>
-                <LoadingSpinner size={40} />
-              </div>
-            )}
-          </div>
-        </div>
-      </div>
-    </Grid>
-  );
+	return (
+		<Grid>
+			<div tw="h-1/3 p-2 bg-purple-200 rounded-sm border-purple-600">
+				<Heading>Top Tags</Heading>
+				{!loading && data ? (
+					<Tags col>
+						{data.getAllTags
+							.slice(0, 26)
+							.map((t) => (
+								<Tag
+									label={
+										t.tagName.length > 13 ? (
+											t.tagName.slice(0, 13) + '...'
+										) : (
+											t.tagName
+										)
+									}
+									key={t.tagName}
+									to={`/tags/${t.tagName}`}
+									count={t.count}
+								/>
+							))}
+					</Tags>
+				) : (
+					<div style={{ minWidth: '200px' }}>
+						<LoadingSpinner size={40} />
+					</div>
+				)}
+			</div>
+		</Grid>
+	);
 };
 
 export default RightSidePanel;
