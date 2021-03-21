@@ -1,8 +1,14 @@
 import tw from 'twin.macro';
 
-export const Button = tw.button`outline-none bg-purple-600 text-white`;
-
 export const SvgIcon = tw.svg`fill-current width[1em] height[1em] inline-block transition-colors flex-shrink-0 user-select[none]`;
+
+export const LightButton = (props) => (
+	<button
+		tw="cursor-pointer text-gray-600 bg-transparent border-0 rounded-sm text-xs"
+		tabIndex={0}
+		{...props}
+	/>
+);
 
 export const Checkbox = ({
 	checkedIcon,

@@ -7,14 +7,10 @@ import CommentSection from './CommentSection';
 import AcceptAnswerButton from './AcceptAnswerButton';
 import DeleteDialog from './DeleteDialog';
 import AuthFormModal from './AuthFormModal';
-import { ReactComponent as AcceptedIcon } from '../svg/accepted.svg';
 
-import { SvgIcon, TextField } from '@material-ui/core';
-import { useQuesPageStyles } from '../styles/muiStyles';
 import Tag, { Tags } from './Tag';
 import tw from 'twin.macro';
-
-const Button = tw.button`outline-none cursor-pointer text-gray-600 bg-transparent border-0 rounded-sm text-xs`;
+import { LightButton } from './CompStore';
 
 const QuesAnsDetails = ({
 	quesAns,
@@ -43,7 +39,6 @@ const QuesAnsDetails = ({
 		updatedAt
 	} = quesAns;
 
-	const classes = useQuesPageStyles();
 	const { user } = useAuthContext();
 	const [ editAnsOpen, setEditAnsOpen ] = useState(false);
 	const [ editedAnswerBody, setEditedAnswerBody ] = useState(body);
@@ -55,7 +50,7 @@ const QuesAnsDetails = ({
 			}
 			// eslint-disable-next-line react-hooks/exhaustive-deps
 		},
-		[ body ]
+		[ body, isAnswer ]
 	);
 
 	const openEditInput = () => {
@@ -73,8 +68,8 @@ const QuesAnsDetails = ({
 	};
 
 	return (
-		<div className={classes.quesAnsWrapper}>
-			<div className={classes.voteColumn}>
+		<div tw="flex flex-row flex-nowrap w-full">
+			<div tw="flex flex-col items-center">
 				{user ? (
 					<UpvoteButton
 						checked={user ? upvotedBy.includes(user.id) : false}
@@ -102,54 +97,22 @@ const QuesAnsDetails = ({
 						handleAcceptAns={acceptAnswer}
 					/>
 				)}
-				{isAnswer &&
-				acceptedAnswer === id &&
-				(!user || user.id !== quesAuthor.id) && (
-					<SvgIcon className={classes.checkedAcceptIcon}>
-						<AcceptedIcon />
-					</SvgIcon>
-				)}
 			</div>
-			<div className={classes.quesBody}>
+			<div tw="px-3 pt-2 w-full">
 				{!editAnsOpen ? (
 					<p tw="m-0 pb-1 text-sm">{body}</p>
 				) : (
-					<form
-						className={classes.smallForm}
-						onSubmit={handleAnswerEdit}
-					>
-						<TextField
+					<form tw="w-full">
+						<textarea
+							tw="w-full border-gray-400 p-1 resize-none rounded-sm font-family[inherit] text-sm"
 							value={editedAnswerBody}
 							required
-							fullWidth
 							onChange={(e) =>
 								setEditedAnswerBody(e.target.value)}
 							type="text"
 							placeholder="Enter at least 30 characters"
-							variant="outlined"
-							size="small"
-							multiline
 							rows={4}
 						/>
-						<div className={classes.submitCancelBtns}>
-							<Button
-								type="submit"
-								size="small"
-								variant="contained"
-								color="primary"
-								style={{ marginRight: 9 }}
-							>
-								Update Answer
-							</Button>
-							<Button
-								size="small"
-								variant="outlined"
-								color="primary"
-								onClick={() => setEditAnsOpen(false)}
-							>
-								Cancel
-							</Button>
-						</div>
 					</form>
 				)}
 				{tags && (
@@ -164,19 +127,19 @@ const QuesAnsDetails = ({
 						))}
 					</Tags>
 				)}
-				<div className={classes.bottomWrapper}>
-					{!editAnsOpen && (
-						<div className={classes.btnsWrapper}>
+				<div tw="flex flex-row flex-wrap justify-between my-5">
+					{!editAnsOpen ? (
+						<div tw="inline-block">
 							{user &&
 							user.id === author.id && (
-								<Button
-									style={{ marginRight: 6 }}
+								<LightButton
+									tw="m-1 p-0"
 									onClick={
 										isAnswer ? openEditInput : editQuesAns
 									}
 								>
 									Edit
-								</Button>
+								</LightButton>
 							)}
 							{user &&
 							(user.id === author.id ||
@@ -186,6 +149,18 @@ const QuesAnsDetails = ({
 									handleDelete={deleteQuesAns}
 								/>
 							)}
+						</div>
+					) : (
+						<div tw="">
+							<LightButton
+								style={{ marginRight: 9 }}
+								onClick={handleAnswerEdit}
+							>
+								Update Answer
+							</LightButton>
+							<LightButton onClick={() => setEditAnsOpen(false)}>
+								Cancel
+							</LightButton>
 						</div>
 					)}
 					<PostedByUser

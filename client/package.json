@@ -53,6 +53,7 @@
     ]
   },
   "devDependencies": {
+    "@emotion/react": "^11.1.5",
     "postcss": "^8.2.8"
   }
 }

@@ -10,14 +10,13 @@ import UserPage from './UserPage';
 import NotFoundPage from './NotFoundPage';
 import { useAuthContext } from '../context/auth';
 
-import { Container, Grid } from '@material-ui/core';
+import tw from 'twin.macro';
 
 const Routes = () => {
   const { user } = useAuthContext();
 
   return (
-    <Container disableGutters>
-      <Grid container direction="row" wrap="nowrap" justify="space-between">
+    <div tw="max-width[1264px] w-full m-auto flex flex-row flex-nowrap relative">
         <Switch>
           <Route exact path="/">
             <NavMenuDesktop />
@@ -67,8 +66,7 @@ const Routes = () => {
             <RightSidePanel />
           </Route>
         </Switch>
-      </Grid>
-    </Container>
+    </div>
   );
 };
 

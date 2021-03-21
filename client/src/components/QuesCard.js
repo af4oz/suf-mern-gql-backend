@@ -40,7 +40,10 @@ const QuesCard = ({ question }) => {
 			</StatsContainer>
 			<QuestionContainer>
 				<Question>
-					<Link tw="no-underline" to={`/questions/${id}`}>
+					<Link
+						tw="no-underline text-blue-600 font-normal"
+						to={`/questions/${id}`}
+					>
 						{title}
 					</Link>
 				</Question>

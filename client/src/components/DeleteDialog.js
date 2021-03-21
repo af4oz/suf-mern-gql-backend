@@ -8,12 +8,10 @@ import {
 } from '@material-ui/core';
 import { useQuesPageStyles } from '../styles/muiStyles';
 import tw from 'twin.macro';
-
-const Button = tw.button`outline-none cursor-pointer text-gray-600 bg-transparent border-0 rounded-sm text-xs`;
+import { LightButton } from './CompStore';
 
 const DeleteDialog = ({ handleDelete, bodyType }) => {
 	const [ modalOpen, setModalOpen ] = useState(false);
-	const classes = useQuesPageStyles();
 
 	const handleModalOpen = () => {
 		setModalOpen(true);
@@ -30,26 +28,7 @@ const DeleteDialog = ({ handleDelete, bodyType }) => {
 
 	return (
 		<div style={{ display: 'inline' }}>
-			{bodyType === 'comment' ? (
-				<Button
-					size="small"
-					color="primary"
-					className={classes.commentBtns}
-					onClick={handleModalOpen}
-				>
-					delete
-				</Button>
-			) : (
-				<Button
-					size="small"
-					color="primary"
-					variant="contained"
-					className={classes.bottomBtns}
-					onClick={handleModalOpen}
-				>
-					Delete
-				</Button>
-			)}
+			<LightButton onClick={handleModalOpen}>Delete</LightButton>
 			<Dialog open={modalOpen} onClose={handleModalClose}>
 				<DialogTitle>Confirm Delete</DialogTitle>
 				<DialogContent>
@@ -60,16 +39,10 @@ const DeleteDialog = ({ handleDelete, bodyType }) => {
 					</DialogContentText>
 				</DialogContent>
 				<DialogActions>
-					<Button
-						autoFocus
-						onClick={handleModalClose}
-						color="primary"
-					>
-						Cancel
-					</Button>
-					<Button onClick={handleDeleteClick} color="primary">
+					<LightButton onClick={handleModalClose}>Cancel</LightButton>
+					<LightButton onClick={handleDeleteClick} color="primary">
 						Delete
-					</Button>
+					</LightButton>
 				</DialogActions>
 			</Dialog>
 		</div>
