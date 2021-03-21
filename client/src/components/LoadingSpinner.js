@@ -1,4 +1,4 @@
-import CircularProgress from '@material-ui/core/CircularProgress';
+import CircularProgress from '@material-ui/core/CircularProgress'
 
 const LoadingSpinner = ({ size, marginTop }) => {
   return (
@@ -11,7 +11,7 @@ const LoadingSpinner = ({ size, marginTop }) => {
     >
       <CircularProgress disableShrink size={size || 40} />
     </div>
-  );
-};
+  )
+}
 
-export default LoadingSpinner;
+export default LoadingSpinner

@@ -1,10 +1,10 @@
-import { useState } from 'react';
-import { useQuery } from '@apollo/client';
-import { GET_ALL_USERS } from '../graphql/queries';
-import { Link as RouterLink } from 'react-router-dom';
-import LoadingSpinner from '../components/LoadingSpinner';
-import { useStateContext } from '../context/state';
-import { formatDateAgo, getErrorMsg } from '../utils/helperFuncs';
+import { useState } from 'react'
+import { useQuery } from '@apollo/client'
+import { GET_ALL_USERS } from '../graphql/queries'
+import { Link as RouterLink } from 'react-router-dom'
+import LoadingSpinner from '../components/LoadingSpinner'
+import { useStateContext } from '../context/state'
+import { formatDateAgo, getErrorMsg } from '../utils/helperFuncs'
 
 import {
   Typography,
@@ -12,20 +12,20 @@ import {
   InputAdornment,
   Avatar,
   Link,
-} from '@material-ui/core';
-import { useUsersPageStyles } from '../styles/muiStyles';
-import SearchIcon from '@material-ui/icons/Search';
+} from '@material-ui/core'
+import { useUsersPageStyles } from '../styles/muiStyles'
+import SearchIcon from '@material-ui/icons/Search'
 
 const AllUsersPage = () => {
-  const { notify } = useStateContext();
+  const { notify } = useStateContext()
   const { data, loading } = useQuery(GET_ALL_USERS, {
-    onError: (err) => {
-      notify(getErrorMsg(err), 'error');
+    onError: err => {
+      notify(getErrorMsg(err), 'error')
     },
-  });
+  })
 
-  const [filterInput, setFilterInput] = useState('');
-  const classes = useUsersPageStyles();
+  const [filterInput, setFilterInput] = useState('')
+  const classes = useUsersPageStyles()
 
   return (
     <div className={classes.root}>
@@ -36,7 +36,7 @@ const AllUsersPage = () => {
         className={classes.filterInput}
         value={filterInput}
         placeholder="Filter by username"
-        onChange={(e) => setFilterInput(e.target.value)}
+        onChange={e => setFilterInput(e.target.value)}
         variant="outlined"
         size="small"
         InputProps={{
@@ -50,10 +50,10 @@ const AllUsersPage = () => {
       {!loading && data ? (
         <div className={classes.usersWrapper}>
           {data.getAllUsers
-            .filter((u) =>
+            .filter(u =>
               u.username.toLowerCase().includes(filterInput.toLowerCase())
             )
-            .map((u) => (
+            .map(u => (
               <div key={u.id} className={classes.userBox}>
                 <Avatar
                   src={`https://secure.gravatar.com/avatar/${u.id}?s=164&d=identicon`}
@@ -79,7 +79,7 @@ const AllUsersPage = () => {
         </div>
       )}
     </div>
-  );
-};
+  )
+}
 
-export default AllUsersPage;
+export default AllUsersPage

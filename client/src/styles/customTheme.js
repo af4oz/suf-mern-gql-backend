@@ -1,6 +1,6 @@
-import { createMuiTheme } from '@material-ui/core/styles';
+import { createMuiTheme } from '@material-ui/core/styles'
 
-const customTheme = (darkMode) =>
+const customTheme = darkMode =>
   createMuiTheme({
     palette: {
       type: darkMode ? 'dark' : 'light',
@@ -46,6 +46,6 @@ const customTheme = (darkMode) =>
         disableElevation: true,
       },
     },
-  });
+  })
 
-export default customTheme;
+export default customTheme

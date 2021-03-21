@@ -1,30 +1,30 @@
-import { useState, useEffect } from 'react';
-import { Link as RouterLink } from 'react-router-dom';
-import DeleteDialog from './DeleteDialog';
-import { formatDayTime } from '../utils/helperFuncs';
+import { useState, useEffect } from 'react'
+import { Link as RouterLink } from 'react-router-dom'
+import DeleteDialog from './DeleteDialog'
+import { formatDayTime } from '../utils/helperFuncs'
 
-import { Typography, Link, Button, TextField } from '@material-ui/core';
-import { useQuesPageStyles } from '../styles/muiStyles';
-import EditIcon from '@material-ui/icons/Edit';
+import { Typography, Link, Button, TextField } from '@material-ui/core'
+import { useQuesPageStyles } from '../styles/muiStyles'
+import EditIcon from '@material-ui/icons/Edit'
 
 const Comment = ({ comment, user, quesAnsId, editComment, deleteComment }) => {
-  const [editOpen, setEditOpen] = useState(false);
-  const [editedCommentBody, setEditedCommentBody] = useState(comment.body);
-  const classes = useQuesPageStyles();
+  const [editOpen, setEditOpen] = useState(false)
+  const [editedCommentBody, setEditedCommentBody] = useState(comment.body)
+  const classes = useQuesPageStyles()
 
   useEffect(() => {
-    setEditedCommentBody(comment.body);
-  }, [comment]);
+    setEditedCommentBody(comment.body)
+  }, [comment])
 
   const closeInput = () => {
-    setEditOpen(false);
-  };
+    setEditOpen(false)
+  }
 
-  const handleCommentEdit = (e) => {
-    e.preventDefault();
-    editComment(editedCommentBody, comment.id, quesAnsId);
-    closeInput();
-  };
+  const handleCommentEdit = e => {
+    e.preventDefault()
+    editComment(editedCommentBody, comment.id, quesAnsId)
+    closeInput()
+  }
 
   return (
     <div className={classes.commentWrapper}>
@@ -74,7 +74,7 @@ const Comment = ({ comment, user, quesAnsId, editComment, deleteComment }) => {
             size="small"
             multiline
             rows={2}
-            onChange={(e) => setEditedCommentBody(e.target.value)}
+            onChange={e => setEditedCommentBody(e.target.value)}
           />
           <div className={classes.submitCancelBtns}>
             <Button
@@ -98,7 +98,7 @@ const Comment = ({ comment, user, quesAnsId, editComment, deleteComment }) => {
         </form>
       )}
     </div>
-  );
-};
+  )
+}
 
-export default Comment;
+export default Comment

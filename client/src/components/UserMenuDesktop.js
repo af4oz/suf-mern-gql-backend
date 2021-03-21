@@ -1,29 +1,29 @@
-import { useState } from 'react';
-import { Link as RouterLink } from 'react-router-dom';
-import AuthFormModal from './AuthFormModal';
+import { useState } from 'react'
+import { Link as RouterLink } from 'react-router-dom'
+import AuthFormModal from './AuthFormModal'
 
-import { Button, Menu, MenuItem, Avatar, Typography } from '@material-ui/core';
-import { useMenuStyles } from '../styles/muiStyles';
-import AccountCircleIcon from '@material-ui/icons/AccountCircle';
-import PowerSettingsNewIcon from '@material-ui/icons/PowerSettingsNew';
-import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown';
+import { Button, Menu, MenuItem, Avatar, Typography } from '@material-ui/core'
+import { useMenuStyles } from '../styles/muiStyles'
+import AccountCircleIcon from '@material-ui/icons/AccountCircle'
+import PowerSettingsNewIcon from '@material-ui/icons/PowerSettingsNew'
+import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown'
 
 const UserMenuDesktop = ({ user, logoutUser }) => {
-  const [anchorEl, setAnchorEl] = useState(null);
-  const classes = useMenuStyles();
+  const [anchorEl, setAnchorEl] = useState(null)
+  const classes = useMenuStyles()
 
-  const handleOpenMenu = (event) => {
-    setAnchorEl(event.currentTarget);
-  };
+  const handleOpenMenu = event => {
+    setAnchorEl(event.currentTarget)
+  }
 
   const handleCloseMenu = () => {
-    setAnchorEl(null);
-  };
+    setAnchorEl(null)
+  }
 
   const handleLogoutClick = () => {
-    logoutUser();
-    handleCloseMenu();
-  };
+    logoutUser()
+    handleCloseMenu()
+  }
 
   return (
     <div>
@@ -77,7 +77,7 @@ const UserMenuDesktop = ({ user, logoutUser }) => {
         <AuthFormModal />
       )}
     </div>
-  );
-};
+  )
+}
 
-export default UserMenuDesktop;
+export default UserMenuDesktop

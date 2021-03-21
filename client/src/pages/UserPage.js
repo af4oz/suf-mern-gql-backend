@@ -1,43 +1,43 @@
-import { useState, useEffect } from 'react';
-import { useParams, Link as RouterLink } from 'react-router-dom';
-import { useLazyQuery } from '@apollo/client';
-import { GET_USER } from '../graphql/queries';
-import RecentQuestions from '../components/RecentQuestions';
-import LoadingSpinner from '../components/LoadingSpinner';
-import { useStateContext } from '../context/state';
-import { formatDateAgo, getErrorMsg } from '../utils/helperFuncs';
+import { useState, useEffect } from 'react'
+import { useParams, Link as RouterLink } from 'react-router-dom'
+import { useLazyQuery } from '@apollo/client'
+import { GET_USER } from '../graphql/queries'
+import RecentQuestions from '../components/RecentQuestions'
+import LoadingSpinner from '../components/LoadingSpinner'
+import { useStateContext } from '../context/state'
+import { formatDateAgo, getErrorMsg } from '../utils/helperFuncs'
 
-import { Avatar, Typography, Divider } from '@material-ui/core';
-import { useUserPageStyles } from '../styles/muiStyles';
+import { Avatar, Typography, Divider } from '@material-ui/core'
+import { useUserPageStyles } from '../styles/muiStyles'
 
 const UserPage = () => {
-  const classes = useUserPageStyles();
-  const { notify } = useStateContext();
-  const { username } = useParams();
-  const [fetchedUser, setFetchedUser] = useState(null);
+  const classes = useUserPageStyles()
+  const { notify } = useStateContext()
+  const { username } = useParams()
+  const [fetchedUser, setFetchedUser] = useState(null)
   const [fetchUser, { data, loading }] = useLazyQuery(GET_USER, {
-    onError: (err) => {
-      notify(getErrorMsg(err), 'error');
+    onError: err => {
+      notify(getErrorMsg(err), 'error')
     },
-  });
+  })
 
   useEffect(() => {
-    fetchUser({ variables: { username } });
+    fetchUser({ variables: { username } })
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [username]);
+  }, [username])
 
   useEffect(() => {
     if (data) {
-      setFetchedUser(data.getUser);
+      setFetchedUser(data.getUser)
     }
-  }, [data]);
+  }, [data])
 
   if (loading || !fetchedUser) {
     return (
       <div style={{ minWidth: '100%', marginTop: '20%' }}>
         <LoadingSpinner size={80} />
       </div>
-    );
+    )
   }
 
   const {
@@ -49,7 +49,7 @@ const UserPage = () => {
     totalAnswers,
     recentQuestions,
     recentAnswers,
-  } = fetchedUser;
+  } = fetchedUser
 
   return (
     <div className={classes.root}>
@@ -126,7 +126,7 @@ const UserPage = () => {
             </Typography>
             <Divider />
             {recentQuestions.length !== 0 ? (
-              recentQuestions.map((q) => (
+              recentQuestions.map(q => (
                 <div key={q.id}>
                   <RecentQuestions question={q} />
                   <Divider />
@@ -144,7 +144,7 @@ const UserPage = () => {
             </Typography>
             <Divider />
             {recentAnswers.length !== 0 ? (
-              recentAnswers.map((q) => (
+              recentAnswers.map(q => (
                 <div key={q.id}>
                   <RecentQuestions question={q} />
                   <Divider />
@@ -159,7 +159,7 @@ const UserPage = () => {
         </div>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default UserPage;
+export default UserPage

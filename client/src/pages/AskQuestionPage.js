@@ -1,13 +1,13 @@
-import { useState } from 'react';
-import { useHistory } from 'react-router-dom';
-import { useForm } from 'react-hook-form';
-import { useMutation } from '@apollo/client';
-import { POST_QUESTION, EDIT_QUESTION } from '../graphql/mutations';
-import { useStateContext } from '../context/state';
-import ErrorMessage from '../components/ErrorMessage';
-import * as yup from 'yup';
-import { yupResolver } from '@hookform/resolvers/yup';
-import { getErrorMsg } from '../utils/helperFuncs';
+import { useState } from 'react'
+import { useHistory } from 'react-router-dom'
+import { useForm } from 'react-hook-form'
+import { useMutation } from '@apollo/client'
+import { POST_QUESTION, EDIT_QUESTION } from '../graphql/mutations'
+import { useStateContext } from '../context/state'
+import ErrorMessage from '../components/ErrorMessage'
+import * as yup from 'yup'
+import { yupResolver } from '@hookform/resolvers/yup'
+import { getErrorMsg } from '../utils/helperFuncs'
 
 import {
   Typography,
@@ -15,9 +15,9 @@ import {
   Button,
   InputAdornment,
   Chip,
-} from '@material-ui/core';
-import Autocomplete from '@material-ui/lab/Autocomplete';
-import { useAskQuesPageStyles } from '../styles/muiStyles';
+} from '@material-ui/core'
+import Autocomplete from '@material-ui/lab/Autocomplete'
+import { useAskQuesPageStyles } from '../styles/muiStyles'
 
 const validationSchema = yup.object({
   title: yup
@@ -28,15 +28,15 @@ const validationSchema = yup.object({
     .string()
     .required('Required')
     .min(30, 'Must be at least 30 characters'),
-});
+})
 
 const AskQuestionPage = () => {
-  const classes = useAskQuesPageStyles();
-  const history = useHistory();
-  const { editValues, clearEdit, notify } = useStateContext();
-  const [tagInput, setTagInput] = useState('');
-  const [tags, setTags] = useState(editValues ? editValues.tags : []);
-  const [errorMsg, setErrorMsg] = useState(null);
+  const classes = useAskQuesPageStyles()
+  const history = useHistory()
+  const { editValues, clearEdit, notify } = useStateContext()
+  const [tagInput, setTagInput] = useState('')
+  const [tags, setTags] = useState(editValues ? editValues.tags : [])
+  const [errorMsg, setErrorMsg] = useState(null)
   const { register, handleSubmit, reset, errors } = useForm({
     defaultValues: {
       title: editValues ? editValues.title : '',
@@ -44,84 +44,84 @@ const AskQuestionPage = () => {
     },
     mode: 'onChange',
     resolver: yupResolver(validationSchema),
-  });
+  })
 
   const [addQuestion, { loading: addQuesLoading }] = useMutation(
     POST_QUESTION,
     {
-      onError: (err) => {
-        setErrorMsg(getErrorMsg(err));
+      onError: err => {
+        setErrorMsg(getErrorMsg(err))
       },
     }
-  );
+  )
 
   const [updateQuestion, { loading: editQuesLoading }] = useMutation(
     EDIT_QUESTION,
     {
-      onError: (err) => {
-        setErrorMsg(getErrorMsg(err));
+      onError: err => {
+        setErrorMsg(getErrorMsg(err))
       },
     }
-  );
+  )
 
   const postQuestion = ({ title, body }) => {
-    if (tags.length === 0) return setErrorMsg('Atleast one tag must be added.');
+    if (tags.length === 0) return setErrorMsg('Atleast one tag must be added.')
 
     addQuestion({
       variables: { title, body, tags },
       update: (_, { data }) => {
-        history.push(`/questions/${data.postQuestion.id}`);
-        reset();
-        notify('Question posted!');
+        history.push(`/questions/${data.postQuestion.id}`)
+        reset()
+        notify('Question posted!')
       },
-    });
-  };
+    })
+  }
 
   const editQuestion = ({ title, body }) => {
-    if (tags.length === 0) return setErrorMsg('Atleast one tag must be added.');
+    if (tags.length === 0) return setErrorMsg('Atleast one tag must be added.')
 
     updateQuestion({
       variables: { quesId: editValues.quesId, title, body, tags },
       update: (_, { data }) => {
-        history.push(`/questions/${data.editQuestion.id}`);
-        clearEdit();
-        notify('Question edited!');
+        history.push(`/questions/${data.editQuestion.id}`)
+        clearEdit()
+        notify('Question edited!')
       },
-    });
-  };
+    })
+  }
 
-  const handleTags = (e) => {
-    if (!e || (!e.target.value && e.target.value !== '')) return;
-    const value = e.target.value.toLowerCase().trim();
-    setTagInput(value);
+  const handleTags = e => {
+    if (!e || (!e.target.value && e.target.value !== '')) return
+    const value = e.target.value.toLowerCase().trim()
+    setTagInput(value)
 
     const keyCode = e.target.value
       .charAt(e.target.selectionStart - 1)
-      .charCodeAt();
+      .charCodeAt()
 
     if (keyCode === 32 && value.trim() !== '') {
       if (tags.includes(value))
         return setErrorMsg(
           "Duplicate tag found! You can't add the same tag twice."
-        );
+        )
 
       if (!/^[a-zA-Z0-9-]*$/.test(value)) {
-        return setErrorMsg('Only alphanumeric characters & dash are allowed.');
+        return setErrorMsg('Only alphanumeric characters & dash are allowed.')
       }
 
       if (tags.length >= 5) {
-        setTagInput('');
-        return setErrorMsg('Max 5 tags can be added! Not more than that.');
+        setTagInput('')
+        return setErrorMsg('Max 5 tags can be added! Not more than that.')
       }
 
       if (value.length > 15) {
-        return setErrorMsg("A single tag can't have more than 15 characters.");
+        return setErrorMsg("A single tag can't have more than 15 characters.")
       }
 
-      setTags((prevTags) => [...prevTags, value]);
-      setTagInput('');
+      setTags(prevTags => [...prevTags, value])
+      setTagInput('')
     }
-  };
+  }
 
   return (
     <div className={classes.root}>
@@ -197,14 +197,14 @@ const AskQuestionPage = () => {
             multiple
             freeSolo
             options={[]}
-            getOptionLabel={(option) => option}
+            getOptionLabel={option => option}
             value={tags}
             inputValue={tagInput}
             onInputChange={handleTags}
             onChange={(e, value, reason) => {
-              setTags(value);
+              setTags(value)
             }}
-            renderInput={(params) => (
+            renderInput={params => (
               <TextField
                 {...params}
                 variant="outlined"
@@ -245,7 +245,7 @@ const AskQuestionPage = () => {
         />
       </form>
     </div>
-  );
-};
+  )
+}
 
-export default AskQuestionPage;
+export default AskQuestionPage

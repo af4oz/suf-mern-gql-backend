@@ -1,11 +1,11 @@
-import { useReducer, createContext, useContext, useEffect } from 'react';
-import storage from '../utils/localStorage';
+import { useReducer, createContext, useContext, useEffect } from 'react'
+import storage from '../utils/localStorage'
 
 const AuthContext = createContext({
   user: null,
-  setUser: (userData) => {},
+  setUser: userData => {},
   logoutUser: () => {},
-});
+})
 
 const authReducer = (state, action) => {
   switch (action.type) {
@@ -13,49 +13,49 @@ const authReducer = (state, action) => {
       return {
         ...state,
         user: action.payload,
-      };
+      }
     case 'LOGOUT':
       return {
         ...state,
         user: null,
-      };
+      }
     default:
-      return state;
+      return state
   }
-};
+}
 
 export const AuthProvider = ({ children }) => {
-  const [state, dispatch] = useReducer(authReducer, { user: null });
+  const [state, dispatch] = useReducer(authReducer, { user: null })
 
   useEffect(() => {
-    const loggedUser = storage.loadUser();
+    const loggedUser = storage.loadUser()
 
     if (loggedUser) {
       dispatch({
         type: 'LOGIN',
         payload: loggedUser,
-      });
+      })
     }
-  }, []);
+  }, [])
 
-  const setUser = (userData) => {
-    storage.saveUser(userData);
+  const setUser = userData => {
+    storage.saveUser(userData)
     dispatch({
       type: 'LOGIN',
       payload: userData,
-    });
-  };
+    })
+  }
 
   const logoutUser = () => {
-    storage.removeUser();
-    dispatch({ type: 'LOGOUT' });
-  };
+    storage.removeUser()
+    dispatch({ type: 'LOGOUT' })
+  }
 
   return (
     <AuthContext.Provider value={{ user: state.user, setUser, logoutUser }}>
       {children}
     </AuthContext.Provider>
-  );
-};
+  )
+}
 
-export const useAuthContext = () => useContext(AuthContext);
+export const useAuthContext = () => useContext(AuthContext)

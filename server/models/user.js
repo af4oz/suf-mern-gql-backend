@@ -1,6 +1,6 @@
-const mongoose = require('mongoose');
-const uniqueValidator = require('mongoose-unique-validator');
-const schemaCleaner = require('../utils/schemaCleaner');
+const mongoose = require('mongoose')
+const uniqueValidator = require('mongoose-unique-validator')
+const schemaCleaner = require('../utils/schemaCleaner')
 
 const userSchema = new mongoose.Schema({
   username: {
@@ -32,9 +32,9 @@ const userSchema = new mongoose.Schema({
     type: Date,
     default: Date.now,
   },
-});
+})
 
-userSchema.plugin(uniqueValidator);
-schemaCleaner(userSchema);
+userSchema.plugin(uniqueValidator)
+schemaCleaner(userSchema)
 
-module.exports = mongoose.model('User', userSchema);
+module.exports = mongoose.model('User', userSchema)

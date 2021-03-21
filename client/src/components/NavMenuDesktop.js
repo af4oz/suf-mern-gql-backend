@@ -1,19 +1,19 @@
-import { useLocation, Link as RouterLink } from 'react-router-dom';
+import { useLocation, Link as RouterLink } from 'react-router-dom'
 
-import { MenuItem, useMediaQuery, Divider, Grid } from '@material-ui/core';
-import { useMenuStyles } from '../styles/muiStyles';
-import { useTheme } from '@material-ui/core/styles';
-import PublicIcon from '@material-ui/icons/Public';
-import LocalOfferIcon from '@material-ui/icons/LocalOffer';
-import PeopleIcon from '@material-ui/icons/People';
+import { MenuItem, useMediaQuery, Divider, Grid } from '@material-ui/core'
+import { useMenuStyles } from '../styles/muiStyles'
+import { useTheme } from '@material-ui/core/styles'
+import PublicIcon from '@material-ui/icons/Public'
+import LocalOfferIcon from '@material-ui/icons/LocalOffer'
+import PeopleIcon from '@material-ui/icons/People'
 
 const DesktopNavMenu = () => {
-  const { pathname } = useLocation();
-  const classes = useMenuStyles();
-  const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down('xs'));
+  const { pathname } = useLocation()
+  const classes = useMenuStyles()
+  const theme = useTheme()
+  const isMobile = useMediaQuery(theme.breakpoints.down('xs'))
 
-  if (isMobile) return null;
+  if (isMobile) return null
 
   return (
     <Grid item>
@@ -50,7 +50,7 @@ const DesktopNavMenu = () => {
         <Divider orientation="vertical" flexItem />
       </div>
     </Grid>
-  );
-};
+  )
+}
 
-export default DesktopNavMenu;
+export default DesktopNavMenu

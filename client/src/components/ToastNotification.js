@@ -1,16 +1,16 @@
-import { useStateContext } from '../context/state';
+import { useStateContext } from '../context/state'
 
-import { Snackbar } from '@material-ui/core';
-import Alert from '@material-ui/lab/Alert';
+import { Snackbar } from '@material-ui/core'
+import Alert from '@material-ui/lab/Alert'
 
 const ToastNotification = () => {
-  const { notification, clearNotif } = useStateContext();
+  const { notification, clearNotif } = useStateContext()
 
   if (!notification?.message) {
-    return null;
+    return null
   }
 
-  const { message, severity } = notification;
+  const { message, severity } = notification
 
   return (
     <Snackbar
@@ -22,7 +22,7 @@ const ToastNotification = () => {
         {message}
       </Alert>
     </Snackbar>
-  );
-};
+  )
+}
 
-export default ToastNotification;
+export default ToastNotification

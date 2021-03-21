@@ -1,11 +1,11 @@
-import { Link as RouterLink } from 'react-router-dom';
-import { formatDateAgo } from '../utils/helperFuncs';
+import { Link as RouterLink } from 'react-router-dom'
+import { formatDateAgo } from '../utils/helperFuncs'
 
-import { Typography } from '@material-ui/core';
-import { useUserPageStyles } from '../styles/muiStyles';
+import { Typography } from '@material-ui/core'
+import { useUserPageStyles } from '../styles/muiStyles'
 
 const RecentQuestions = ({ question }) => {
-  const classes = useUserPageStyles();
+  const classes = useUserPageStyles()
 
   return (
     <div className={classes.recentQuesAns}>
@@ -29,7 +29,7 @@ const RecentQuestions = ({ question }) => {
         {formatDateAgo(question.createdAt)} ago
       </Typography>
     </div>
-  );
-};
+  )
+}
 
-export default RecentQuestions;
+export default RecentQuestions

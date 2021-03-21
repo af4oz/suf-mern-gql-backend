@@ -1,11 +1,11 @@
-import { gql } from '@apollo/client';
+import { gql } from '@apollo/client'
 
 export const AUTHOR_DETAILS = gql`
   fragment AuthorDetails on Author {
     id
     username
   }
-`;
+`
 
 export const COMMENT_DETAILS = gql`
   fragment CommentDetails on Comment {
@@ -18,7 +18,7 @@ export const COMMENT_DETAILS = gql`
     updatedAt
   }
   ${AUTHOR_DETAILS}
-`;
+`
 
 export const ANSWER_DETAILS = gql`
   fragment AnswerDetails on Answer {
@@ -38,7 +38,7 @@ export const ANSWER_DETAILS = gql`
   }
   ${COMMENT_DETAILS}
   ${AUTHOR_DETAILS}
-`;
+`
 
 export const QUESTION_DETAILS = gql`
   fragment QuestionDetails on Question {
@@ -66,7 +66,7 @@ export const QUESTION_DETAILS = gql`
   ${COMMENT_DETAILS}
   ${AUTHOR_DETAILS}
   ${ANSWER_DETAILS}
-`;
+`
 
 export const LOGGED_USER_DETAILS = gql`
   fragment LoggedUserDetails on LoggedUser {
@@ -75,4 +75,4 @@ export const LOGGED_USER_DETAILS = gql`
     role
     token
   }
-`;
+`

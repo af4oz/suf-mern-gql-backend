@@ -1,63 +1,63 @@
-import { useForm } from 'react-hook-form';
-import { Link as RouterLink } from 'react-router-dom';
-import { useMutation } from '@apollo/client';
-import { POST_ANSWER } from '../graphql/mutations';
-import { VIEW_QUESTION } from '../graphql/queries';
-import { useAuthContext } from '../context/auth';
-import { useStateContext } from '../context/state';
-import AuthFormModal from '../components/AuthFormModal';
-import * as yup from 'yup';
-import { yupResolver } from '@hookform/resolvers/yup';
-import { getErrorMsg } from '../utils/helperFuncs';
+import { useForm } from 'react-hook-form'
+import { Link as RouterLink } from 'react-router-dom'
+import { useMutation } from '@apollo/client'
+import { POST_ANSWER } from '../graphql/mutations'
+import { VIEW_QUESTION } from '../graphql/queries'
+import { useAuthContext } from '../context/auth'
+import { useStateContext } from '../context/state'
+import AuthFormModal from '../components/AuthFormModal'
+import * as yup from 'yup'
+import { yupResolver } from '@hookform/resolvers/yup'
+import { getErrorMsg } from '../utils/helperFuncs'
 
-import { Typography, Button, TextField, Chip, Link } from '@material-ui/core';
-import { useQuesPageStyles } from '../styles/muiStyles';
+import { Typography, Button, TextField, Chip, Link } from '@material-ui/core'
+import { useQuesPageStyles } from '../styles/muiStyles'
 
 const validationSchema = yup.object({
   answerBody: yup.string().min(30, 'Must be at least 30 characters'),
-});
+})
 
 const AnswerForm = ({ quesId, tags }) => {
-  const classes = useQuesPageStyles();
-  const { user } = useAuthContext();
-  const { clearEdit, notify } = useStateContext();
+  const classes = useQuesPageStyles()
+  const { user } = useAuthContext()
+  const { clearEdit, notify } = useStateContext()
   const { register, handleSubmit, reset, errors } = useForm({
     mode: 'onChange',
     resolver: yupResolver(validationSchema),
-  });
+  })
 
   const [addAnswer, { loading }] = useMutation(POST_ANSWER, {
-    onError: (err) => {
-      notify(getErrorMsg(err), 'error');
+    onError: err => {
+      notify(getErrorMsg(err), 'error')
     },
-  });
+  })
 
   const postAnswer = ({ answerBody }) => {
     addAnswer({
       variables: { quesId, body: answerBody },
       update: (proxy, { data }) => {
-        reset();
+        reset()
 
         const dataInCache = proxy.readQuery({
           query: VIEW_QUESTION,
           variables: { quesId },
-        });
+        })
 
         const updatedData = {
           ...dataInCache.viewQuestion,
           answers: data.postAnswer,
-        };
+        }
 
         proxy.writeQuery({
           query: VIEW_QUESTION,
           variables: { quesId },
           data: { viewQuestion: updatedData },
-        });
+        })
 
-        notify('Answer submitted!');
+        notify('Answer submitted!')
       },
-    });
-  };
+    })
+  }
 
   return (
     <div className={classes.answerForm}>
@@ -98,7 +98,7 @@ const AnswerForm = ({ quesId, tags }) => {
       <div className={classes.footerText}>
         <span>
           Browse other questions tagged{' '}
-          {tags.map((t) => (
+          {tags.map(t => (
             <Chip
               key={t}
               label={t}
@@ -122,7 +122,7 @@ const AnswerForm = ({ quesId, tags }) => {
         </span>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default AnswerForm;
+export default AnswerForm

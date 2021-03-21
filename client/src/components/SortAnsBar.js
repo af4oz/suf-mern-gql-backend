@@ -1,9 +1,9 @@
-import { ButtonGroup, Button } from '@material-ui/core';
+import { ButtonGroup, Button } from '@material-ui/core'
 
 const SortAnsBar = ({ isMobile, sortBy, setSortBy }) => {
-  const handleSortChange = (e) => {
-    setSortBy(e.target.innerText.toUpperCase());
-  };
+  const handleSortChange = e => {
+    setSortBy(e.target.innerText.toUpperCase())
+  }
 
   return (
     <div>
@@ -32,7 +32,7 @@ const SortAnsBar = ({ isMobile, sortBy, setSortBy }) => {
         </Button>
       </ButtonGroup>
     </div>
-  );
-};
+  )
+}
 
-export default SortAnsBar;
+export default SortAnsBar

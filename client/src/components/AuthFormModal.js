@@ -1,10 +1,10 @@
-import { useState } from 'react';
-import LoginForm from './LoginForm';
-import RegisterForm from './RegisterForm';
-import { ReactComponent as UpvoteIcon } from '../svg/upvote.svg';
-import { ReactComponent as DownvoteIcon } from '../svg/downvote.svg';
+import { useState } from 'react'
+import LoginForm from './LoginForm'
+import RegisterForm from './RegisterForm'
+import { ReactComponent as UpvoteIcon } from '../svg/upvote.svg'
+import { ReactComponent as DownvoteIcon } from '../svg/downvote.svg'
 
-import { DialogTitle } from './CustomDialogTitle';
+import { DialogTitle } from './CustomDialogTitle'
 import {
   Dialog,
   DialogContent,
@@ -14,38 +14,38 @@ import {
   Link,
   SvgIcon,
   IconButton,
-} from '@material-ui/core';
-import { useTheme } from '@material-ui/core/styles';
-import { useDialogStyles } from '../styles/muiStyles';
-import PersonAddIcon from '@material-ui/icons/PersonAdd';
-import ExitToAppIcon from '@material-ui/icons/ExitToApp';
+} from '@material-ui/core'
+import { useTheme } from '@material-ui/core/styles'
+import { useDialogStyles } from '../styles/muiStyles'
+import PersonAddIcon from '@material-ui/icons/PersonAdd'
+import ExitToAppIcon from '@material-ui/icons/ExitToApp'
 
 const AuthFormModal = ({ closeMenu, buttonType }) => {
-  const [modalOpen, setModalOpen] = useState(false);
-  const [authType, setAuthType] = useState('login');
-  const classes = useDialogStyles();
-  const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down('xs'));
+  const [modalOpen, setModalOpen] = useState(false)
+  const [authType, setAuthType] = useState('login')
+  const classes = useDialogStyles()
+  const theme = useTheme()
+  const isMobile = useMediaQuery(theme.breakpoints.down('xs'))
 
   const handleLoginModal = () => {
-    setAuthType('login');
-    setModalOpen(true);
+    setAuthType('login')
+    setModalOpen(true)
     if (buttonType === 'mobile') {
-      closeMenu();
+      closeMenu()
     }
-  };
+  }
 
   const handleSignupModal = () => {
-    setAuthType('signup');
-    setModalOpen(true);
+    setAuthType('signup')
+    setModalOpen(true)
     if (buttonType === 'mobile') {
-      closeMenu();
+      closeMenu()
     }
-  };
+  }
 
   const handleModalClose = () => {
-    setModalOpen(false);
-  };
+    setModalOpen(false)
+  }
 
   const triggerButton = () => {
     if (buttonType === 'ask') {
@@ -59,13 +59,13 @@ const AuthFormModal = ({ closeMenu, buttonType }) => {
         >
           Ask Question
         </Button>
-      );
+      )
     } else if (buttonType === 'link') {
       return (
         <Link onClick={handleLoginModal} style={{ cursor: 'pointer' }}>
           ask your own question.
         </Link>
-      );
+      )
     } else if (buttonType === 'upvote') {
       return (
         <IconButton onClick={handleLoginModal}>
@@ -73,7 +73,7 @@ const AuthFormModal = ({ closeMenu, buttonType }) => {
             <UpvoteIcon />
           </SvgIcon>
         </IconButton>
-      );
+      )
     } else if (buttonType === 'downvote') {
       return (
         <IconButton onClick={handleLoginModal}>
@@ -81,7 +81,7 @@ const AuthFormModal = ({ closeMenu, buttonType }) => {
             <DownvoteIcon />
           </SvgIcon>
         </IconButton>
-      );
+      )
     } else if (buttonType === 'mobile') {
       return (
         <div>
@@ -94,7 +94,7 @@ const AuthFormModal = ({ closeMenu, buttonType }) => {
             Sign Up
           </MenuItem>
         </div>
-      );
+      )
     } else {
       return (
         <div>
@@ -116,9 +116,9 @@ const AuthFormModal = ({ closeMenu, buttonType }) => {
             Sign Up
           </Button>
         </div>
-      );
+      )
     }
-  };
+  }
 
   return (
     <div style={{ display: 'inline' }}>
@@ -145,7 +145,7 @@ const AuthFormModal = ({ closeMenu, buttonType }) => {
         </DialogContent>
       </Dialog>
     </div>
-  );
-};
+  )
+}
 
-export default AuthFormModal;
+export default AuthFormModal

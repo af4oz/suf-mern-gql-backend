@@ -1,0 +1,40 @@
+{
+  "name": "stack-underflow-mern-gql",
+  "version": "1.0.0",
+  "description": "Fullstack [Stack Overflow](https://stackoverflow.com/) clone (QnA site) made with MERN + GraphQL",
+  "scripts": {
+    "format": "prettier --write \"**/*.{js,jsx,json,md,ts,tsx}\"",
+    "client": "npm run start --prefix client",
+    "server": "npm run dev --prefix server",
+    "dev": "concurrently \"npm run server\" \"npm run client\""
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/afroz1198/stack-underflow-mern-gql.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/afroz1198/stack-underflow-mern-gql/issues"
+  },
+  "homepage": "https://github.com/afroz1198/stack-underflow-mern-gql#readme",
+  "devDependencies": {
+    "concurrently": "^6.0.0",
+    "husky": "^5.1.3",
+    "prettier": "^2.2.1"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "*.{js,ts,jsx,tsx}": [
+      "eslint --cache --fix"
+    ],
+    "*.{js,ts,jsx,tsx,json,md}": [
+      "prettier --write"
+    ]
+  }
+}

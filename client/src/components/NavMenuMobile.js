@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { useLocation, Link as RouterLink } from 'react-router-dom';
+import { useState } from 'react'
+import { useLocation, Link as RouterLink } from 'react-router-dom'
 
 import {
   IconButton,
@@ -8,27 +8,27 @@ import {
   Divider,
   Typography,
   Link,
-} from '@material-ui/core';
-import { useMenuStyles } from '../styles/muiStyles';
-import MenuIcon from '@material-ui/icons/Menu';
-import CloseIcon from '@material-ui/icons/Close';
-import PublicIcon from '@material-ui/icons/Public';
-import LocalOfferIcon from '@material-ui/icons/LocalOffer';
-import PeopleIcon from '@material-ui/icons/People';
-import FavoriteIcon from '@material-ui/icons/Favorite';
+} from '@material-ui/core'
+import { useMenuStyles } from '../styles/muiStyles'
+import MenuIcon from '@material-ui/icons/Menu'
+import CloseIcon from '@material-ui/icons/Close'
+import PublicIcon from '@material-ui/icons/Public'
+import LocalOfferIcon from '@material-ui/icons/LocalOffer'
+import PeopleIcon from '@material-ui/icons/People'
+import FavoriteIcon from '@material-ui/icons/Favorite'
 
 const MobileNavMenu = () => {
-  const { pathname } = useLocation();
-  const [anchorEl, setAnchorEl] = useState(null);
-  const classes = useMenuStyles();
+  const { pathname } = useLocation()
+  const [anchorEl, setAnchorEl] = useState(null)
+  const classes = useMenuStyles()
 
-  const handleOpenMenu = (event) => {
-    setAnchorEl(event.currentTarget);
-  };
+  const handleOpenMenu = event => {
+    setAnchorEl(event.currentTarget)
+  }
 
   const handleCloseMenu = () => {
-    setAnchorEl(null);
-  };
+    setAnchorEl(null)
+  }
 
   return (
     <div>
@@ -97,7 +97,7 @@ const MobileNavMenu = () => {
         </div>
       </Menu>
     </div>
-  );
-};
+  )
+}
 
-export default MobileNavMenu;
+export default MobileNavMenu

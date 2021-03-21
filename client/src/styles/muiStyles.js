@@ -1,7 +1,7 @@
-import { makeStyles } from '@material-ui/core/styles';
+import { makeStyles } from '@material-ui/core/styles'
 
 export const useBodyStyles = makeStyles(
-  (theme) => ({
+  theme => ({
     root: {
       width: '100vW',
       display: 'flex',
@@ -11,10 +11,10 @@ export const useBodyStyles = makeStyles(
     },
   }),
   { index: 1 }
-);
+)
 
 export const useNavStyles = makeStyles(
-  (theme) => ({
+  theme => ({
     leftPortion: {
       flexGrow: 1,
       display: 'flex',
@@ -59,10 +59,10 @@ export const useNavStyles = makeStyles(
     },
   }),
   { index: 1 }
-);
+)
 
 export const useMenuStyles = makeStyles(
-  (theme) => ({
+  theme => ({
     menuIcon: {
       marginRight: '6px',
       fontSize: '1.3em',
@@ -107,10 +107,10 @@ export const useMenuStyles = makeStyles(
     },
   }),
   { index: 1 }
-);
+)
 
 export const useQuesListStyles = makeStyles(
-  (theme) => ({
+  theme => ({
     root: {
       width: '100%',
       marginTop: '1em',
@@ -156,10 +156,10 @@ export const useQuesListStyles = makeStyles(
     },
   }),
   { index: 1 }
-);
+)
 
 export const useRightSidePanelStyles = makeStyles(
-  (theme) => ({
+  theme => ({
     rootPanel: {
       position: 'sticky',
       display: 'flex',
@@ -185,10 +185,10 @@ export const useRightSidePanelStyles = makeStyles(
     },
   }),
   { index: 1 }
-);
+)
 
 export const useQuesCardStyles = makeStyles(
-  (theme) => ({
+  theme => ({
     root: {
       borderBottom: '1px solid #dfdfdf',
       display: 'flex',
@@ -273,10 +273,10 @@ export const useQuesCardStyles = makeStyles(
     },
   }),
   { index: 1 }
-);
+)
 
 export const useDialogStyles = makeStyles(
-  (theme) => ({
+  theme => ({
     dialogWrapper: {
       padding: 0,
       overflow: 'hidden',
@@ -294,10 +294,10 @@ export const useDialogStyles = makeStyles(
     },
   }),
   { index: 1 }
-);
+)
 
 export const useAuthFormStyles = makeStyles(
-  (theme) => ({
+  theme => ({
     root: {
       paddingLeft: 20,
       paddingRight: 20,
@@ -326,10 +326,10 @@ export const useAuthFormStyles = makeStyles(
     },
   }),
   { index: 1 }
-);
+)
 
 export const useTagsPageStyles = makeStyles(
-  (theme) => ({
+  theme => ({
     root: {
       marginTop: '1em',
       padding: '0.4em 0.7em',
@@ -364,10 +364,10 @@ export const useTagsPageStyles = makeStyles(
     },
   }),
   { index: 1 }
-);
+)
 
 export const useUsersPageStyles = makeStyles(
-  (theme) => ({
+  theme => ({
     root: {
       marginTop: '1em',
       padding: '0.4em 0.7em',
@@ -397,10 +397,10 @@ export const useUsersPageStyles = makeStyles(
     },
   }),
   { index: 1 }
-);
+)
 
 export const useQuesPageStyles = makeStyles(
-  (theme) => ({
+  theme => ({
     root: {
       width: '100%',
       paddingLeft: '0.7em',
@@ -514,10 +514,10 @@ export const useQuesPageStyles = makeStyles(
     },
   }),
   { index: 1 }
-);
+)
 
 export const useUserPageStyles = makeStyles(
-  (theme) => ({
+  theme => ({
     root: {
       marginTop: '1em',
       padding: '0em 1.4em',
@@ -612,10 +612,10 @@ export const useUserPageStyles = makeStyles(
     },
   }),
   { index: 1 }
-);
+)
 
 export const useAskQuesPageStyles = makeStyles(
-  (theme) => ({
+  theme => ({
     root: {
       width: '100%',
       marginTop: '1em',
@@ -640,10 +640,10 @@ export const useAskQuesPageStyles = makeStyles(
     },
   }),
   { index: 1 }
-);
+)
 
 export const useVoteBtnsStyles = makeStyles(
-  (theme) => ({
+  theme => ({
     icon: {
       color: '#aa9aaa',
       fontSize: 32,
@@ -654,10 +654,10 @@ export const useVoteBtnsStyles = makeStyles(
     },
   }),
   { index: 1 }
-);
+)
 
 export const useAlertStyles = makeStyles(
-  (theme) => ({
+  theme => ({
     root: {
       width: '100%',
       '& > * + *': {
@@ -668,10 +668,10 @@ export const useAlertStyles = makeStyles(
     },
   }),
   { index: 1 }
-);
+)
 
 export const useNotFoundPageStyles = makeStyles(
-  (theme) => ({
+  theme => ({
     root: {
       width: '100%',
       marginTop: '1em',
@@ -687,4 +687,4 @@ export const useNotFoundPageStyles = makeStyles(
     },
   }),
   { index: 1 }
-);
+)

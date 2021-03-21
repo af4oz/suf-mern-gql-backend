@@ -1,11 +1,11 @@
-import { Alert, AlertTitle } from '@material-ui/lab';
-import { useAlertStyles } from '../styles/muiStyles';
+import { Alert, AlertTitle } from '@material-ui/lab'
+import { useAlertStyles } from '../styles/muiStyles'
 
 const AlertMessage = ({ errorMsg, clearErrorMsg }) => {
-  const classes = useAlertStyles();
+  const classes = useAlertStyles()
 
   if (!errorMsg) {
-    return null;
+    return null
   }
 
   return (
@@ -15,7 +15,7 @@ const AlertMessage = ({ errorMsg, clearErrorMsg }) => {
         {errorMsg}
       </Alert>
     </div>
-  );
-};
+  )
+}
 
-export default AlertMessage;
+export default AlertMessage

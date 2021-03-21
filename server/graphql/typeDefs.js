@@ -1,4 +1,4 @@
-const { gql } = require('apollo-server');
+const { gql } = require('apollo-server')
 
 module.exports = gql`
   enum RoleType {
@@ -184,4 +184,4 @@ module.exports = gql`
       body: String!
     ): [Comment!]!
   }
-`;
+`

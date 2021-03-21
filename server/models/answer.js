@@ -1,6 +1,6 @@
-const mongoose = require('mongoose');
-const commentSchema = require('./comment').schema;
-const schemaCleaner = require('../utils/schemaCleaner');
+const mongoose = require('mongoose')
+const commentSchema = require('./comment').schema
+const schemaCleaner = require('../utils/schemaCleaner')
 
 const answerSchema = new mongoose.Schema({
   author: {
@@ -39,8 +39,8 @@ const answerSchema = new mongoose.Schema({
     type: Date,
     default: Date.now,
   },
-});
+})
 
-schemaCleaner(answerSchema);
+schemaCleaner(answerSchema)
 
-module.exports = mongoose.model('Answer', answerSchema);
+module.exports = mongoose.model('Answer', answerSchema)

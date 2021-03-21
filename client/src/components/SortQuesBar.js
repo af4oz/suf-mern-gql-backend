@@ -1,12 +1,12 @@
-import { ButtonGroup, Button } from '@material-ui/core';
-import { useQuesListStyles } from '../styles/muiStyles';
+import { ButtonGroup, Button } from '@material-ui/core'
+import { useQuesListStyles } from '../styles/muiStyles'
 
 const SortQuesBar = ({ isMobile, sortBy, setSortBy }) => {
-  const classes = useQuesListStyles();
+  const classes = useQuesListStyles()
 
-  const handleSortChange = (e) => {
-    setSortBy(e.target.innerText.toUpperCase());
-  };
+  const handleSortChange = e => {
+    setSortBy(e.target.innerText.toUpperCase())
+  }
 
   return (
     <div className={classes.btnGroupWrapper}>
@@ -48,7 +48,7 @@ const SortQuesBar = ({ isMobile, sortBy, setSortBy }) => {
         </Button>
       </ButtonGroup>
     </div>
-  );
-};
+  )
+}
 
-export default SortQuesBar;
+export default SortQuesBar

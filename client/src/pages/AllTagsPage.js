@@ -1,25 +1,25 @@
-import { useState } from 'react';
-import { useQuery } from '@apollo/client';
-import { GET_ALL_TAGS } from '../graphql/queries';
-import { Link as RouterLink } from 'react-router-dom';
-import LoadingSpinner from '../components/LoadingSpinner';
-import { useStateContext } from '../context/state';
-import { getErrorMsg } from '../utils/helperFuncs';
+import { useState } from 'react'
+import { useQuery } from '@apollo/client'
+import { GET_ALL_TAGS } from '../graphql/queries'
+import { Link as RouterLink } from 'react-router-dom'
+import LoadingSpinner from '../components/LoadingSpinner'
+import { useStateContext } from '../context/state'
+import { getErrorMsg } from '../utils/helperFuncs'
 
-import { Typography, Chip, TextField, InputAdornment } from '@material-ui/core';
-import { useTagsPageStyles } from '../styles/muiStyles';
-import SearchIcon from '@material-ui/icons/Search';
+import { Typography, Chip, TextField, InputAdornment } from '@material-ui/core'
+import { useTagsPageStyles } from '../styles/muiStyles'
+import SearchIcon from '@material-ui/icons/Search'
 
 const AllTagsPage = () => {
-  const { notify } = useStateContext();
+  const { notify } = useStateContext()
   const { data, loading } = useQuery(GET_ALL_TAGS, {
-    onError: (err) => {
-      notify(getErrorMsg(err), 'error');
+    onError: err => {
+      notify(getErrorMsg(err), 'error')
     },
-  });
+  })
 
-  const [filterInput, setFilterInput] = useState('');
-  const classes = useTagsPageStyles();
+  const [filterInput, setFilterInput] = useState('')
+  const classes = useTagsPageStyles()
 
   return (
     <div className={classes.root}>
@@ -36,7 +36,7 @@ const AllTagsPage = () => {
         className={classes.filterInput}
         value={filterInput}
         placeholder="Filter by tag name"
-        onChange={(e) => setFilterInput(e.target.value)}
+        onChange={e => setFilterInput(e.target.value)}
         variant="outlined"
         size="small"
         InputProps={{
@@ -50,10 +50,10 @@ const AllTagsPage = () => {
       {!loading && data ? (
         <div className={classes.tagsWrapper}>
           {data.getAllTags
-            .filter((t) =>
+            .filter(t =>
               t.tagName.toLowerCase().includes(filterInput.toLowerCase())
             )
-            .map((t) => (
+            .map(t => (
               <div key={t.tagName} className={classes.tagBox}>
                 <Chip
                   label={t.tagName}
@@ -77,7 +77,7 @@ const AllTagsPage = () => {
         </div>
       )}
     </div>
-  );
-};
+  )
+}
 
-export default AllTagsPage;
+export default AllTagsPage

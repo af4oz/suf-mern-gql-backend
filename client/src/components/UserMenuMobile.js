@@ -1,29 +1,29 @@
-import { useState } from 'react';
-import { Link as RouterLink } from 'react-router-dom';
-import AuthFormModal from './AuthFormModal';
+import { useState } from 'react'
+import { Link as RouterLink } from 'react-router-dom'
+import AuthFormModal from './AuthFormModal'
 
-import { IconButton, Menu, MenuItem, Avatar } from '@material-ui/core';
-import { useMenuStyles } from '../styles/muiStyles';
-import MoreVertIcon from '@material-ui/icons/MoreVert';
-import AccountCircleIcon from '@material-ui/icons/AccountCircle';
-import PowerSettingsNewIcon from '@material-ui/icons/PowerSettingsNew';
+import { IconButton, Menu, MenuItem, Avatar } from '@material-ui/core'
+import { useMenuStyles } from '../styles/muiStyles'
+import MoreVertIcon from '@material-ui/icons/MoreVert'
+import AccountCircleIcon from '@material-ui/icons/AccountCircle'
+import PowerSettingsNewIcon from '@material-ui/icons/PowerSettingsNew'
 
 const MobileUserMenu = ({ user, logoutUser }) => {
-  const [anchorEl, setAnchorEl] = useState(null);
-  const classes = useMenuStyles();
+  const [anchorEl, setAnchorEl] = useState(null)
+  const classes = useMenuStyles()
 
-  const handleOpenMenu = (event) => {
-    setAnchorEl(event.currentTarget);
-  };
+  const handleOpenMenu = event => {
+    setAnchorEl(event.currentTarget)
+  }
 
   const handleCloseMenu = () => {
-    setAnchorEl(null);
-  };
+    setAnchorEl(null)
+  }
 
   const handleLogoutClick = () => {
-    logoutUser();
-    handleCloseMenu();
-  };
+    logoutUser()
+    handleCloseMenu()
+  }
 
   return (
     <div>
@@ -82,7 +82,7 @@ const MobileUserMenu = ({ user, logoutUser }) => {
         )}
       </Menu>
     </div>
-  );
-};
+  )
+}
 
-export default MobileUserMenu;
+export default MobileUserMenu

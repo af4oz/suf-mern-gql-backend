@@ -1,5 +1,5 @@
-import { gql } from '@apollo/client';
-import { AUTHOR_DETAILS, COMMENT_DETAILS, ANSWER_DETAILS } from './fragments';
+import { gql } from '@apollo/client'
+import { AUTHOR_DETAILS, COMMENT_DETAILS, ANSWER_DETAILS } from './fragments'
 
 export const GET_QUESTIONS = gql`
   query fetchQuestions(
@@ -39,7 +39,7 @@ export const GET_QUESTIONS = gql`
     }
   }
   ${AUTHOR_DETAILS}
-`;
+`
 
 export const VIEW_QUESTION = gql`
   query fetchQuestion($quesId: ID!) {
@@ -73,7 +73,7 @@ export const VIEW_QUESTION = gql`
   ${ANSWER_DETAILS}
   ${COMMENT_DETAILS}
   ${AUTHOR_DETAILS}
-`;
+`
 
 export const GET_USER = gql`
   query fetchUser($username: String!) {
@@ -99,7 +99,7 @@ export const GET_USER = gql`
       }
     }
   }
-`;
+`
 
 export const GET_ALL_TAGS = gql`
   query {
@@ -108,7 +108,7 @@ export const GET_ALL_TAGS = gql`
       count
     }
   }
-`;
+`
 
 export const GET_ALL_USERS = gql`
   query {
@@ -118,4 +118,4 @@ export const GET_ALL_USERS = gql`
       createdAt
     }
   }
-`;
+`

@@ -1,11 +1,11 @@
-import { Typography, IconButton } from '@material-ui/core';
-import { withStyles } from '@material-ui/core/styles';
-import MuiDialogTitle from '@material-ui/core/DialogTitle';
-import MuiDialogContent from '@material-ui/core/DialogContent';
-import MuiDialogActions from '@material-ui/core/DialogActions';
-import CloseIcon from '@material-ui/icons/Close';
+import { Typography, IconButton } from '@material-ui/core'
+import { withStyles } from '@material-ui/core/styles'
+import MuiDialogTitle from '@material-ui/core/DialogTitle'
+import MuiDialogContent from '@material-ui/core/DialogContent'
+import MuiDialogActions from '@material-ui/core/DialogActions'
+import CloseIcon from '@material-ui/icons/Close'
 
-const styles = (theme) => ({
+const styles = theme => ({
   root: {
     margin: 0,
     paddingBottom: theme.spacing(2),
@@ -16,10 +16,10 @@ const styles = (theme) => ({
     top: theme.spacing(1),
     color: theme.palette.primary.main,
   },
-});
+})
 
-export const DialogTitle = withStyles(styles)((props) => {
-  const { children, classes, onClose, ...other } = props;
+export const DialogTitle = withStyles(styles)(props => {
+  const { children, classes, onClose, ...other } = props
   return (
     <MuiDialogTitle disableTypography className={classes.root} {...other}>
       <Typography variant="h6">{children}</Typography>
@@ -33,18 +33,18 @@ export const DialogTitle = withStyles(styles)((props) => {
         </IconButton>
       ) : null}
     </MuiDialogTitle>
-  );
-});
+  )
+})
 
-export const DialogContent = withStyles((theme) => ({
+export const DialogContent = withStyles(theme => ({
   root: {
     padding: theme.spacing(2),
   },
-}))(MuiDialogContent);
+}))(MuiDialogContent)
 
-export const DialogActions = withStyles((theme) => ({
+export const DialogActions = withStyles(theme => ({
   root: {
     margin: 0,
     padding: theme.spacing(1),
   },
-}))(MuiDialogActions);
+}))(MuiDialogActions)

@@ -1,13 +1,13 @@
-import { useState, useEffect } from 'react';
-import { Link as RouterLink } from 'react-router-dom';
-import { useApolloClient } from '@apollo/client';
-import NavMenuMobile from './NavMenuMobile';
-import UserMenuMobile from './UserMenuMobile';
-import UserMenuDesktop from './UserMenuDesktop';
-import SearchBar from './SearchBar';
-import DarkModeSwitch from './DarkModeSwitch';
-import { useAuthContext } from '../context/auth';
-import SofLogo from '../svg/stack-overflow.svg';
+import { useState, useEffect } from 'react'
+import { Link as RouterLink } from 'react-router-dom'
+import { useApolloClient } from '@apollo/client'
+import NavMenuMobile from './NavMenuMobile'
+import UserMenuMobile from './UserMenuMobile'
+import UserMenuDesktop from './UserMenuDesktop'
+import SearchBar from './SearchBar'
+import DarkModeSwitch from './DarkModeSwitch'
+import { useAuthContext } from '../context/auth'
+import SofLogo from '../svg/stack-overflow.svg'
 
 import {
   AppBar,
@@ -18,31 +18,31 @@ import {
   Container,
   useMediaQuery,
   IconButton,
-} from '@material-ui/core';
-import { useNavStyles } from '../styles/muiStyles';
-import { useTheme } from '@material-ui/core/styles';
-import FavoriteIcon from '@material-ui/icons/Favorite';
-import SearchIcon from '@material-ui/icons/Search';
+} from '@material-ui/core'
+import { useNavStyles } from '../styles/muiStyles'
+import { useTheme } from '@material-ui/core/styles'
+import FavoriteIcon from '@material-ui/icons/Favorite'
+import SearchIcon from '@material-ui/icons/Search'
 
 const NavBar = () => {
-  const { user, logoutUser } = useAuthContext();
-  const [searchOpen, setSearchOpen] = useState(false);
-  const client = useApolloClient();
-  const classes = useNavStyles();
-  const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down('xs'));
+  const { user, logoutUser } = useAuthContext()
+  const [searchOpen, setSearchOpen] = useState(false)
+  const client = useApolloClient()
+  const classes = useNavStyles()
+  const theme = useTheme()
+  const isMobile = useMediaQuery(theme.breakpoints.down('xs'))
 
   useEffect(() => {
     if (!isMobile && searchOpen) {
-      setSearchOpen(false);
+      setSearchOpen(false)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isMobile]);
+  }, [isMobile])
 
   const handleLogout = () => {
-    logoutUser();
-    client.resetStore();
-  };
+    logoutUser()
+    client.resetStore()
+  }
 
   return (
     <AppBar
@@ -104,7 +104,7 @@ const NavBar = () => {
                 <IconButton
                   color="primary"
                   className={classes.searchBtn}
-                  onClick={() => setSearchOpen((prevState) => !prevState)}
+                  onClick={() => setSearchOpen(prevState => !prevState)}
                 >
                   <SearchIcon />
                 </IconButton>
@@ -124,7 +124,7 @@ const NavBar = () => {
         )}
       </Toolbar>
     </AppBar>
-  );
-};
+  )
+}
 
-export default NavBar;
+export default NavBar

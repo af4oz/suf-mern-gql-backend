@@ -1,14 +1,14 @@
-import { useState } from 'react';
-import { useForm } from 'react-hook-form';
-import { useMutation } from '@apollo/client';
-import { REGISTER_USER } from '../graphql/mutations';
-import { useAuthContext } from '../context/auth';
-import { useStateContext } from '../context/state';
-import ErrorMessage from './ErrorMessage';
-import * as yup from 'yup';
-import { yupResolver } from '@hookform/resolvers/yup';
-import SofLogo from '../svg/stack-overflow.svg';
-import { getErrorMsg } from '../utils/helperFuncs';
+import { useState } from 'react'
+import { useForm } from 'react-hook-form'
+import { useMutation } from '@apollo/client'
+import { REGISTER_USER } from '../graphql/mutations'
+import { useAuthContext } from '../context/auth'
+import { useStateContext } from '../context/state'
+import ErrorMessage from './ErrorMessage'
+import * as yup from 'yup'
+import { yupResolver } from '@hookform/resolvers/yup'
+import SofLogo from '../svg/stack-overflow.svg'
+import { getErrorMsg } from '../utils/helperFuncs'
 
 import {
   TextField,
@@ -17,14 +17,14 @@ import {
   InputAdornment,
   IconButton,
   Link,
-} from '@material-ui/core';
-import { useAuthFormStyles } from '../styles/muiStyles';
-import PersonIcon from '@material-ui/icons/Person';
-import LockIcon from '@material-ui/icons/Lock';
-import EnhancedEncryptionIcon from '@material-ui/icons/EnhancedEncryption';
-import PersonAddIcon from '@material-ui/icons/PersonAdd';
-import VisibilityOffIcon from '@material-ui/icons/VisibilityOff';
-import VisibilityIcon from '@material-ui/icons/Visibility';
+} from '@material-ui/core'
+import { useAuthFormStyles } from '../styles/muiStyles'
+import PersonIcon from '@material-ui/icons/Person'
+import LockIcon from '@material-ui/icons/Lock'
+import EnhancedEncryptionIcon from '@material-ui/icons/EnhancedEncryption'
+import PersonAddIcon from '@material-ui/icons/PersonAdd'
+import VisibilityOffIcon from '@material-ui/icons/VisibilityOff'
+import VisibilityIcon from '@material-ui/icons/Visibility'
 
 const validationSchema = yup.object({
   username: yup
@@ -44,42 +44,42 @@ const validationSchema = yup.object({
     .string()
     .required('Required')
     .min(6, 'Must be at least 6 characters'),
-});
+})
 
 const RegisterForm = ({ setAuthType, closeModal }) => {
-  const [showPass, setShowPass] = useState(false);
-  const [errorMsg, setErrorMsg] = useState(null);
-  const [showConfPass, setShowConfPass] = useState(false);
-  const classes = useAuthFormStyles();
-  const { setUser } = useAuthContext();
-  const { notify } = useStateContext();
+  const [showPass, setShowPass] = useState(false)
+  const [errorMsg, setErrorMsg] = useState(null)
+  const [showConfPass, setShowConfPass] = useState(false)
+  const classes = useAuthFormStyles()
+  const { setUser } = useAuthContext()
+  const { notify } = useStateContext()
   const { register, handleSubmit, reset, errors } = useForm({
     mode: 'onTouched',
     resolver: yupResolver(validationSchema),
-  });
+  })
 
   const [registerUser, { loading }] = useMutation(REGISTER_USER, {
-    onError: (err) => {
-      setErrorMsg(getErrorMsg(err));
+    onError: err => {
+      setErrorMsg(getErrorMsg(err))
     },
-  });
+  })
 
   const onRegister = ({ username, password, confirmPassword }) => {
     if (password !== confirmPassword)
-      return setErrorMsg('Both passwords need to match.');
+      return setErrorMsg('Both passwords need to match.')
 
     registerUser({
       variables: { username, password },
       update: (_, { data }) => {
-        setUser(data.register);
+        setUser(data.register)
         notify(
           `Welcome, ${data.register.username}! You've successfully registered.`
-        );
-        reset();
-        closeModal();
+        )
+        reset()
+        closeModal()
       },
-    });
-  };
+    })
+  }
 
   return (
     <div className={classes.root}>
@@ -122,7 +122,7 @@ const RegisterForm = ({ setAuthType, closeModal }) => {
               endAdornment: (
                 <InputAdornment position="end">
                   <IconButton
-                    onClick={() => setShowPass((prevState) => !prevState)}
+                    onClick={() => setShowPass(prevState => !prevState)}
                     size="small"
                   >
                     {showPass ? (
@@ -159,7 +159,7 @@ const RegisterForm = ({ setAuthType, closeModal }) => {
               endAdornment: (
                 <InputAdornment position="end">
                   <IconButton
-                    onClick={() => setShowConfPass((prevState) => !prevState)}
+                    onClick={() => setShowConfPass(prevState => !prevState)}
                     size="small"
                   >
                     {showConfPass ? (
@@ -201,7 +201,7 @@ const RegisterForm = ({ setAuthType, closeModal }) => {
         clearErrorMsg={() => setErrorMsg(null)}
       />
     </div>
-  );
-};
+  )
+}
 
-export default RegisterForm;
+export default RegisterForm
