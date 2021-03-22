@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState,useEffect } from 'react'
 import LoginForm from './LoginForm'
 import RegisterForm from './RegisterForm'
 import { ReactComponent as UpvoteIcon } from '../svg/upvote.svg'
@@ -22,29 +22,36 @@ import ExitToAppIcon from '@material-ui/icons/ExitToApp'
 
 const AuthFormModal = ({ closeMenu, buttonType }) => {
   const [modalOpen, setModalOpen] = useState(false)
+  const [isMounted,setIsMounted] = useState(false)
   const [authType, setAuthType] = useState('login')
   const classes = useDialogStyles()
   const theme = useTheme()
   const isMobile = useMediaQuery(theme.breakpoints.down('xs'))
 
+  useEffect(() => {
+    setIsMounted(true)
+    return () => {
+      setIsMounted(false)
+    }
+  }, [isMounted])
   const handleLoginModal = () => {
-    setAuthType('login')
-    setModalOpen(true)
+    isMounted && setAuthType('login')
+    isMounted && setModalOpen(true)
     if (buttonType === 'mobile') {
       closeMenu()
     }
   }
 
   const handleSignupModal = () => {
-    setAuthType('signup')
-    setModalOpen(true)
+    isMounted && setAuthType('signup')
+    isMounted && setModalOpen(true)
     if (buttonType === 'mobile') {
       closeMenu()
     }
   }
 
   const handleModalClose = () => {
-    setModalOpen(false)
+    isMounted && setModalOpen(false)
   }
 
   const triggerButton = () => {

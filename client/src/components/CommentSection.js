@@ -34,7 +34,7 @@ const CommentSection = ({
     setIsCollapsed(false)
   }
 
-  const handleCommentAdd = ({ commentBody }) => {
+  const handleCommentAdd = ({ commentBody}) => {
     addComment(commentBody, quesAnsId)
     showComments()
     closeInput()
@@ -72,7 +72,7 @@ const CommentSection = ({
       {inputOpen && (
         <form onSubmit={handleSubmit(handleCommentAdd)} tw="mt-1">
           <textarea
-            inputRef={register}
+            ref={register}
             name="commentBody"
             required
             type="text"
