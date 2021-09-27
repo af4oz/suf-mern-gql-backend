@@ -10,13 +10,13 @@ import UserPage from './UserPage'
 import NotFoundPage from './NotFoundPage'
 import { useAuthContext } from '../context/auth'
 
-import tw from 'twin.macro'
+import tw from 'twin.macro'; //eslint-disable-line no-unused-vars
 
 const Routes = () => {
   const { user } = useAuthContext()
 
   return (
-    <div tw="max-width[1264px] w-full m-auto flex flex-row flex-nowrap relative">
+    <div tw="max-width[1264px] w-full mx-auto flex flex-row flex-nowrap relative">
       <Switch>
         <Route exact path="/">
           <NavMenuDesktop />

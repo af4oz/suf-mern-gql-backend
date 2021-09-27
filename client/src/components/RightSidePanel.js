@@ -4,7 +4,7 @@ import LoadingSpinner from './LoadingSpinner'
 import { useStateContext } from '../context/state'
 import { getErrorMsg } from '../utils/helperFuncs'
 import { useMediaQuery } from 'react-responsive'
-import tw from 'twin.macro'
+import tw from 'twin.macro'; //eslint-disable-line no-unused-vars
 import Tag, { Tags } from './Tag'
 
 const Grid = tw.div`m-0 w-1/3 mt-4 rounded-sm hidden md:block`

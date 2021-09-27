@@ -4,8 +4,8 @@ import Comment from './Comment'
 import * as yup from 'yup'
 import { yupResolver } from '@hookform/resolvers/yup'
 
-import { LightButton } from './CompStore'
-import tw from 'twin.macro'
+import { LightButton ,TextArea} from './CompStore'
+import tw from 'twin.macro';// eslint-disable-line no-unused-vars
 
 const validationSchema = yup.object({
   commentBody: yup.string().min(5, 'Must be at least 5 characters'),
@@ -71,18 +71,19 @@ const CommentSection = ({
       )}
       {inputOpen && (
         <form onSubmit={handleSubmit(handleCommentAdd)} tw="mt-1">
-          <textarea
+          <TextArea
             ref={register}
             name="commentBody"
             required
             type="text"
             placeholder="Enter at least 5 characters"
             rows={3}
+            fullWidth
+            size="small"
             error={'commentBody' in errors}
             helperText={
               'commentBody' in errors ? errors.commentBody.message : ''
             }
-            tw="w-full p-1 resize-none border-gray-300 rounded-sm font-family[inherit]"
           />
           <div>
             <LightButton

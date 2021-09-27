@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom'
 import PostedByUser from './PostedByUser'
-import tw from 'twin.macro'
+import tw from 'twin.macro'; //eslint-disable-line no-unused-vars
 
 import Tag, { Tags } from './Tag'
 

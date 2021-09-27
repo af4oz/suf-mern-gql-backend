@@ -6,8 +6,7 @@ import {
   DialogContentText,
   DialogActions,
 } from '@material-ui/core'
-import { useQuesPageStyles } from '../styles/muiStyles'
-import tw from 'twin.macro'
+import tw from 'twin.macro';// eslint-disable-line no-unused-vars
 import { LightButton } from './CompStore'
 
 const DeleteDialog = ({ handleDelete, bodyType }) => {

@@ -18,7 +18,7 @@ import sortAnswers from '../utils/sortAnswers'
 import { upvote, downvote } from '../utils/voteQuesAns'
 import { getErrorMsg } from '../utils/helperFuncs'
 
-import { Typography, useMediaQuery, Divider } from '@material-ui/core'
+import { Typography, useMediaQuery } from '@material-ui/core'
 import { useQuesPageStyles } from '../styles/muiStyles'
 import { useTheme } from '@material-ui/core/styles'
 

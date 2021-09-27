@@ -1,22 +1,21 @@
 import { ReactComponent as UpvoteIcon } from '../svg/upvote.svg'
 import { ReactComponent as DownvoteIcon } from '../svg/downvote.svg'
 
-import { Checkbox, SvgIcon } from '@material-ui/core'
-import { useVoteBtnsStyles } from '../styles/muiStyles'
+import { Checkbox, SvgIcon } from './CompStore'
+import tw from 'twin.macro'; // eslint-disable-line no-unused-vars
 
 export const UpvoteButton = ({ checked, handleUpvote }) => {
-  const classes = useVoteBtnsStyles()
 
   return (
     <Checkbox
       checked={checked}
       icon={
-        <SvgIcon className={classes.icon}>
+        <SvgIcon tw="text-gray-400 font-size[32px]">
           <UpvoteIcon />
         </SvgIcon>
       }
       checkedIcon={
-        <SvgIcon className={classes.checkedIcon}>
+        <SvgIcon tw="text-green-600 font-size[32px]">
           <UpvoteIcon />
         </SvgIcon>
       }
@@ -26,18 +25,17 @@ export const UpvoteButton = ({ checked, handleUpvote }) => {
 }
 
 export const DownvoteButton = ({ checked, handleDownvote }) => {
-  const classes = useVoteBtnsStyles()
 
   return (
     <Checkbox
       checked={checked}
       icon={
-        <SvgIcon className={classes.icon}>
+        <SvgIcon tw="text-gray-400 font-size[32px]">
           <DownvoteIcon />
         </SvgIcon>
       }
       checkedIcon={
-        <SvgIcon className={classes.checkedIcon}>
+        <SvgIcon tw="text-green-600 font-size[32px]">
           <DownvoteIcon />
         </SvgIcon>
       }

@@ -1,3 +1,5 @@
+import { useForm } from 'react-hook-form'
+import { yupResolver } from '@hookform/resolvers/yup'
 import { useState, useEffect } from 'react'
 import { Link as RouterLink } from 'react-router-dom'
 import { UpvoteButton, DownvoteButton } from './VoteButtons'
@@ -7,10 +9,15 @@ import CommentSection from './CommentSection'
 import AcceptAnswerButton from './AcceptAnswerButton'
 import DeleteDialog from './DeleteDialog'
 import AuthFormModal from './AuthFormModal'
+import * as yup from 'yup'
 
 import Tag, { Tags } from './Tag'
-import tw from 'twin.macro'
-import { LightButton } from './CompStore'
+import tw from 'twin.macro' // eslint-disable-line no-unused-vars
+import { LightButton, TextArea } from './CompStore'
+
+const validationSchema = yup.object({
+  editedAnswerBody: yup.string().min(30, 'Must be at least 30 characters'),
+})
 
 const QuesAnsDetails = ({
   quesAns,
@@ -43,6 +50,10 @@ const QuesAnsDetails = ({
   const [editAnsOpen, setEditAnsOpen] = useState(false)
   const [editedAnswerBody, setEditedAnswerBody] = useState(body)
 
+  const { register, handleSubmit, reset, errors } = useForm({
+    mode: 'onChange',
+    resolver: yupResolver(validationSchema),
+  })
   useEffect(() => {
     if (isAnswer) {
       setEditedAnswerBody(body)
@@ -58,8 +69,8 @@ const QuesAnsDetails = ({
     setEditAnsOpen(false)
   }
 
-  const handleAnswerEdit = e => {
-    e.preventDefault()
+  const handleAnswerEdit = () => {
+    reset()
     editQuesAns(editedAnswerBody, id)
     closeEditInput()
   }
@@ -97,16 +108,32 @@ const QuesAnsDetails = ({
         {!editAnsOpen ? (
           <p tw="m-0 pb-1 text-sm">{body}</p>
         ) : (
-          <form tw="w-full">
-            <textarea
-              tw="w-full border-gray-400 p-1 resize-none rounded-sm font-family[inherit] text-sm"
+          <form onSubmit={handleSubmit(handleAnswerEdit)}>
+            <TextArea
+              name="editedAnswerBody"
               value={editedAnswerBody}
+              fullWidth
+              ref={register}
+              error={'editedAnswerBody' in errors}
+              helperText={
+                'editedAnswerBody' in errors
+                  ? errors.editedAnswerBody.message
+                  : ''
+              }
               required
               onChange={e => setEditedAnswerBody(e.target.value)}
               type="text"
               placeholder="Enter at least 30 characters"
               rows={4}
             />
+            <div tw="">
+              <LightButton style={{ marginRight: 9 }} type="submit">
+                Update Answer
+              </LightButton>
+              <LightButton onClick={() => setEditAnsOpen(false)}>
+                Cancel
+              </LightButton>
+            </div>
           </form>
         )}
         {tags && (
@@ -117,7 +144,7 @@ const QuesAnsDetails = ({
           </Tags>
         )}
         <div tw="flex flex-row flex-wrap justify-between my-5">
-          {!editAnsOpen ? (
+          {!editAnsOpen && (
             <div tw="inline-block">
               {user && user.id === author.id && (
                 <LightButton
@@ -133,18 +160,6 @@ const QuesAnsDetails = ({
                   handleDelete={deleteQuesAns}
                 />
               )}
-            </div>
-          ) : (
-            <div tw="">
-              <LightButton
-                style={{ marginRight: 9 }}
-                onClick={handleAnswerEdit}
-              >
-                Update Answer
-              </LightButton>
-              <LightButton onClick={() => setEditAnsOpen(false)}>
-                Cancel
-              </LightButton>
             </div>
           )}
           <PostedByUser

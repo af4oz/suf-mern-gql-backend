@@ -10,7 +10,7 @@ import AuthFormModal from '../components/AuthFormModal'
 import LoadingSpinner from '../components/LoadingSpinner'
 import { formatDateAgo, getErrorMsg } from '../utils/helperFuncs'
 
-import tw from 'twin.macro'
+import tw from 'twin.macro' //eslint-disable-line no-unused-vars
 
 const QuestionPage = () => {
   const { clearEdit, notify } = useStateContext()
@@ -79,7 +79,7 @@ const QuestionPage = () => {
           </span>
         </div>
       </div>
-      <div tw="flex flex-row flex-nowrap justify-between">
+      <div tw="">
         <QuesPageContent question={question} />
         <RightSidePanel />
       </div>

@@ -16,7 +16,7 @@ import AnswerForm from './AnswerForm'
 import { upvote, downvote } from '../utils/voteQuesAns'
 import { getErrorMsg } from '../utils/helperFuncs'
 
-import tw from 'twin.macro'
+import tw from 'twin.macro'; //eslint-disable-line no-unused-vars 
 import { useQuesPageStyles } from '../styles/muiStyles'
 
 const QuesPageContent = ({ question }) => {

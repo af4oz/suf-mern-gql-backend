@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom'
 import { formatDateAgo, formatDayTime } from '../utils/helperFuncs'
-import tw from 'twin.macro'
+import tw from 'twin.macro'; //eslint-disable-line no-unused-vars
 
 const Avatar = ({ src, alt, ...otherProps }) => (
   <Link tw="w-6 h-6 mr-2 rounded-sm" {...otherProps}>

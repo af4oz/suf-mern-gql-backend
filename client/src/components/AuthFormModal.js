@@ -8,17 +8,16 @@ import { DialogTitle } from './CustomDialogTitle'
 import {
   Dialog,
   DialogContent,
-  Button,
   MenuItem,
   useMediaQuery,
-  Link,
-  SvgIcon,
-  IconButton,
+  Link
 } from '@material-ui/core'
 import { useTheme } from '@material-ui/core/styles'
 import { useDialogStyles } from '../styles/muiStyles'
 import PersonAddIcon from '@material-ui/icons/PersonAdd'
 import ExitToAppIcon from '@material-ui/icons/ExitToApp'
+import {SvgIcon,Button,IconButton} from './CompStore';
+import 'twin.macro';
 
 const AuthFormModal = ({ closeMenu, buttonType }) => {
   const [modalOpen, setModalOpen] = useState(false)
@@ -58,9 +57,6 @@ const AuthFormModal = ({ closeMenu, buttonType }) => {
     if (buttonType === 'ask') {
       return (
         <Button
-          variant="contained"
-          color="primary"
-          size={isMobile ? 'small' : 'medium'}
           style={{ minWidth: '9em' }}
           onClick={handleLoginModal}
         >
@@ -76,7 +72,7 @@ const AuthFormModal = ({ closeMenu, buttonType }) => {
     } else if (buttonType === 'upvote') {
       return (
         <IconButton onClick={handleLoginModal}>
-          <SvgIcon className={classes.upDownIcon}>
+          <SvgIcon  tw="text-gray-400">
             <UpvoteIcon />
           </SvgIcon>
         </IconButton>
@@ -84,7 +80,7 @@ const AuthFormModal = ({ closeMenu, buttonType }) => {
     } else if (buttonType === 'downvote') {
       return (
         <IconButton onClick={handleLoginModal}>
-          <SvgIcon className={classes.upDownIcon}>
+          <SvgIcon tw="text-gray-400" >
             <DownvoteIcon />
           </SvgIcon>
         </IconButton>
@@ -106,18 +102,12 @@ const AuthFormModal = ({ closeMenu, buttonType }) => {
       return (
         <div>
           <Button
-            color="primary"
-            variant="outlined"
-            size="small"
             style={{ marginRight: 7 }}
             onClick={handleLoginModal}
           >
             Log In
           </Button>
           <Button
-            color="primary"
-            variant="contained"
-            size="small"
             onClick={handleSignupModal}
           >
             Sign Up
