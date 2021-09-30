@@ -22,7 +22,7 @@
     "react-router-dom": "^5.2.0",
     "react-scripts": "4.0.0",
     "styled-components": "^5.2.1",
-    "twin.macro": "^2.3.0",
+    "twin.macro": "^2.7.0",
     "typeface-montserrat": "^1.1.13",
     "web-vitals": "^0.2.4",
     "yup": "^0.30.0"
@@ -40,20 +40,14 @@
       "react-app/jest"
     ]
   },
-  "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
-  },
+  "browserslist": [
+    ">0.3%",
+    "not ie 11",
+    "not dead",
+    "not op_mini all"
+  ],
   "devDependencies": {
     "@emotion/react": "^11.1.5",
-    "postcss": "^8.2.8"
+    "postcss": "^8.3.8"
   }
 }

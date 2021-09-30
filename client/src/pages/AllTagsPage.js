@@ -1,14 +1,13 @@
 import { useState } from 'react'
 import { useQuery } from '@apollo/client'
 import { GET_ALL_TAGS } from '../graphql/queries'
-import { Link as RouterLink } from 'react-router-dom'
 import LoadingSpinner from '../components/LoadingSpinner'
 import { useStateContext } from '../context/state'
 import { getErrorMsg } from '../utils/helperFuncs'
 
-import { Typography, Chip, TextField, InputAdornment } from '@material-ui/core'
-import { useTagsPageStyles } from '../styles/muiStyles'
+import { TextField ,ChipLink} from '../components/CompStore'
 import SearchIcon from '@material-ui/icons/Search'
+import tw from 'twin.macro' // eslint-disable-line no-unused-vars
 
 const AllTagsPage = () => {
   const { notify } = useStateContext()
@@ -19,21 +18,19 @@ const AllTagsPage = () => {
   })
 
   const [filterInput, setFilterInput] = useState('')
-  const classes = useTagsPageStyles()
 
   return (
-    <div className={classes.root}>
-      <Typography variant="h5" className={classes.titleText} color="secondary">
+    <div tw="p-3 mt-2">
+      <h2 tw="mt-0 text-purple-900  font-normal">
         Tags
-      </Typography>
-      <Typography variant="body1">
+      </h2>
+      <p tw="leading-5 text-gray-700">
         A tag is a keyword or label that categorizes your question with other,
         similar questions. Using <br />
         the right tags makes it easier for others to find and answer your
         question.
-      </Typography>
+      </p>
       <TextField
-        className={classes.filterInput}
         value={filterInput}
         placeholder="Filter by tag name"
         onChange={e => setFilterInput(e.target.value)}
@@ -41,33 +38,28 @@ const AllTagsPage = () => {
         size="small"
         InputProps={{
           startAdornment: (
-            <InputAdornment position="start">
               <SearchIcon color="primary" />
-            </InputAdornment>
           ),
         }}
       />
       {!loading && data ? (
-        <div className={classes.tagsWrapper}>
+        <div tw="flex mt-4">
           {data.getAllTags
             .filter(t =>
               t.tagName.toLowerCase().includes(filterInput.toLowerCase())
             )
-            .map(t => (
-              <div key={t.tagName} className={classes.tagBox}>
-                <Chip
+            .map((t,i) => (
+              <div key={t.tagName} css={ [i !== 0 && tw`ml-2`,tw`border-gray-400 border-width[1px] border-solid rounded-sm p-2 min-width[8em]`] }>
+                <ChipLink
                   label={t.tagName}
-                  variant="outlined"
-                  color="primary"
-                  size="small"
-                  component={RouterLink}
+                  tw="mb-2"
                   to={`/tags/${t.tagName}`}
-                  className={classes.tag}
-                  clickable
                 />
-                <Typography variant="caption" color="secondary">
+                <div tw="mt-2">
+                  <span tw="text-xs text-purple-800">
                   {t.count} questions
-                </Typography>
+                  </span>
+                </div>
               </div>
             ))}
         </div>

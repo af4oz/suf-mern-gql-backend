@@ -17,9 +17,8 @@ import { upvote, downvote } from '../utils/voteQuesAns'
 import { getErrorMsg } from '../utils/helperFuncs'
 
 import tw from 'twin.macro'; //eslint-disable-line no-unused-vars 
-import { useQuesPageStyles } from '../styles/muiStyles'
 
-const QuesPageContent = ({ question }) => {
+const QuesPageContent = ({ question,...rest }) => {
   const {
     id: quesId,
     answers,
@@ -35,7 +34,6 @@ const QuesPageContent = ({ question }) => {
   const { user } = useAuthContext()
   const { setEditValues, notify } = useStateContext()
   const history = useHistory()
-  const classes = useQuesPageStyles()
 
   const [submitVote] = useMutation(VOTE_QUESTION, {
     onError: err => {
@@ -190,7 +188,7 @@ const QuesPageContent = ({ question }) => {
   }
 
   return (
-    <div className={classes.content}>
+    <div tw="border-top[1px solid lightgray]" {...rest}>
       <QuesAnsDetails
         quesAns={question}
         upvoteQuesAns={upvoteQues}

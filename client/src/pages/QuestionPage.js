@@ -10,8 +10,15 @@ import AuthFormModal from '../components/AuthFormModal'
 import LoadingSpinner from '../components/LoadingSpinner'
 import { formatDateAgo, getErrorMsg } from '../utils/helperFuncs'
 
-import tw from 'twin.macro' //eslint-disable-line no-unused-vars
+import tw,{styled} from 'twin.macro' //eslint-disable-line no-unused-vars
 
+const QuestionContainer = styled.div`
+  display: flex;
+  >:first-child {
+    flex-basis: 70%;
+    margin-right: .5rem;
+  }
+`
 const QuestionPage = () => {
   const { clearEdit, notify } = useStateContext()
   const { user } = useAuthContext()
@@ -65,7 +72,7 @@ const QuestionPage = () => {
             <AuthFormModal buttonType="ask" />
           )}
         </div>
-        <div tw="pb-2 text-xs mb-2 border-bottom[1px solid lightgray]">
+        <div tw="pb-2 text-xs mb-2 ">
           <span>
             Asked <strong>{formatDateAgo(createdAt)} ago</strong>
           </span>
@@ -79,10 +86,10 @@ const QuestionPage = () => {
           </span>
         </div>
       </div>
-      <div tw="">
-        <QuesPageContent question={question} />
+      <QuestionContainer>
+        <QuesPageContent question={question}/>
         <RightSidePanel />
-      </div>
+      </QuestionContainer>
     </div>
   )
 }

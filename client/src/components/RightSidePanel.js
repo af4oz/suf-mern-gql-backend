@@ -28,7 +28,7 @@ const RightSidePanel = () => {
 
   return (
     <Grid>
-      <div tw="h-1/3 p-2 bg-purple-200 rounded-sm border-purple-600">
+      <div tw="min-height[35vh] p-2 bg-purple-200 bg-opacity-50 rounded-sm border-purple-600">
         <Heading>Top Tags</Heading>
         {!loading && data ? (
           <Tags col>

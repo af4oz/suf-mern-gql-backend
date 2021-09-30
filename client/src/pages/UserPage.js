@@ -9,6 +9,7 @@ import { formatDateAgo, getErrorMsg } from '../utils/helperFuncs'
 
 import { Avatar, Typography, Divider } from '@material-ui/core'
 import { useUserPageStyles } from '../styles/muiStyles'
+import tw from 'twin.macro';
 
 const UserPage = () => {
   const classes = useUserPageStyles()
@@ -53,72 +54,59 @@ const UserPage = () => {
 
   return (
     <div className={classes.root}>
-      <div className={classes.userCard}>
-        <Avatar
+      <div tw="bg-purple-200 bg-opacity-50 h-56 w-48 flex flex-col justify-center items-center rounded-sm">
+        <RouterLink
+          tw=""
+          to={`/user/${username}`}
+        >
+          <img 
           src={`https://secure.gravatar.com/avatar/${id}?s=164&d=identicon`}
           alt={username}
-          className={classes.avatar}
-          component={RouterLink}
-          to={`/user/${username}`}
-        />
-        <Typography variant="h5" color="secondary" className={classes.cardText}>
-          {reputation} <Typography variant="caption">REPUTATION</Typography>
-        </Typography>
+          />
+        </RouterLink>
+        <p tw="text-purple-900 text-xl">
+          {reputation} <span tw="text-sm">REPUTATION</span>
+        </p>
       </div>
-      <div className={classes.infoCard}>
-        <div className={classes.userInfo}>
+      <div className={classes.infoCard} tw="text-purple-900">
+        <div tw="flex justify-between color[inherit] ">
           <div>
-            <Typography
-              variant="h4"
-              color="primary"
-              className={classes.bigText}
+            <h1
+            tw="text-purple-800 my-0"
             >
               {userName}
-            </Typography>
-            <Typography
-              variant="body1"
-              color="secondary"
-              className={classes.smallText}
+            </h1>
+            <span
+            tw="color[inherit]"
             >
               member for {formatDateAgo(createdAt)}
-            </Typography>
+            </span>
           </div>
-          <div className={classes.statsBar}>
+          <div tw="flex text-center">
             <div style={{ marginRight: 10 }}>
-              <Typography
-                variant="h4"
-                color="primary"
-                className={classes.bigText}
+              <h2
+              tw="my-0"
               >
                 {totalAnswers}
-              </Typography>
-              <Typography
-                variant="body1"
-                color="secondary"
-                className={classes.smallText}
+              </h2>
+              <span
               >
                 answers
-              </Typography>
+              </span>
             </div>
             <div>
-              <Typography
-                variant="h4"
-                color="primary"
-                className={classes.bigText}
+              <h2
+              tw="my-0"
               >
                 {totalQuestions}
-              </Typography>
-              <Typography
-                variant="body1"
-                color="secondary"
-                className={classes.smallText}
+              </h2>
+              <span
               >
                 questions
-              </Typography>
+              </span>
             </div>
           </div>
         </div>
-        <Divider />
         <div className={classes.recentActivity}>
           <div style={{ marginBottom: '1em' }}>
             <Typography variant="h6" color="primary">

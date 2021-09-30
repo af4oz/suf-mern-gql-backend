@@ -28,3 +28,7 @@ input[type='search']::-webkit-search-results-decoration {
     overflow-x: hidden;
   }
 }
+
+* {
+  box-sizing: border-box;
+}

@@ -14,7 +14,7 @@ import 'twin.macro'
 import { TextArea, Button } from './CompStore'
 import Tag, { Tags } from './Tag'
 
-import { Typography, Link } from '@material-ui/core'
+import {  Link } from '@material-ui/core'
 import { useQuesPageStyles } from '../styles/muiStyles'
 
 const validationSchema = yup.object({

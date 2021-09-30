@@ -106,7 +106,7 @@ const QuesAnsDetails = ({
       </div>
       <div tw="px-3 pt-2 w-full">
         {!editAnsOpen ? (
-          <p tw="m-0 pb-1 text-sm">{body}</p>
+          <p tw="m-0 pb-1 text-sm text-gray-800">{body}</p>
         ) : (
           <form onSubmit={handleSubmit(handleAnswerEdit)}>
             <TextArea
