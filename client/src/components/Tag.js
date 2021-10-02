@@ -5,8 +5,8 @@ const Container = tw.span`flex items-center h-auto `
 
 const TagWord = tw.span`flex items-center h-auto rounded-sm bg-blue-200 bg-opacity-75`
 
-const Tag = ({ to, children, label, count }) => (
-  <Container>
+const Tag = ({ to, children, label, count, ...rest }) => (
+  <Container {...rest}>
     <TagWord>
       <Link to={to} tw=" text-blue-700 no-underline text-xs padding[.1rem .5rem]">
         {label || children}

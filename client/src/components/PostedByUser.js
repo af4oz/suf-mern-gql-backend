@@ -1,18 +1,9 @@
-import { Link } from 'react-router-dom'
 import { formatDateAgo, formatDayTime } from '../utils/helperFuncs'
 import tw from 'twin.macro'; //eslint-disable-line no-unused-vars
 
-const Avatar = ({ src, alt, ...otherProps }) => (
-  <Link tw="w-6 h-6 mr-2 rounded-sm" {...otherProps}>
-    <img
-      tw="color[transparent] object-fit[cover] text-center h-full w-full"
-      src={src}
-      alt={alt}
-    />
-  </Link>
-)
+import {Avatar,Link} from './CompStore';
 
-const AvatarDetails = tw.div``
+const AvatarDetails = tw.div`text-xs`
 
 const ByUser = ({
   username,
@@ -28,22 +19,23 @@ const ByUser = ({
         src={`https://secure.gravatar.com/avatar/${userId}?s=164&d=identicon`}
         alt={username}
         to={`/user/${username}`}
+        tw="w-8 h-8"
       />
       <AvatarDetails>
-        <span tw="text-xs">
+        <span >
           {filledVariant
             ? `${isAnswer ? 'answered' : 'asked'} ${formatDayTime(createdAt)}`
             : `asked ${formatDateAgo(createdAt)} ago`}
         </span>
         <br />
         {filledVariant && createdAt !== updatedAt && (
-          <span tw="text-xs">
+          <span>
             {`updated ${formatDayTime(updatedAt)}`}
             <br />
           </span>
         )}
-        <Link to={`/user/${username}`} tw="no-underline">
-          <span tw="text-xs">{username}</span>
+        <Link to={`/user/${username}`}>
+          <span>{username}</span>
         </Link>
       </AvatarDetails>
     </div>

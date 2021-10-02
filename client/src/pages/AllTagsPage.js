@@ -7,7 +7,14 @@ import { getErrorMsg } from '../utils/helperFuncs'
 
 import { TextField ,ChipLink} from '../components/CompStore'
 import SearchIcon from '@material-ui/icons/Search'
-import tw from 'twin.macro' // eslint-disable-line no-unused-vars
+import tw,{styled} from 'twin.macro' // eslint-disable-line no-unused-vars
+
+const Tags = styled.div`
+${tw`flex mt-4`}
+`
+const Tag = styled.div`
+${tw`border-gray-400 border-width[1px] border-solid rounded-sm p-2 min-width[8em]`}
+`
 
 const AllTagsPage = () => {
   const { notify } = useStateContext()
@@ -43,13 +50,13 @@ const AllTagsPage = () => {
         }}
       />
       {!loading && data ? (
-        <div tw="flex mt-4">
+        <Tags >
           {data.getAllTags
             .filter(t =>
               t.tagName.toLowerCase().includes(filterInput.toLowerCase())
             )
             .map((t,i) => (
-              <div key={t.tagName} css={ [i !== 0 && tw`ml-2`,tw`border-gray-400 border-width[1px] border-solid rounded-sm p-2 min-width[8em]`] }>
+              <Tag key={t.tagName} css={ [i !== 0 && tw`ml-2`] }>
                 <ChipLink
                   label={t.tagName}
                   tw="mb-2"
@@ -60,9 +67,9 @@ const AllTagsPage = () => {
                   {t.count} questions
                   </span>
                 </div>
-              </div>
+              </Tag>
             ))}
-        </div>
+        </Tags>
       ) : (
         <div style={{ minWidth: '100%' }}>
           <LoadingSpinner size={80} />

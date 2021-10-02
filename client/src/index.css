@@ -32,3 +32,12 @@ input[type='search']::-webkit-search-results-decoration {
 * {
   box-sizing: border-box;
 }
+
+body.has-dialog {
+  padding-right: 15px;
+  overflow: hidden;
+}
+.border-focus {
+  box-shadow: 0px 0px 0px 2px purple;
+  border-color: transparent;
+}

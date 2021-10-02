@@ -1,23 +1,22 @@
 import { ReactComponent as Error404 } from '../svg/404-error.svg'
 
-import { Typography, SvgIcon } from '@material-ui/core'
-import { useNotFoundPageStyles } from '../styles/muiStyles'
+import tw from 'twin.macro' // eslint-disable-line no-unused-vars
+import {SvgIcon} from '../components/CompStore'
 
 const NotFoundPage = () => {
-  const classes = useNotFoundPageStyles()
 
   return (
-    <div className={classes.root}>
-      <div className={classes.textWrapper}>
-        <SvgIcon color="primary" className={classes.icon}>
+    <div tw="w-full mt-4 text-purple-900">
+      <div tw="text-center margin-top[15%]">
+        <SvgIcon tw="font-size[6em] mb-3 text-purple-700">
           <Error404 />
         </SvgIcon>
-        <Typography color="secondary" variant="h5">
+        <h2 tw="font-normal mb-0">
           Page Not Found
-        </Typography>
-        <Typography color="secondary" variant="body1">
+        </h2>
+        <p tw="text-sm">
           The page you requested does not exist.
-        </Typography>
+        </p>
       </div>
     </div>
   )

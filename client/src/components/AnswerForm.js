@@ -1,5 +1,4 @@
 import { useForm } from 'react-hook-form'
-import { Link as RouterLink } from 'react-router-dom'
 import { useMutation } from '@apollo/client'
 import { POST_ANSWER } from '../graphql/mutations'
 import { VIEW_QUESTION } from '../graphql/queries'
@@ -11,18 +10,15 @@ import { yupResolver } from '@hookform/resolvers/yup'
 import { getErrorMsg } from '../utils/helperFuncs'
 
 import 'twin.macro'
-import { TextArea, Button } from './CompStore'
+import { TextArea, Button, Link } from './CompStore'
 import Tag, { Tags } from './Tag'
 
-import {  Link } from '@material-ui/core'
-import { useQuesPageStyles } from '../styles/muiStyles'
 
 const validationSchema = yup.object({
   answerBody: yup.string().min(30, 'Must be at least 30 characters'),
 })
 
 const AnswerForm = ({ quesId, tags }) => {
-  const classes = useQuesPageStyles()
   const { user } = useAuthContext()
   const { clearEdit, notify } = useStateContext()
   const { register, handleSubmit, reset, errors } = useForm({
@@ -98,20 +94,16 @@ const AnswerForm = ({ quesId, tags }) => {
             <Tag
               key={t}
               label={t}
-              variant="outlined"
-              color="primary"
-              size="small"
-              component={RouterLink}
               to={`/tags/${t}`}
-              className={classes.footerTag}
-              clickable
             />
           ))}
           &nbsp; or &nbsp;
           {user ? (
-            <Link component={RouterLink} to="/ask" onClick={() => clearEdit()}>
-              ask your own question.
-            </Link>
+            <>
+              <Link to="/ask" onClick={() => clearEdit()}>
+                ask your own question.
+              </Link>
+            </>
           ) : (
             <AuthFormModal buttonType="link" />
           )}

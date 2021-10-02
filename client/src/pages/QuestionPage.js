@@ -5,20 +5,12 @@ import { VIEW_QUESTION } from '../graphql/queries'
 import { useStateContext } from '../context/state'
 import { useAuthContext } from '../context/auth'
 import QuesPageContent from '../components/QuesPageContent'
-import RightSidePanel from '../components/RightSidePanel'
 import AuthFormModal from '../components/AuthFormModal'
 import LoadingSpinner from '../components/LoadingSpinner'
 import { formatDateAgo, getErrorMsg } from '../utils/helperFuncs'
 
-import tw,{styled} from 'twin.macro' //eslint-disable-line no-unused-vars
+import tw, { styled } from 'twin.macro' //eslint-disable-line no-unused-vars
 
-const QuestionContainer = styled.div`
-  display: flex;
-  >:first-child {
-    flex-basis: 70%;
-    margin-right: .5rem;
-  }
-`
 const QuestionPage = () => {
   const { clearEdit, notify } = useStateContext()
   const { user } = useAuthContext()
@@ -52,9 +44,9 @@ const QuestionPage = () => {
   const { title, views, createdAt, updatedAt } = question
 
   return (
-    <div tw="p-4">
+    <div tw="p-2 w-full">
       <div>
-        <div tw="flex justify-between  flex-nowrap flex-col sm:flex-row ">
+        <div tw="flex justify-between items-center flex-nowrap flex-col sm:flex-row ">
           <h1 tw="m-0 mb-1 font-normal text-2xl word-wrap[break-word]">
             {title}
           </h1>
@@ -86,10 +78,7 @@ const QuestionPage = () => {
           </span>
         </div>
       </div>
-      <QuestionContainer>
-        <QuesPageContent question={question}/>
-        <RightSidePanel />
-      </QuestionContainer>
+      <QuesPageContent question={question} />
     </div>
   )
 }

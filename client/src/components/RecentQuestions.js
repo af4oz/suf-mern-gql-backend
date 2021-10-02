@@ -1,33 +1,29 @@
-import { Link as RouterLink } from 'react-router-dom'
 import { formatDateAgo } from '../utils/helperFuncs'
 
-import { Typography } from '@material-ui/core'
-import { useUserPageStyles } from '../styles/muiStyles'
+import tw,{styled}  from 'twin.macro' // eslint-disable-line no-unused-vars
+import {Link} from '../components/CompStore';
 
+const PointsBox = styled.div`
+${tw`inline-flex px-2 py-1 border-width[1px] border-solid border-purple-900`}
+`
 const RecentQuestions = ({ question }) => {
-  const classes = useUserPageStyles()
 
   return (
-    <div className={classes.recentQuesAns}>
-      <div className={classes.votesTitleWrapper}>
-        <div className={classes.votes}>
-          <Typography color="primary" variant="subtitle2">
+    <div tw="flex justify-between text-purple-900 p-1 items-center">
+      <div tw="">
+        <PointsBox>
             {question.points}
-          </Typography>
-        </div>
-        <Typography
-          variant="subtitle2"
-          color="secondary"
-          className={classes.title}
-          component={RouterLink}
+        </PointsBox>
+        <Link
           to={`/questions/${question.id}`}
+          tw="font-medium ml-1"
         >
           {question.title}
-        </Typography>
+        </Link>
       </div>
-      <Typography variant="caption" className={classes.timeAgo}>
+      <span tw="text-xs">
         {formatDateAgo(question.createdAt)} ago
-      </Typography>
+      </span>
     </div>
   )
 }

@@ -7,7 +7,7 @@ import { formatDateAgo, getErrorMsg } from '../utils/helperFuncs'
 
 import SearchIcon from '@material-ui/icons/Search'
 import tw from 'twin.macro';
-import { TextField ,Avatar,Link} from '../components/CompStore'
+import { TextField, Avatar, Link } from '../components/CompStore'
 
 const AllUsersPage = () => {
   const { notify } = useStateContext()
@@ -20,7 +20,7 @@ const AllUsersPage = () => {
   const [filterInput, setFilterInput] = useState('')
 
   return (
-    <div tw="p-2">
+    <div tw="p-2 w-full">
       <h2 tw="text-purple-900 font-normal">
         Users
       </h2>
@@ -30,7 +30,7 @@ const AllUsersPage = () => {
         onChange={e => setFilterInput(e.target.value)}
         InputProps={{
           startAdornment: (
-              <SearchIcon color="primary" />
+            <SearchIcon tw="text-purple-600" />
           ),
         }}
       />
@@ -40,8 +40,8 @@ const AllUsersPage = () => {
             .filter(u =>
               u.username.toLowerCase().includes(filterInput.toLowerCase())
             )
-            .map((u,i) => (
-              <div key={u.id} css={[i !==0 && tw`ml-2` ,tw`flex `]}>
+            .map((u, i) => (
+              <div key={u.id} css={[i !== 0 && tw`ml-2`, tw`flex `]}>
                 <Avatar
                   src={`https://secure.gravatar.com/avatar/${u.id}?s=164&d=identicon`}
                   alt={u.username}

@@ -1,15 +1,26 @@
-import { ButtonGroup, Button } from '@material-ui/core'
-import { useQuesListStyles } from '../styles/muiStyles'
+import tw ,{styled} from 'twin.macro' // eslint-disable-line no-unused-vars
 
+const Button = styled.button(({variant}) => [
+  tw` inline-block cursor-pointer no-underline rounded-none transition-colors border-0 rounded-l-none px-3 py-2 outline-color[salmon]`,
+  variant === "contained" ? tw`bg-purple-800 hover:bg-black text-white`: tw`bg-white hover:bg-gray-lightest text-purple-900 `
+])
+
+const ButtonGroup = styled.div`
+  border-width: 1px;
+  ${tw`rounded-sm border-solid border-gray-600`}
+  > button + button {
+    border-left-width: 1px; 
+    ${tw` border-l-gray-600`}
+  }
+`
 const SortQuesBar = ({ isMobile, sortBy, setSortBy }) => {
-  const classes = useQuesListStyles()
 
   const handleSortChange = e => {
     setSortBy(e.target.innerText.toUpperCase())
   }
 
   return (
-    <div className={classes.btnGroupWrapper}>
+    <div tw="flex justify-end my-4">
       <ButtonGroup
         color="secondary"
         disableElevation

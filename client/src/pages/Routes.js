@@ -49,6 +49,7 @@ const Routes = () => {
         <Route exact path="/questions/:quesId">
           <NavMenuDesktop />
           <QuestionPage />
+          <RightSidePanel />
         </Route>
         <Route exact path="/tags/:tagName">
           <NavMenuDesktop />

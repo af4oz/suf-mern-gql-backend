@@ -7,12 +7,21 @@ import LoadingSpinner from '../components/LoadingSpinner'
 import { useStateContext } from '../context/state'
 import { formatDateAgo, getErrorMsg } from '../utils/helperFuncs'
 
-import { Avatar, Typography, Divider } from '@material-ui/core'
-import { useUserPageStyles } from '../styles/muiStyles'
-import tw from 'twin.macro';
+import tw,{styled} from 'twin.macro';
+import {Divider} from '../components/CompStore';
 
+const UserInfo = styled.div`
+  ${tw`flex justify-between color[inherit] items-center`}
+`
+const UserActivity = styled.div`${tw`mt-4`}`
+
+const UserAvatar = styled.div`
+  ${tw`bg-purple-200 bg-opacity-50 h-56 w-48 flex flex-col justify-center items-center rounded-sm`}
+`
+const UserCard = styled.div`
+${tw`w-full mt-4 ml-2 flex flex-row flex-wrap text-sm md:text-base`}
+`
 const UserPage = () => {
-  const classes = useUserPageStyles()
   const { notify } = useStateContext()
   const { username } = useParams()
   const [fetchedUser, setFetchedUser] = useState(null)
@@ -53,8 +62,8 @@ const UserPage = () => {
   } = fetchedUser
 
   return (
-    <div className={classes.root}>
-      <div tw="bg-purple-200 bg-opacity-50 h-56 w-48 flex flex-col justify-center items-center rounded-sm">
+    <UserCard>
+      <UserAvatar>
         <RouterLink
           tw=""
           to={`/user/${username}`}
@@ -67,9 +76,9 @@ const UserPage = () => {
         <p tw="text-purple-900 text-xl">
           {reputation} <span tw="text-sm">REPUTATION</span>
         </p>
-      </div>
-      <div className={classes.infoCard} tw="text-purple-900">
-        <div tw="flex justify-between color[inherit] ">
+      </UserAvatar>
+      <div  tw="text-purple-900 flex-1 mt-2 md:ml-2">
+        <UserInfo>
           <div>
             <h1
             tw="text-purple-800 my-0"
@@ -106,12 +115,12 @@ const UserPage = () => {
               </span>
             </div>
           </div>
-        </div>
-        <div className={classes.recentActivity}>
-          <div style={{ marginBottom: '1em' }}>
-            <Typography variant="h6" color="primary">
+        </UserInfo>
+        <UserActivity >
+          <div tw="mb-5">
+            <h3 tw="margin[.5rem .1rem] ">
               Last Asked Questions
-            </Typography>
+            </h3>
             <Divider />
             {recentQuestions.length !== 0 ? (
               recentQuestions.map(q => (
@@ -121,15 +130,15 @@ const UserPage = () => {
                 </div>
               ))
             ) : (
-              <Typography variant="subtitle1">
+              <p >
                 No questions asked yet.
-              </Typography>
+              </p>
             )}
           </div>
           <div>
-            <Typography variant="h6" color="primary">
+            <h3 tw="margin[.5rem .1rem]">
               Last Answered Questions
-            </Typography>
+            </h3>
             <Divider />
             {recentAnswers.length !== 0 ? (
               recentAnswers.map(q => (
@@ -139,14 +148,14 @@ const UserPage = () => {
                 </div>
               ))
             ) : (
-              <Typography variant="subtitle1">
+              <p>
                 No questions answered yet.
-              </Typography>
+              </p>
             )}
           </div>
-        </div>
+        </UserActivity>
       </div>
-    </div>
+    </UserCard>
   )
 }
 

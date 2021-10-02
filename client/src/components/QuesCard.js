@@ -4,7 +4,7 @@ import tw from 'twin.macro'; //eslint-disable-line no-unused-vars
 
 import Tag, { Tags } from './Tag'
 
-const StatsContainer = tw.div`ml-2 mr-3`
+const StatsContainer = tw.div`ml-2 mr-3 text-center text-xs`
 
 const QuestionContainer = tw.div`w-full`
 
@@ -28,20 +28,20 @@ const QuesCard = ({ question }) => {
   return (
     <Container>
       <StatsContainer>
-        <div tw="text-center">
-          <span tw="block text-gray-600">{points}</span>
-          <div tw="text-xs">votes</div>
+        <div >
+          <span tw="block text-gray-600 text-sm">{points}</span>
+          <div>votes</div>
         </div>
-        <div tw="text-center mt-2">
-          <span tw="block text-gray-600">{answerCount}</span>
-          <div tw="text-xs">answers</div>
+        <div tw="my-2">
+          <span tw="block text-gray-600 text-sm">{answerCount}</span>
+          <div>answers</div>
         </div>
-        <div tw="text-xs mt-2 text-center">{views} views</div>
+        <div>{views} views</div>
       </StatsContainer>
       <QuestionContainer>
         <Question>
           <Link
-            tw="no-underline text-blue-600 font-normal"
+            tw="no-underline text-blue-600 font-normal hover:text-blue-800"
             to={`/questions/${id}`}
           >
             {title}

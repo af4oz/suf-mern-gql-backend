@@ -1,31 +1,24 @@
-import { useState,useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import LoginForm from './LoginForm'
 import RegisterForm from './RegisterForm'
 import { ReactComponent as UpvoteIcon } from '../svg/upvote.svg'
 import { ReactComponent as DownvoteIcon } from '../svg/downvote.svg'
 
-import { DialogTitle } from './CustomDialogTitle'
 import {
-  Dialog,
-  DialogContent,
   MenuItem,
-  useMediaQuery,
-  Link
 } from '@material-ui/core'
-import { useTheme } from '@material-ui/core/styles'
 import { useDialogStyles } from '../styles/muiStyles'
 import PersonAddIcon from '@material-ui/icons/PersonAdd'
 import ExitToAppIcon from '@material-ui/icons/ExitToApp'
-import {SvgIcon,Button,IconButton} from './CompStore';
+import { SvgIcon, Button, IconButton, Link } from './CompStore';
+import Dialog, { DialogTitle, DialogContent } from './Dialog'
 import 'twin.macro';
 
 const AuthFormModal = ({ closeMenu, buttonType }) => {
   const [modalOpen, setModalOpen] = useState(false)
-  const [isMounted,setIsMounted] = useState(false)
+  const [isMounted, setIsMounted] = useState(false)
   const [authType, setAuthType] = useState('login')
   const classes = useDialogStyles()
-  const theme = useTheme()
-  const isMobile = useMediaQuery(theme.breakpoints.down('xs'))
 
   useEffect(() => {
     setIsMounted(true)
@@ -72,7 +65,7 @@ const AuthFormModal = ({ closeMenu, buttonType }) => {
     } else if (buttonType === 'upvote') {
       return (
         <IconButton onClick={handleLoginModal}>
-          <SvgIcon  tw="text-gray-400">
+          <SvgIcon tw="text-gray-400">
             <UpvoteIcon />
           </SvgIcon>
         </IconButton>
@@ -120,27 +113,29 @@ const AuthFormModal = ({ closeMenu, buttonType }) => {
   return (
     <div style={{ display: 'inline' }}>
       {triggerButton()}
-      <Dialog
-        open={modalOpen}
-        onClose={handleModalClose}
-        maxWidth="sm"
-        classes={{ paper: classes.dialogWrapper }}
-      >
-        <DialogTitle onClose={handleModalClose}></DialogTitle>
-        <DialogContent>
-          {authType === 'login' ? (
-            <LoginForm
-              setAuthType={setAuthType}
-              closeModal={handleModalClose}
-            />
-          ) : (
-            <RegisterForm
-              setAuthType={setAuthType}
-              closeModal={handleModalClose}
-            />
-          )}
-        </DialogContent>
-      </Dialog>
+      {
+        modalOpen ? (
+          <Dialog
+            onClose={handleModalClose}
+            classes={{ paper: classes.dialogWrapper }}
+          >
+            <DialogTitle onClose={handleModalClose}></DialogTitle>
+            <DialogContent>
+              {authType === 'login' ? (
+                <LoginForm
+                  setAuthType={setAuthType}
+                  closeModal={handleModalClose}
+                />
+              ) : (
+                <RegisterForm
+                  setAuthType={setAuthType}
+                  closeModal={handleModalClose}
+                />
+              )}
+            </DialogContent>
+          </Dialog>
+        ) : null
+      }
     </div>
   )
 }
