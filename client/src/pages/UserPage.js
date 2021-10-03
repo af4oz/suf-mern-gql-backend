@@ -7,8 +7,8 @@ import LoadingSpinner from '../components/LoadingSpinner'
 import { useStateContext } from '../context/state'
 import { formatDateAgo, getErrorMsg } from '../utils/helperFuncs'
 
-import tw,{styled} from 'twin.macro';
-import {Divider} from '../components/CompStore';
+import tw, { styled } from 'twin.macro';
+import { Divider } from '../components/CompStore';
 
 const UserInfo = styled.div`
   ${tw`flex justify-between color[inherit] items-center`}
@@ -68,25 +68,25 @@ const UserPage = () => {
           tw=""
           to={`/user/${username}`}
         >
-          <img 
-          src={`https://secure.gravatar.com/avatar/${id}?s=164&d=identicon`}
-          alt={username}
+          <img
+            src={`https://secure.gravatar.com/avatar/${id}?s=164&d=identicon`}
+            alt={username}
           />
         </RouterLink>
-        <p tw="text-purple-900 text-xl">
+        <p tw="text-purple-900 text-xl my-2">
           {reputation} <span tw="text-sm">REPUTATION</span>
         </p>
       </UserAvatar>
-      <div  tw="text-purple-900 flex-1 mt-2 md:ml-2">
+      <div tw="text-purple-900 flex-1 mt-2 md:ml-2">
         <UserInfo>
           <div>
             <h1
-            tw="text-purple-800 my-0"
+              tw="text-2xl text-purple-800 "
             >
               {userName}
             </h1>
             <span
-            tw="color[inherit]"
+              tw="color[inherit]"
             >
               member for {formatDateAgo(createdAt)}
             </span>
@@ -94,7 +94,7 @@ const UserPage = () => {
           <div tw="flex text-center">
             <div style={{ marginRight: 10 }}>
               <h2
-              tw="my-0"
+                tw="my-0"
               >
                 {totalAnswers}
               </h2>
@@ -105,7 +105,7 @@ const UserPage = () => {
             </div>
             <div>
               <h2
-              tw="my-0"
+                tw="my-0"
               >
                 {totalQuestions}
               </h2>
@@ -118,7 +118,7 @@ const UserPage = () => {
         </UserInfo>
         <UserActivity >
           <div tw="mb-5">
-            <h3 tw="margin[.5rem .1rem] ">
+            <h3 tw="margin[.5rem .1rem] font-bold">
               Last Asked Questions
             </h3>
             <Divider />
@@ -136,7 +136,7 @@ const UserPage = () => {
             )}
           </div>
           <div>
-            <h3 tw="margin[.5rem .1rem]">
+            <h3 tw="margin[.5rem .1rem] font-bold">
               Last Answered Questions
             </h3>
             <Divider />

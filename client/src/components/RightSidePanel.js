@@ -9,7 +9,7 @@ import Tag, { Tags } from './Tag'
 
 const Grid = tw.div`m-0 w-1/3 mt-4 rounded-sm hidden md:block`
 
-const Heading = tw.h3`text-purple-600 text-center`
+const Heading = tw.h3`text-purple-600 text-center mb-4`
 
 const RightSidePanel = () => {
   const { notify } = useStateContext()

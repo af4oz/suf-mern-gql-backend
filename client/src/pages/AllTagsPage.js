@@ -5,9 +5,9 @@ import LoadingSpinner from '../components/LoadingSpinner'
 import { useStateContext } from '../context/state'
 import { getErrorMsg } from '../utils/helperFuncs'
 
-import { TextField ,ChipLink} from '../components/CompStore'
+import { TextField, ChipLink } from '../components/CompStore'
 import SearchIcon from '@material-ui/icons/Search'
-import tw,{styled} from 'twin.macro' // eslint-disable-line no-unused-vars
+import tw, { styled } from 'twin.macro' // eslint-disable-line no-unused-vars
 
 const Tags = styled.div`
 ${tw`flex mt-4`}
@@ -28,10 +28,10 @@ const AllTagsPage = () => {
 
   return (
     <div tw="p-3 mt-2">
-      <h2 tw="mt-0 text-purple-900  font-normal">
+      <h2 tw="text-xl text-purple-900  font-normal my-2">
         Tags
       </h2>
-      <p tw="leading-5 text-gray-700">
+      <p tw="leading-5 text-gray-700 mb-4">
         A tag is a keyword or label that categorizes your question with other,
         similar questions. Using <br />
         the right tags makes it easier for others to find and answer your
@@ -41,11 +41,10 @@ const AllTagsPage = () => {
         value={filterInput}
         placeholder="Filter by tag name"
         onChange={e => setFilterInput(e.target.value)}
-        variant="outlined"
-        size="small"
+        tw="leading-3"
         InputProps={{
           startAdornment: (
-              <SearchIcon color="primary" />
+            <SearchIcon color="primary" />
           ),
         }}
       />
@@ -55,8 +54,8 @@ const AllTagsPage = () => {
             .filter(t =>
               t.tagName.toLowerCase().includes(filterInput.toLowerCase())
             )
-            .map((t,i) => (
-              <Tag key={t.tagName} css={ [i !== 0 && tw`ml-2`] }>
+            .map((t, i) => (
+              <Tag key={t.tagName} css={[i !== 0 && tw`ml-2`]}>
                 <ChipLink
                   label={t.tagName}
                   tw="mb-2"
@@ -64,7 +63,7 @@ const AllTagsPage = () => {
                 />
                 <div tw="mt-2">
                   <span tw="text-xs text-purple-800">
-                  {t.count} questions
+                    {t.count} questions
                   </span>
                 </div>
               </Tag>

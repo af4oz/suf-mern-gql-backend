@@ -10,21 +10,15 @@ import { yupResolver } from '@hookform/resolvers/yup'
 import SofLogo from '../svg/stack-overflow.svg'
 import { getErrorMsg } from '../utils/helperFuncs'
 
-import {
-  TextField,
-  Button,
-  Typography,
-  InputAdornment,
-  IconButton,
-  Link,
-} from '@material-ui/core'
-import { useAuthFormStyles } from '../styles/muiStyles'
 import PersonIcon from '@material-ui/icons/Person'
 import LockIcon from '@material-ui/icons/Lock'
 import EnhancedEncryptionIcon from '@material-ui/icons/EnhancedEncryption'
 import PersonAddIcon from '@material-ui/icons/PersonAdd'
 import VisibilityOffIcon from '@material-ui/icons/VisibilityOff'
 import VisibilityIcon from '@material-ui/icons/Visibility'
+
+import { TextField, IconButton, EmptyLink, Button } from './CompStore';
+import tw from 'twin.macro' // eslint-disable-line no-unused-vars
 
 const validationSchema = yup.object({
   username: yup
@@ -50,7 +44,6 @@ const RegisterForm = ({ setAuthType, closeModal }) => {
   const [showPass, setShowPass] = useState(false)
   const [errorMsg, setErrorMsg] = useState(null)
   const [showConfPass, setShowConfPass] = useState(false)
-  const classes = useAuthFormStyles()
   const { setUser } = useAuthContext()
   const { notify } = useStateContext()
   const { register, handleSubmit, reset, errors } = useForm({
@@ -82,120 +75,102 @@ const RegisterForm = ({ setAuthType, closeModal }) => {
   }
 
   return (
-    <div className={classes.root}>
-      <img src={SofLogo} alt="sof-logo" className={classes.titleLogo} />
+    <div tw="px-3 py-2">
+      <img src={SofLogo} alt="sof-logo" tw="width[5em] mx-auto my-4" />
       <form onSubmit={handleSubmit(onRegister)}>
-        <div className={classes.inputField}>
+        <div tw="mb-6">
           <TextField
             required
             fullWidth
             inputRef={register}
             name="username"
+            placeholder="username"
             type="text"
-            label="Username"
-            variant="outlined"
-            size="small"
             error={'username' in errors}
             helperText={'username' in errors ? errors.username.message : ''}
             InputProps={{
               startAdornment: (
-                <InputAdornment position="start">
-                  <PersonIcon color="primary" />
-                </InputAdornment>
+                <PersonIcon color="primary" />
               ),
             }}
           />
         </div>
-        <div className={classes.inputField}>
+        <div tw="mb-6">
           <TextField
             required
             fullWidth
             inputRef={register}
             name="password"
+            placeholder="password"
             type={showPass ? 'text' : 'password'}
-            label="Password"
-            variant="outlined"
-            size="small"
             error={'password' in errors}
             helperText={'password' in errors ? errors.password.message : ''}
             InputProps={{
               endAdornment: (
-                <InputAdornment position="end">
-                  <IconButton
-                    onClick={() => setShowPass(prevState => !prevState)}
-                    size="small"
-                  >
-                    {showPass ? (
-                      <VisibilityOffIcon color="secondary" />
-                    ) : (
-                      <VisibilityIcon color="secondary" />
-                    )}
-                  </IconButton>
-                </InputAdornment>
+                <IconButton
+                  onClick={() => setShowPass(prevState => !prevState)}
+                  size="small"
+                >
+                  {showPass ? (
+                    <VisibilityOffIcon color="secondary" />
+                  ) : (
+                    <VisibilityIcon color="secondary" />
+                  )}
+                </IconButton>
               ),
               startAdornment: (
-                <InputAdornment position="start">
-                  <LockIcon color="primary" />
-                </InputAdornment>
+                <LockIcon color="primary" />
               ),
             }}
           />
         </div>
-        <div className={classes.inputField}>
+        <div tw="mb-6">
           <TextField
             required
             fullWidth
             inputRef={register}
             name="confirmPassword"
+            placeholder="confirmPassword"
             type={showConfPass ? 'text' : 'password'}
-            label="Confirm Password"
-            variant="outlined"
-            size="small"
             error={'confirmPassword' in errors}
             helperText={
               'confirmPassword' in errors ? errors.confirmPassword.message : ''
             }
             InputProps={{
               endAdornment: (
-                <InputAdornment position="end">
-                  <IconButton
-                    onClick={() => setShowConfPass(prevState => !prevState)}
-                    size="small"
-                  >
-                    {showConfPass ? (
-                      <VisibilityOffIcon color="secondary" />
-                    ) : (
-                      <VisibilityIcon color="secondary" />
-                    )}
-                  </IconButton>
-                </InputAdornment>
+                <IconButton
+                  onClick={() => setShowConfPass(prevState => !prevState)}
+                  size="small"
+                >
+                  {showConfPass ? (
+                    <VisibilityOffIcon color="secondary" />
+                  ) : (
+                    <VisibilityIcon color="secondary" />
+                  )}
+                </IconButton>
               ),
               startAdornment: (
-                <InputAdornment position="start">
-                  <EnhancedEncryptionIcon color="primary" />
-                </InputAdornment>
+                <EnhancedEncryptionIcon color="primary" />
               ),
             }}
           />
         </div>
         <Button
-          color="primary"
-          variant="contained"
-          size="large"
           fullWidth
-          startIcon={<PersonAddIcon />}
           type="submit"
           disabled={loading}
+          tw="w-full bg-purple-600 hover:bg-purple-700"
         >
+          <PersonAddIcon /> &nbsp;
           Sign Up
         </Button>
       </form>
-      <Typography variant="body1" className={classes.footerText}>
+      <p tw="text-center my-3">
         Already have an account?{' '}
-        <Link onClick={() => setAuthType('login')} className={classes.link}>
+        <EmptyLink onClick={() => setAuthType('login')} >
           Log In
-        </Link>
-      </Typography>
+        </EmptyLink>
+      </p>
       <ErrorMessage
         errorMsg={errorMsg}
         clearErrorMsg={() => setErrorMsg(null)}

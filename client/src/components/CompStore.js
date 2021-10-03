@@ -12,7 +12,7 @@ const LightButton = props => (
   />
 )
 
-const Button = tw.button`no-underline px-1 py-2 sm:(px-4 py-2) bg-blue-600  text-white text-xs rounded-sm leading-none whitespace-nowrap inline-block border-none cursor-pointer transition-colors`
+const Button = tw.button`font[inherit] no-underline px-1 py-2 sm:(px-4 py-2) bg-blue-600  text-white rounded-sm leading-none whitespace-nowrap inline-block border-none cursor-pointer transition-colors  hover:bg-blue-700 align-middle`;
 
 const Checkbox = ({ checkedIcon, checked, icon, onChange, ...otherProps }) => {
   return (
@@ -30,6 +30,7 @@ const IconButton = ({ children, ...otherProps }) => {
   return (
     <button
       tw="padding[9px] bg-transparent border-none text-decoration[none] user-select[none] items-center justify-center vertical-align[middle] border-radius[50%] hover:bg-gray-200  focus:bg-gray-200 cursor-pointer outline-none transition-colors "
+      type="button"
       {...otherProps}
     >
       {children}
@@ -54,17 +55,27 @@ const TextArea = React.forwardRef((props, ref) => {
   )
 })
 
-const TextField = React.forwardRef((props, ref) => {
-  const { InputProps, ...rest } = props;
-  const [focus, setFocus] = React.useState(false);
+const textInputBorderStyles = [
+  tw` text-left absolute top[-5px] left-0 right-0 bottom-0 m-0 py-0 px-2 pointer-events-none overflow-hidden min-w-0 rounded-sm border-width[1px] border-gray-400 border-solid`
+];
+const textInputStyles = css`
+    ${tw`w-full px-1 py-2 border-none outline-none font[inherit] color[currentColor]`}
+    &:focus ~ fieldset {
+      ${tw`border-2 border-purple-600`}
+    }
+  `;
 
-  const borderStyles = [
-    tw` text-left absolute top[-5px] left-0 right-0 bottom-0 m-0 py-0 px-2 pointer-events-none overflow-hidden min-w-0 rounded-sm border-width[1px] border-gray-400 border-solid  hover:border-gray-800`,
-    focus && tw`border-2 border-purple-600`
-  ]
+const textInputRootStyles = css`
+    ${tw`relative inline-flex font[inherit]`}
+    &:hover > fieldset {
+      ${tw`border-gray-800`}
+    }
+  `;
+const TextField = React.forwardRef((props, ref) => {
+  const { InputProps, fullWidth, ...rest } = props;
 
   return (
-    <div tw="relative inline-flex mt-4">
+    <div css={[textInputRootStyles, fullWidth && tw`w-full`]} >
       {
         InputProps.startAdornment ? (
           <div tw="mr-1 inline-flex justify-center items-center pl-2">
@@ -72,8 +83,8 @@ const TextField = React.forwardRef((props, ref) => {
           </div>
         ) : null
       }
-      <input type="text" ref={ref} {...rest} tw="border-none outline-none font[inherit] color[currentColor] py-2 " onFocus={() => setFocus(true)} onBlur={() => setFocus(false)} />
-      <fieldset aria-hidden="true" css={borderStyles}>
+      <input type="text" ref={ref} {...rest} css={textInputStyles} />
+      <fieldset aria-hidden="true" css={textInputBorderStyles}>
         <legend tw="block w-0 p-0 invisible line-height[11px]">
           <span>Required&nbsp;*</span>
         </legend>
@@ -93,10 +104,8 @@ const ChipLink = (props) => {
   const { label, to, ...rest } = props
 
   return (
-    <RouterLink to={to} {...rest} tw="no-underline">
-      <span tw="bg-purple-200 opacity-75 border-solid border-width[1px] border-purple-800 rounded-sm padding[.1rem .5rem] text-xs no-underline text-purple-900" >
-        {label}
-      </span>
+    <RouterLink to={to} {...rest} tw=" bg-purple-200 text-purple-900 hover:(bg-purple-900 text-white) outline-color[darkorange] text-xs opacity-75 border-solid border-width[1px] border-purple-800 rounded-sm padding[.1rem .5rem] no-underline">
+      {label}
     </RouterLink>
   )
 }
@@ -113,12 +122,11 @@ const Link = styled(RouterLink)`
   ${tw`text-purple-900 hover:text-purple-600`}
 `;
 
-const EmptyLink = styled.a`
+const EmptyLink = styled.button`
   text-decoration: none;
-  ${tw`text-purple-900 hover:text-purple-600`}
+  ${tw`bg-transparent border-0 text-purple-900 hover:text-purple-600`}
 `;
-const Divider = tw.hr`my-0 border-width[1px] border-b-0 border-t-gray-lightest border-opacity-50 `;
+const Divider = tw.hr`my-0 border-width[1px] border-b-0 border-top-color[lightgray] `;
 
-// const TextField = 
 
 export { IconButton, SvgIcon, LightButton, Button, Checkbox, TextArea, TextField, ChipLink, Avatar, Link, Divider, EmptyLink };

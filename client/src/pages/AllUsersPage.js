@@ -21,7 +21,7 @@ const AllUsersPage = () => {
 
   return (
     <div tw="p-2 w-full">
-      <h2 tw="text-purple-900 font-normal">
+      <h2 tw="text-xl my-2 text-purple-900 font-normal">
         Users
       </h2>
       <TextField

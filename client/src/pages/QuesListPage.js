@@ -11,10 +11,10 @@ import LoadMoreButton from '../components/LoadMoreButton'
 import LoadingSpinner from '../components/LoadingSpinner'
 import { filterDuplicates, getErrorMsg } from '../utils/helperFuncs'
 
-import {  useMediaQuery } from '@material-ui/core'
+import { useMediaQuery } from '@material-ui/core'
 import { useTheme } from '@material-ui/core/styles'
-import tw ,{styled} from 'twin.macro' // eslint-disable-line no-unused-vars
-import {Divider,Button} from '../components/CompStore'
+import tw, { styled } from 'twin.macro' // eslint-disable-line no-unused-vars
+import { Divider, Button } from '../components/CompStore'
 
 const QuestionListContainer = styled.div`${tw`w-full mt-6 mx-3`}`;
 
@@ -76,24 +76,24 @@ const QuesListPage = ({ tagFilterActive, searchFilterActive }) => {
     <QuestionListContainer >
       <QuestionListHeader >
         <h2
-          tw="font-normal text-purple-900 m-0"
+          tw="text-xl font-normal text-purple-900 m-0"
         >
           {tagFilterActive
             ? `Questions tagged [${tagName}]`
             : searchFilterActive
-            ? `Search results for "${query}"`
-            : 'All Questions'}
+              ? `Search results for "${query}"`
+              : 'All Questions'}
         </h2>
         {user ? (
           <RouterLink
             to="/ask"
             onClick={() => clearEdit()}
-          > 
-          <Button
-          tw="bg-purple-700 hover:bg-purple-800 text-base"
           >
-            Ask Question
-          </Button>
+            <Button
+              tw="bg-purple-700 hover:bg-purple-800 text-base"
+            >
+              Ask Question
+            </Button>
           </RouterLink>
         ) : (
           <AuthFormModal buttonType="ask" />
@@ -102,23 +102,23 @@ const QuesListPage = ({ tagFilterActive, searchFilterActive }) => {
       <SortQuesBar isMobile={isMobile} sortBy={sortBy} setSortBy={setSortBy} />
       <Divider />
       <QuestionListBody>
-      {loading && page === 1 && (
-        <div style={{ minWidth: '100%', marginTop: '1em' }}>
-          <LoadingSpinner size={60} />
-        </div>
-      )}
-      {quesData &&
-        (quesData.questions.length !== 0 ? (
-          quesData.questions.map(q => <QuesCard key={q.id} question={q} />)
-        ) : (
-          <h3 tw="text-center text-purple-900 mt-10">
-            {tagFilterActive
-              ? `There are no questions tagged "${tagName}".`
-              : searchFilterActive
-              ? `No matches found for your search "${query}".`
-              : 'No questions found.'}
-          </h3>
-        ))}
+        {loading && page === 1 && (
+          <div style={{ minWidth: '100%', marginTop: '1em' }}>
+            <LoadingSpinner size={60} />
+          </div>
+        )}
+        {quesData &&
+          (quesData.questions.length !== 0 ? (
+            quesData.questions.map(q => <QuesCard key={q.id} question={q} />)
+          ) : (
+            <h3 tw="text-center text-purple-900 mt-10">
+              {tagFilterActive
+                ? `There are no questions tagged "${tagName}".`
+                : searchFilterActive
+                  ? `No matches found for your search "${query}".`
+                  : 'No questions found.'}
+            </h3>
+          ))}
       </QuestionListBody>
       {quesData && quesData.next && (
         <LoadMoreButton

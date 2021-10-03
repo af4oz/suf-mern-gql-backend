@@ -50,7 +50,7 @@ const AuthFormModal = ({ closeMenu, buttonType }) => {
     if (buttonType === 'ask') {
       return (
         <Button
-          style={{ minWidth: '9em' }}
+          tw="bg-purple-600 hover:bg-purple-700 text-sm"
           onClick={handleLoginModal}
         >
           Ask Question
@@ -58,7 +58,7 @@ const AuthFormModal = ({ closeMenu, buttonType }) => {
       )
     } else if (buttonType === 'link') {
       return (
-        <Link onClick={handleLoginModal} style={{ cursor: 'pointer' }}>
+        <Link to="#" onClick={handleLoginModal} style={{ cursor: 'pointer' }}>
           ask your own question.
         </Link>
       )
@@ -82,11 +82,11 @@ const AuthFormModal = ({ closeMenu, buttonType }) => {
       return (
         <div>
           <MenuItem onClick={handleLoginModal}>
-            <ExitToAppIcon className={classes.menuIcon} />
+            <ExitToAppIcon />
             Log In
           </MenuItem>
           <MenuItem onClick={handleSignupModal}>
-            <PersonAddIcon className={classes.menuIcon} />
+            <PersonAddIcon />
             Sign Up
           </MenuItem>
         </div>
@@ -95,12 +95,13 @@ const AuthFormModal = ({ closeMenu, buttonType }) => {
       return (
         <div>
           <Button
-            style={{ marginRight: 7 }}
+            tw="text-sm mr-3"
             onClick={handleLoginModal}
           >
             Log In
           </Button>
           <Button
+            tw="text-sm"
             onClick={handleSignupModal}
           >
             Sign Up
@@ -117,7 +118,6 @@ const AuthFormModal = ({ closeMenu, buttonType }) => {
         modalOpen ? (
           <Dialog
             onClose={handleModalClose}
-            classes={{ paper: classes.dialogWrapper }}
           >
             <DialogTitle onClose={handleModalClose}></DialogTitle>
             <DialogContent>

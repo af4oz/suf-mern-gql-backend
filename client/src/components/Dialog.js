@@ -42,10 +42,10 @@ const Dialog = (
       }
     }
 
-    document.body.addEventListener('click', handleOutsideClick);
+    document.body.addEventListener('click', handleOutsideClick, { capture: true });
 
     return () => {
-      document.body.removeEventListener('click', handleOutsideClick);
+      document.body.removeEventListener('click', handleOutsideClick, { capture: true });
     }
   })
 
