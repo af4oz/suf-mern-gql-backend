@@ -18,16 +18,11 @@ import sortAnswers from '../utils/sortAnswers'
 import { upvote, downvote } from '../utils/voteQuesAns'
 import { getErrorMsg } from '../utils/helperFuncs'
 
-import { Typography, useMediaQuery } from '@material-ui/core'
-import { useQuesPageStyles } from '../styles/muiStyles'
-import { useTheme } from '@material-ui/core/styles'
+import tw from 'twin.macro' // eslint-disable-line no-unused-vars
 
 const AnswerList = ({ quesId, answers, acceptedAnswer, quesAuthor }) => {
   const { user } = useAuthContext()
   const { notify } = useStateContext()
-  const classes = useQuesPageStyles()
-  const theme = useTheme()
-  const isMobile = useMediaQuery(theme.breakpoints.down('xs'))
   const [sortBy, setSortBy] = useState('VOTES')
 
   const [updateAnswer] = useMutation(EDIT_ANSWER, {
@@ -247,22 +242,21 @@ const AnswerList = ({ quesId, answers, acceptedAnswer, quesAuthor }) => {
   const answerList = sortAnswers(sortBy, answers, acceptedAnswer)
 
   return (
-    <div className={classes.answersWrapper}>
+    <div tw="mt-10">
       {answerList.length !== 0 && (
-        <div className={classes.answerHeader}>
-          <Typography color="secondary" variant="h6">
+        <div tw="flex justify-between items-center flex-wrap">
+          <h2 tw="text-purple-900 font-normal text-xl">
             {answerList.length} {answerList.length === 1 ? 'Answer' : 'Answers'}
-          </Typography>
+          </h2>
           <SortAnsBar
             sortBy={sortBy}
             setSortBy={setSortBy}
-            isMobile={isMobile}
           />
         </div>
       )}
       <div>
         {answerList.map(a => (
-          <div key={a.id} className={classes.answerWrapper}>
+          <div key={a.id} tw="mb-3">
             <QuesAnsDetails
               quesAns={a}
               upvoteQuesAns={() => upvoteAns(a.id, a.upvotedBy, a.downvotedBy)}

@@ -7,18 +7,16 @@ import { ReactComponent as DownvoteIcon } from '../svg/downvote.svg'
 import {
   MenuItem,
 } from '@material-ui/core'
-import { useDialogStyles } from '../styles/muiStyles'
 import PersonAddIcon from '@material-ui/icons/PersonAdd'
 import ExitToAppIcon from '@material-ui/icons/ExitToApp'
 import { SvgIcon, Button, IconButton, Link } from './CompStore';
-import Dialog, { DialogTitle, DialogContent } from './Dialog'
+import { Dialog, DialogTitle, DialogContent } from './Dialog'
 import 'twin.macro';
 
 const AuthFormModal = ({ closeMenu, buttonType }) => {
   const [modalOpen, setModalOpen] = useState(false)
   const [isMounted, setIsMounted] = useState(false)
   const [authType, setAuthType] = useState('login')
-  const classes = useDialogStyles()
 
   useEffect(() => {
     setIsMounted(true)

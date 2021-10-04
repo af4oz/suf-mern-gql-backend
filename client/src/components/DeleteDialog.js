@@ -3,9 +3,8 @@ import {
   Dialog,
   DialogTitle,
   DialogContent,
-  DialogContentText,
   DialogActions,
-} from '@material-ui/core'
+} from './Dialog'
 import tw from 'twin.macro';// eslint-disable-line no-unused-vars
 import { LightButton } from './CompStore'
 
@@ -28,22 +27,25 @@ const DeleteDialog = ({ handleDelete, bodyType }) => {
   return (
     <div style={{ display: 'inline' }}>
       <LightButton onClick={handleModalOpen}>Delete</LightButton>
-      <Dialog open={modalOpen} onClose={handleModalClose}>
-        <DialogTitle>Confirm Delete</DialogTitle>
-        <DialogContent>
-          <DialogContentText>
-            {`Are you sure you want to delete your ${
-              bodyType ? bodyType : 'question'
-            }?`}
-          </DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <LightButton onClick={handleModalClose}>Cancel</LightButton>
-          <LightButton onClick={handleDeleteClick} color="primary">
-            Delete
-          </LightButton>
-        </DialogActions>
-      </Dialog>
+      {
+        modalOpen && (
+          <Dialog open={modalOpen} onClose={handleModalClose}>
+            <DialogTitle>Confirm Delete</DialogTitle>
+            <DialogContent>
+              <p>
+                {`Are you sure you want to delete your ${bodyType ? bodyType : 'question'
+                  }?`}
+              </p>
+            </DialogContent>
+            <DialogActions>
+              <LightButton onClick={handleModalClose} tw="mr-1">Cancel</LightButton>
+              <LightButton onClick={handleDeleteClick} color="primary">
+                Delete
+              </LightButton>
+            </DialogActions>
+          </Dialog>
+        )
+      }
     </div>
   )
 }

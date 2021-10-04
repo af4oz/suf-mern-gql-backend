@@ -6,13 +6,31 @@ const SvgIcon = tw.svg`fill-current width[1em] height[1em] inline-block transiti
 
 const LightButton = props => (
   <button
-    tw="cursor-pointer text-gray-600 bg-transparent border-0 rounded-sm text-xs"
+    tw="cursor-pointer text-gray-600 bg-transparent border-0 rounded-sm text-xs hover:text-gray-800 outline-color[darkorange]"
     tabIndex={0}
     {...props}
   />
 )
 
-const Button = tw.button`font[inherit] no-underline px-1 py-2 sm:(px-4 py-2) bg-blue-600  text-white rounded-sm leading-none whitespace-nowrap inline-block border-none cursor-pointer transition-colors  hover:bg-blue-700 align-middle`;
+const Button = tw.button`font[inherit] no-underline px-2 py-1 sm:(px-4 py-2) bg-blue-600  hover:active:bg-blue-700 text-white rounded-sm leading-none whitespace-nowrap inline-block border-0 cursor-pointer transition-colors align-middle outline-color[salmon]`;
+
+const VButton = styled(Button)(({ variant }) => [
+  tw`rounded-none  px-3 py-2`,
+  variant === "contained" ? tw`bg-purple-800 hover:bg-black text-white` : tw`bg-white hover:bg-gray-100 text-purple-900 `
+])
+
+
+const VButtonGroup = styled.div(() => [
+  css`
+  border-width: 1px;
+  ${tw`rounded-sm border-solid border-gray-600`}
+  > button + button {
+    border-left-width: 1px; 
+    ${tw` border-l-gray-600`}
+  }
+`,
+  tw`text-sm md:text-base w-full sm:w-auto`
+])
 
 const Checkbox = ({ checkedIcon, checked, icon, onChange, ...otherProps }) => {
   return (
@@ -119,7 +137,7 @@ const Avatar = (props) => {
 }
 const Link = styled(RouterLink)`
   text-decoration: none;
-  ${tw`text-purple-900 hover:text-purple-600`}
+  ${tw`text-purple-600 hover:text-purple-800`}
 `;
 
 const EmptyLink = styled.button`
@@ -129,4 +147,4 @@ const EmptyLink = styled.button`
 const Divider = tw.hr`my-0 border-width[1px] border-b-0 border-top-color[lightgray] `;
 
 
-export { IconButton, SvgIcon, LightButton, Button, Checkbox, TextArea, TextField, ChipLink, Avatar, Link, Divider, EmptyLink };
+export { IconButton, SvgIcon, LightButton, Button, Checkbox, TextArea, TextField, ChipLink, Avatar, Link, Divider, EmptyLink, VButton, VButtonGroup };

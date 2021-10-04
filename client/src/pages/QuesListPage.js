@@ -11,8 +11,6 @@ import LoadMoreButton from '../components/LoadMoreButton'
 import LoadingSpinner from '../components/LoadingSpinner'
 import { filterDuplicates, getErrorMsg } from '../utils/helperFuncs'
 
-import { useMediaQuery } from '@material-ui/core'
-import { useTheme } from '@material-ui/core/styles'
 import tw, { styled } from 'twin.macro' // eslint-disable-line no-unused-vars
 import { Divider, Button } from '../components/CompStore'
 
@@ -29,8 +27,6 @@ const QuesListPage = ({ tagFilterActive, searchFilterActive }) => {
   const [quesData, setQuesData] = useState(null)
   const [sortBy, setSortBy] = useState('HOT')
   const [page, setPage] = useState(1)
-  const theme = useTheme()
-  const isMobile = useMediaQuery(theme.breakpoints.down('xs'))
   const [fetchQuestions, { data, loading }] = useLazyQuery(GET_QUESTIONS, {
     fetchPolicy: 'network-only',
     onError: err => {
@@ -99,7 +95,7 @@ const QuesListPage = ({ tagFilterActive, searchFilterActive }) => {
           <AuthFormModal buttonType="ask" />
         )}
       </QuestionListHeader>
-      <SortQuesBar isMobile={isMobile} sortBy={sortBy} setSortBy={setSortBy} />
+      <SortQuesBar sortBy={sortBy} setSortBy={setSortBy} />
       <Divider />
       <QuestionListBody>
         {loading && page === 1 && (

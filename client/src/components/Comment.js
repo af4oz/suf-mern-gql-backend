@@ -1,16 +1,14 @@
 import { useState, useEffect } from 'react'
-import { Link as RouterLink } from 'react-router-dom'
 import DeleteDialog from './DeleteDialog'
 import { formatDayTime } from '../utils/helperFuncs'
 
-import { Typography, Link, Button, TextField } from '@material-ui/core'
-import { useQuesPageStyles } from '../styles/muiStyles'
-import EditIcon from '@material-ui/icons/Edit'
+import { Link, TextArea, LightButton } from './CompStore'
+
+import tw, { styled } from 'twin.macro' //eslint-disable-line no-unused-vars
 
 const Comment = ({ comment, user, quesAnsId, editComment, deleteComment }) => {
   const [editOpen, setEditOpen] = useState(false)
   const [editedCommentBody, setEditedCommentBody] = useState(comment.body)
-  const classes = useQuesPageStyles()
 
   useEffect(() => {
     setEditedCommentBody(comment.body)
@@ -27,33 +25,33 @@ const Comment = ({ comment, user, quesAnsId, editComment, deleteComment }) => {
   }
 
   return (
-    <div className={classes.commentWrapper}>
+    <div tw="my-1">
       {!editOpen ? (
         <div>
-          <Typography variant="caption" style={{ wordWrap: 'anywhere' }}>
+          <p tw="text-xs break-all inline mr-2">
             {comment.body} –{' '}
             <Link
-              component={RouterLink}
+              tw=""
               to={`/user/${comment.author.username}`}
             >
               {comment.author.username}
             </Link>
-            <Typography variant="caption" color="secondary">
+            <span >
               {` ${formatDayTime(comment.createdAt)} `}
-            </Typography>
-            {comment.createdAt !== comment.updatedAt && (
-              <EditIcon fontSize="inherit" color="secondary" />
-            )}
-          </Typography>
+            </span>
+            <span tw="font-size[.8em]">
+              {comment.createdAt !== comment.updatedAt && (
+                '(edited)'
+              )}
+            </span>
+          </p>
           {user && user.id === comment.author.id && (
-            <Button
-              size="small"
-              color="primary"
-              className={classes.commentBtns}
+            <LightButton
+              tw="mr-1"
               onClick={() => setEditOpen(true)}
             >
               edit
-            </Button>
+            </LightButton>
           )}
           {user && (user.id === comment.author.id || user.role === 'ADMIN') && (
             <DeleteDialog
@@ -63,8 +61,8 @@ const Comment = ({ comment, user, quesAnsId, editComment, deleteComment }) => {
           )}
         </div>
       ) : (
-        <form className={classes.smallForm} onSubmit={handleCommentEdit}>
-          <TextField
+        <form tw="mt-3" onSubmit={handleCommentEdit}>
+          <TextArea
             value={editedCommentBody}
             required
             fullWidth
@@ -76,24 +74,18 @@ const Comment = ({ comment, user, quesAnsId, editComment, deleteComment }) => {
             rows={2}
             onChange={e => setEditedCommentBody(e.target.value)}
           />
-          <div className={classes.submitCancelBtns}>
-            <Button
+          <div >
+            <LightButton
               type="submit"
-              size="small"
-              variant="contained"
-              color="primary"
               style={{ marginRight: 9 }}
             >
               Update Comment
-            </Button>
-            <Button
-              size="small"
-              variant="outlined"
-              color="primary"
+            </LightButton>
+            <LightButton
               onClick={() => setEditOpen(false)}
             >
               Cancel
-            </Button>
+            </LightButton>
           </div>
         </form>
       )}

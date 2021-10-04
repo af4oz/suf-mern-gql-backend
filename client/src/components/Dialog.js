@@ -14,13 +14,13 @@ const DialogBackDrop = styled.div(({ isMounted }) => [
 ])
 
 const DialogChildrenContainer = styled.div(({ maxWidth }) => [
-  tw`relative max-height[calc(100% - 2rem)] rounded-sm overflow-y-auto flex flex-col max-w-2xl bg-white color[rgba(0, 0, 0, .87)] m-8`,
+  tw`relative max-height[calc(100% - 2rem)] rounded-sm overflow-y-auto flex flex-col max-w-2xl bg-white color[rgba(0, 0, 0, .87)] m-8 py-2 px-6`,
   maxWidth && `max-width: ${maxWidth};`
 ])
 
 
-const Dialog = (
-  { focusFirst, focusAfterClosed, onClose, children, maxWidth }
+export const Dialog = (
+  { focusFirst, focusAfterClosed, onClose, children, maxWidth, ...rest }
 ) => {
 
   const [isMounted, setIsMounted] = useState(false);
@@ -64,6 +64,7 @@ const Dialog = (
             ref={ref}
             role="dialog"
             maxWidth={maxWidth}
+            {...rest}
           >
             {children}
           </DialogChildrenContainer>
@@ -77,8 +78,8 @@ const Dialog = (
 };
 export const DialogTitle = ({ onClose, children, styles, ...rest }) => {
   return (
-    <div tw="px-6 py-4 m-0 flex[0 0 auto]" {...rest} css={[styles && styles.root]}>
-      <h3 tw="m-0">
+    <div tw="my-2 flex[0 0 auto]" {...rest} css={[styles && styles.root]}>
+      <h3 tw="m-0 font-bold">
         {children}
       </h3>
       {
@@ -96,11 +97,17 @@ export const DialogTitle = ({ onClose, children, styles, ...rest }) => {
     </div>
   )
 }
-export const DialogContent = (props) => {
+export const DialogContent = ({ children, ...rest }) => {
   return (
-    <div tw="flex-auto py-2 px-6 overflow-y-auto" {...props}>
-      {props.children}
+    <div tw="flex-auto overflow-y-auto" {...rest}>
+      {children}
     </div>
   )
 }
-export default Dialog;
+export const DialogActions = ({ children, ...rest }) => {
+  return (
+    <div tw="my-2 flex flex[0 0 auto] justify-end items-center" {...rest}>
+      {children}
+    </div>
+  )
+}

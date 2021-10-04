@@ -1,21 +1,20 @@
-import { Button, CircularProgress } from '@material-ui/core'
-import { useQuesListStyles } from '../styles/muiStyles'
+import { CircularProgress } from '@material-ui/core'
 import AutorenewIcon from '@material-ui/icons/Autorenew'
+import tw, { styled } from 'twin.macro' // eslint-disable-line no-unused-vars
+import { Button } from './CompStore'
 
 const LoadMoreButton = ({ handleLoadPosts, loading }) => {
-  const classes = useQuesListStyles()
 
   return (
-    <div className={classes.loadBtnWrapper}>
+    <div tw="flex justify-center my-3">
       <Button
-        color="primary"
-        variant="outlined"
-        size="large"
+        tw="px-6 py-1 w-1/2 bg-white text-blue-600 border[1px solid lightgray] hover:(bg-blue-600 text-white)"
         onClick={handleLoadPosts}
-        startIcon={!loading && <AutorenewIcon />}
-        className={classes.loadBtn}
         disabled={loading}
       >
+        {
+          !loading && <AutorenewIcon />
+        }
         {loading && (
           <CircularProgress
             disableShrink

@@ -3,12 +3,12 @@ import { Link } from 'react-router-dom'
 
 const Container = tw.span`flex items-center h-auto `
 
-const TagWord = tw.span`flex items-center h-auto rounded-sm bg-blue-200 bg-opacity-75`
+const TagWord = tw.span`flex items-center h-auto rounded-sm bg-blue-200 bg-opacity-75 `
 
 const Tag = ({ to, children, label, count, ...rest }) => (
   <Container {...rest}>
     <TagWord>
-      <Link to={to} tw=" text-blue-700 no-underline text-xs padding[.1rem .5rem]">
+      <Link to={to} tw=" text-blue-700 no-underline text-xs padding[.1rem .5rem] outline-color[darkorange]">
         {label || children}
       </Link>
     </TagWord>

@@ -1,6 +1,6 @@
-import { ButtonGroup, Button } from '@material-ui/core'
+import { VButton as Button, VButtonGroup as ButtonGroup } from './CompStore'
 
-const SortAnsBar = ({ isMobile, sortBy, setSortBy }) => {
+const SortAnsBar = ({ sortBy, setSortBy }) => {
   const handleSortChange = e => {
     setSortBy(e.target.innerText.toUpperCase())
   }
@@ -8,9 +8,6 @@ const SortAnsBar = ({ isMobile, sortBy, setSortBy }) => {
   return (
     <div>
       <ButtonGroup
-        color="secondary"
-        disableElevation
-        size={isMobile ? 'small' : 'medium'}
       >
         <Button
           variant={sortBy === 'VOTES' ? 'contained' : 'outlined'}

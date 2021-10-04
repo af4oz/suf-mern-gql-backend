@@ -11,6 +11,9 @@ import { formatDateAgo, getErrorMsg } from '../utils/helperFuncs'
 
 import tw, { styled } from 'twin.macro' //eslint-disable-line no-unused-vars
 
+const Container = tw.div`p-2 w-full`;
+const Header = tw.div``;
+
 const QuestionPage = () => {
   const { clearEdit, notify } = useStateContext()
   const { user } = useAuthContext()
@@ -35,18 +38,18 @@ const QuestionPage = () => {
 
   if (loading || !question) {
     return (
-      <div style={{ minWidth: '100%', marginTop: '20%' }}>
+      <Container >
         <LoadingSpinner size={80} />
-      </div>
+      </Container>
     )
   }
 
   const { title, views, createdAt, updatedAt } = question
 
   return (
-    <div tw="p-2 w-full">
-      <div>
-        <div tw="flex justify-between items-center flex-nowrap flex-col sm:flex-row ">
+    <Container>
+      <Header>
+        <div tw="flex sm:(justify-between items-center) flex-nowrap flex-col sm:flex-row ">
           <h1 tw="m-0 mb-1 font-normal text-2xl word-wrap[break-word]">
             {title}
           </h1>
@@ -77,9 +80,9 @@ const QuestionPage = () => {
             Viewed <strong>{views} times</strong>
           </span>
         </div>
-      </div>
+      </Header>
       <QuesPageContent question={question} />
-    </div>
+    </Container>
   )
 }
 

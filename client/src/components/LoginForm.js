@@ -53,15 +53,12 @@ const LoginForm = ({ setAuthType, closeModal }) => {
   return (
     <div tw="px-3 py-2">
       <img src={SofLogo} alt="sof-logo" tw="width[5em] mx-auto my-4" />
-      <form onSubmit={(e) => {
-        e.preventDefault();
-        handleSubmit(onLogin)
-      }}>
+      <form onSubmit={handleSubmit(onLogin)}>
         <div tw="mb-6">
           <TextField
             required
             fullWidth
-            inputRef={register}
+            ref={register}
             name="username"
             placeholder="username"
             type="text"
@@ -78,7 +75,7 @@ const LoginForm = ({ setAuthType, closeModal }) => {
           <TextField
             required
             fullWidth
-            inputRef={register}
+            ref={register}
             name="password"
             placeholder="password"
             type={showPass ? 'text' : 'password'}
