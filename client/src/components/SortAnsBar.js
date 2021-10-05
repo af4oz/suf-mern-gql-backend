@@ -6,29 +6,27 @@ const SortAnsBar = ({ sortBy, setSortBy }) => {
   }
 
   return (
-    <div>
-      <ButtonGroup
+    <ButtonGroup
+    >
+      <Button
+        variant={sortBy === 'VOTES' ? 'contained' : 'outlined'}
+        onClick={handleSortChange}
       >
-        <Button
-          variant={sortBy === 'VOTES' ? 'contained' : 'outlined'}
-          onClick={handleSortChange}
-        >
-          Votes
-        </Button>
-        <Button
-          variant={sortBy === 'NEWEST' ? 'contained' : 'outlined'}
-          onClick={handleSortChange}
-        >
-          Newest
-        </Button>
-        <Button
-          variant={sortBy === 'OLDEST' ? 'contained' : 'outlined'}
-          onClick={handleSortChange}
-        >
-          Oldest
-        </Button>
-      </ButtonGroup>
-    </div>
+        Votes
+      </Button>
+      <Button
+        variant={sortBy === 'NEWEST' ? 'contained' : 'outlined'}
+        onClick={handleSortChange}
+      >
+        Newest
+      </Button>
+      <Button
+        variant={sortBy === 'OLDEST' ? 'contained' : 'outlined'}
+        onClick={handleSortChange}
+      >
+        Oldest
+      </Button>
+    </ButtonGroup>
   )
 }
 

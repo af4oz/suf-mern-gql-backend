@@ -8,7 +8,7 @@ const SortQuesBar = ({ sortBy, setSortBy }) => {
   }
 
   return (
-    <div tw="flex justify-end my-4">
+    <div tw="flex justify-end my-4 text-sm sm:text-base">
       <ButtonGroup
       >
         <Button

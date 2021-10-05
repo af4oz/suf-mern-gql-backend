@@ -2,10 +2,10 @@
 //https://www.w3.org/TR/wai-aria-practices-1.1/examples/dialog-modal/js/dialog.js
 import React, { useEffect, useState } from "react";
 import ReactDOM from "react-dom";
-import useDialog from "../hooks/useDialog";
 import { IconButton } from './CompStore'
 import CloseIcon from '@material-ui/icons/Close'
 import tw, { styled } from 'twin.macro' // eslint-disable-line no-unused-vars
+import useModal from "../hooks/useModal";
 
 
 const DialogBackDrop = styled.div(({ isMounted }) => [
@@ -20,7 +20,7 @@ const DialogChildrenContainer = styled.div(({ maxWidth }) => [
 
 
 export const Dialog = (
-  { focusFirst, focusAfterClosed, onClose, children, maxWidth, ...rest }
+  { focusFirst, focusAfterClosed, onClose, autoFocus, children, maxWidth, ...rest }
 ) => {
 
   const [isMounted, setIsMounted] = useState(false);
@@ -33,23 +33,9 @@ export const Dialog = (
   }, [isMounted])
 
   useEffect(() => {
-    function handleOutsideClick(e) {
-      if (!ref.current) {
-        return
-      }
-      if (!ref.current.contains(e.target)) {
-        onClose();
-      }
-    }
-
-    document.body.addEventListener('click', handleOutsideClick, { capture: true });
-
-    return () => {
-      document.body.removeEventListener('click', handleOutsideClick, { capture: true });
-    }
   })
 
-  const { ref, modalRoot } = useDialog({ focusFirst, focusAfterClosed });
+  const { ref, modalRoot } = useModal({ autoFocus, focusFirst, focusAfterClosed, onClose });
 
   const modal = (
     <div role="presentation" tw="fixed z-index[1300] inset-0">

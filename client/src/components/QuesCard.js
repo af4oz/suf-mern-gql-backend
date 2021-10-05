@@ -4,11 +4,11 @@ import tw from 'twin.macro'; //eslint-disable-line no-unused-vars
 
 import Tag, { Tags } from './Tag'
 
-const StatsContainer = tw.div`ml-2 mr-3 text-center text-xs`
+const StatsContainer = tw.div`ml-0 mr-1 sm:(ml-2 mr-3) text-center text-xs`
 
 const QuestionContainer = tw.div`w-full`
 
-const Container = tw.div`flex p-2`
+const Container = tw.div`flex p-1 sm:p-2`
 
 const Question = tw.h3`m-0 mb-2`
 

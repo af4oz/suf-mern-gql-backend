@@ -11,7 +11,7 @@ import { getErrorMsg } from '../utils/helperFuncs'
 
 import 'twin.macro'
 import { TextArea, Button, Link } from './CompStore'
-import Tag, { Tags } from './Tag'
+import Tag from './Tag'
 
 
 const validationSchema = yup.object({
@@ -87,27 +87,26 @@ const AnswerForm = ({ quesId, tags }) => {
           </div>
         </form>
       )}
-      <div tw="mt-4">
-        <Tags>
-          Browse other questions tagged &nbsp;
-          {tags.map(t => (
-            <Tag
-              key={t}
-              label={t}
-              to={`/tags/${t}`}
-            />
-          ))}
-          &nbsp; or &nbsp;
-          {user ? (
-            <>
-              <Link to="/ask" onClick={() => clearEdit()}>
-                ask your own question.
-              </Link>
-            </>
-          ) : (
-            <AuthFormModal buttonType="link" />
-          )}
-        </Tags>
+      <div tw="mt-4 text-sm sm:text-base">
+        Browse other questions tagged &nbsp;
+        {tags.map(t => (
+          <Tag
+            key={t}
+            label={t}
+            to={`/tags/${t}`}
+            tw="mr-1"
+          />
+        ))}
+        &nbsp; or &nbsp;
+        {user ? (
+          <>
+            <Link to="/ask" onClick={() => clearEdit()}>
+              ask your own question.
+            </Link>
+          </>
+        ) : (
+          <AuthFormModal buttonType="link" />
+        )}
       </div>
     </div>
   )

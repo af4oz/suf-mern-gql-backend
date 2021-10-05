@@ -1,9 +1,9 @@
 import tw, { styled } from 'twin.macro'; //eslint-disable-line no-unused-vars
 import { Link } from 'react-router-dom'
 
-const Container = tw.span`flex items-center h-auto `
+const Container = tw.span`inline-flex items-center h-auto `
 
-const TagWord = tw.span`flex items-center h-auto rounded-sm bg-blue-200 bg-opacity-75 `
+const TagWord = tw.span`inline-flex items-center h-auto rounded-sm bg-blue-200 bg-opacity-75 `
 
 const Tag = ({ to, children, label, count, ...rest }) => (
   <Container {...rest}>

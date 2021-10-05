@@ -2,15 +2,14 @@ import { useState } from 'react'
 import { Link as RouterLink } from 'react-router-dom'
 import AuthFormModal from './AuthFormModal'
 
-import { Button, Menu, MenuItem, Avatar, Typography } from '@material-ui/core'
-import { useMenuStyles } from '../styles/muiStyles'
+import { Menu, MenuItem, Avatar, EmptyLink } from './CompStore'
 import AccountCircleIcon from '@material-ui/icons/AccountCircle'
 import PowerSettingsNewIcon from '@material-ui/icons/PowerSettingsNew'
 import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown'
+import tw from 'twin.macro' // eslint-disable-line no-unused-vars
 
 const UserMenuDesktop = ({ user, logoutUser }) => {
   const [anchorEl, setAnchorEl] = useState(null)
-  const classes = useMenuStyles()
 
   const handleOpenMenu = event => {
     setAnchorEl(event.currentTarget)
@@ -29,46 +28,43 @@ const UserMenuDesktop = ({ user, logoutUser }) => {
     <div>
       {user ? (
         <div style={{ display: 'inline' }}>
-          <Button
-            className={classes.userBtn}
+          <EmptyLink
+            tw="text-sm flex items-center justify-center"
             onClick={handleOpenMenu}
-            endIcon={<KeyboardArrowDownIcon />}
           >
             <Avatar
               alt={user.username}
               src={`https://secure.gravatar.com/avatar/${user.id}?s=164&d=identicon`}
-              className={classes.avatar}
+              tw="width[2em] height[2em]"
             />
-            <Typography color="secondary" variant="body2">
+            <span tw="text-purple-900">
               {user.username}
-            </Typography>
-          </Button>
+            </span>
+            <KeyboardArrowDownIcon />
+          </EmptyLink>
           <Menu
             anchorEl={anchorEl}
-            getContentAnchorEl={null}
             anchorOrigin={{
               vertical: 'bottom',
               horizontal: 'right',
             }}
-            keepMounted
             transformOrigin={{
               vertical: 'top',
               horizontal: 'right',
             }}
             open={Boolean(anchorEl)}
             onClose={handleCloseMenu}
-            elevation={1}
           >
             <MenuItem
               component={RouterLink}
               to={`/user/${user.username}`}
               onClick={handleCloseMenu}
             >
-              <AccountCircleIcon className={classes.menuIcon} />
+              <AccountCircleIcon tw="mr-2" />
               My Profile
             </MenuItem>
-            <MenuItem onClick={handleLogoutClick}>
-              <PowerSettingsNewIcon className={classes.menuIcon} />
+            <MenuItem to="#" onClick={handleLogoutClick}>
+              <PowerSettingsNewIcon tw="mr-2" />
               Logout
             </MenuItem>
           </Menu>

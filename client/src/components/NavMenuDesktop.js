@@ -1,55 +1,50 @@
-import { useLocation, Link as RouterLink } from 'react-router-dom'
+import { useLocation } from 'react-router-dom'
 
-import { MenuItem, useMediaQuery, Divider, Grid } from '@material-ui/core'
-import { useMenuStyles } from '../styles/muiStyles'
-import { useTheme } from '@material-ui/core/styles'
 import PublicIcon from '@material-ui/icons/Public'
 import LocalOfferIcon from '@material-ui/icons/LocalOffer'
 import PeopleIcon from '@material-ui/icons/People'
 
+import tw, { styled, css } from 'twin.macro' // eslint-disable-line no-unused-vars
+import { Divider, MenuItem } from './CompStore'
+
 const DesktopNavMenu = () => {
   const { pathname } = useLocation()
-  const classes = useMenuStyles()
-  const theme = useTheme()
-  const isMobile = useMediaQuery(theme.breakpoints.down('xs'))
-
-  if (isMobile) return null
+  const iconStyles = css`
+    ${tw`width[.8em] height[.8em] mr-2`}
+  `
 
   return (
-    <Grid item>
-      <div className={classes.rootPanel}>
-        <div className={classes.list}>
+    <div tw="hidden sm:block" >
+      <div tw="sticky flex min-height[95vh] top[5vh]">
+        <div tw="flex flex-col mt-4">
           <MenuItem
             selected={
               pathname === '/' ||
               (!pathname.startsWith('/tag') && !pathname.startsWith('/user'))
             }
-            component={RouterLink}
             to="/"
           >
-            <PublicIcon className={classes.menuIcon} />
+            <PublicIcon css={iconStyles} />
             Stack Underflow
           </MenuItem>
           <MenuItem
             selected={pathname.startsWith('/tag')}
-            component={RouterLink}
             to="/tags"
           >
-            <LocalOfferIcon className={classes.menuIcon} />
+            <LocalOfferIcon css={iconStyles} />
             Tags
           </MenuItem>
           <MenuItem
             selected={pathname.startsWith('/user')}
-            component={RouterLink}
             to="/users"
           >
-            <PeopleIcon className={classes.menuIcon} />
+            <PeopleIcon css={iconStyles} />
             Users
           </MenuItem>
         </div>
-        <Divider orientation="vertical" flexItem />
+        <Divider orientation="vertical" />
       </div>
-    </Grid>
+    </div>
   )
 }
 

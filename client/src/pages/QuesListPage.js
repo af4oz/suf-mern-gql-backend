@@ -14,7 +14,7 @@ import { filterDuplicates, getErrorMsg } from '../utils/helperFuncs'
 import tw, { styled } from 'twin.macro' // eslint-disable-line no-unused-vars
 import { Divider, Button } from '../components/CompStore'
 
-const QuestionListContainer = styled.div`${tw`w-full mt-6 mx-3`}`;
+const QuestionListContainer = styled.div`${tw`relative w-full mx-1 mt-6 sm:mx-3 `} `;
 
 const QuestionListHeader = styled.div`${tw`flex justify-between items-center`}`;
 
@@ -72,7 +72,7 @@ const QuesListPage = ({ tagFilterActive, searchFilterActive }) => {
     <QuestionListContainer >
       <QuestionListHeader >
         <h2
-          tw="text-xl font-normal text-purple-900 m-0"
+          tw="text-lg sm:text-xl font-normal text-purple-900 m-0"
         >
           {tagFilterActive
             ? `Questions tagged [${tagName}]`
@@ -86,7 +86,7 @@ const QuesListPage = ({ tagFilterActive, searchFilterActive }) => {
             onClick={() => clearEdit()}
           >
             <Button
-              tw="bg-purple-700 hover:bg-purple-800 text-base"
+              tw="bg-purple-700 hover:bg-purple-800 text-sm sm:text-base"
             >
               Ask Question
             </Button>
