@@ -6,6 +6,11 @@ import { useEffect } from 'react';
 import { useState } from 'react';
 import useModal from '../hooks/useModal';
 import ClearIcon from '@material-ui/icons/Clear'
+import { MdErrorOutline as ErrorIcon } from 'react-icons/md';
+import { AiOutlineWarning as WarningIcon } from 'react-icons/ai';
+import { RiInformationLine as InfoIcon } from 'react-icons/ri';
+import { IoMdCheckmarkCircleOutline as SuccessIcon } from 'react-icons/io';
+import { MdClear as CloseIcon } from 'react-icons/md';
 
 const SvgIcon = tw.svg`fill-current width[1em] height[1em] inline-block transition-colors flex-shrink-0 user-select[none] font-size[32px]`
 
@@ -53,7 +58,7 @@ const Checkbox = ({ checkedIcon, checked, icon, onChange, ...otherProps }) => {
 }
 
 const iconButtonStyles = css`
-${tw`padding[9px] bg-transparent border-none text-decoration[none] user-select[none] flex items-center justify-center vertical-align[middle] border-radius[50%] hover:bg-gray-200  focus:bg-gray-200 cursor-pointer outline-none transition-colors `}
+${tw`padding[9px] bg-transparent border-none text-decoration[none] user-select[none] flex items-center justify-center vertical-align[middle] border-radius[50%] cursor-pointer outline-none transition-colors `}
 `
 const IconButton = ({ children, ...otherProps }) => {
   return (
@@ -410,7 +415,7 @@ const Autocomplete = React.forwardRef(function Autocomplete({ disabled, value: v
             startAdornment,
             endAdornment: (
               hasClearIcon ? (
-                <InputAdornment {...getClearProps()}>
+                <InputAdornment {...getClearProps()} tw="cursor-pointer">
                   <ClearIcon ></ClearIcon>
                 </InputAdornment>
               ) : null
@@ -428,4 +433,81 @@ const Autocomplete = React.forwardRef(function Autocomplete({ disabled, value: v
   )
 })
 
-export { MenuItem, IconButton, SvgIcon, LightButton, Button, Checkbox, TextArea, TextField, ChipLink, Avatar, Link, Divider, EmptyLink, VButton, VButtonGroup, Menu, Autocomplete, ChipWithClose, InputAdornment };
+const Alert = React.forwardRef(function Alert(props, ref) {
+  const { severity, onClose, title, children, styles, ...rest } = props;
+  let icon, bgStyles;
+  if (severity === 'error') {
+    icon = <ErrorIcon />;
+    bgStyles = tw`bg-red-600`;
+  } else if (severity === 'info') {
+    icon = <InfoIcon />;
+    bgStyles = tw`bg-blue-600`;
+  } else if (severity === 'warning') {
+    icon = <WarningIcon />;
+    bgStyles = tw`bg-orange-600`;
+  } else {
+    icon = <SuccessIcon />;
+    bgStyles = tw`bg-green-600`;
+  }
+  return (
+    <div css={[tw`flex items-center justify-between min-width[240px] p-1 md:p-2 text-white bg-gray-900 bg-opacity-75 shadow-sm rounded-sm  font-bold leading-5 tracking-wide `, bgStyles && bgStyles]}>
+      <div>
+        {
+          title ? (
+            <div css={[tw`text-lg font-bold`, styles && styles.alertTitle]}>
+              {title}
+            </div>
+          ) : null
+        }
+        <div css={[tw`flex items-center font[inherit]`, styles && styles.alertBody]} ref={ref} {...rest}>
+          <div css={[tw`flex mr-2 py-1 color[inherit] font-size[1.2em]`, styles && styles.alertIcon]}>
+            {
+              icon
+            }
+          </div>
+          <div css={[tw`py-1`]}>{children}</div>
+        </div>
+      </div>
+      {
+        onClose ? (
+          <IconButton tw="font-size[1.2em] color[inherit]" onClick={onClose}>
+            <CloseIcon />
+          </IconButton>
+        ) : null
+      }
+    </div>
+  )
+})
+const Snackbar = React.forwardRef(function SnackBar(props, ref) {
+  const { open, onClose, anchorOrigin, styles, children, ...rest } = props;
+  let posStyles;
+  let mobilePosStyles = tw`bottom[24px] left-1/2 transform -translate-x-1/2 right-auto`
+  if (anchorOrigin) {
+    const { vertical, horizontal } = anchorOrigin;
+    if (horizontal === 'left' && vertical === 'top') {
+      posStyles = tw`md:(left[24px] top[24px] right-auto)`
+    } else if (horizontal === 'right' && vertical === 'top') {
+      posStyles = tw`md:(right[24px] top[24px] left-auto)`
+    } else if (horizontal === 'center' && vertical === 'top') {
+      posStyles = tw`md:(left-1/2 top[24px] -translate-x-1/2)`
+    } else if (horizontal === 'right' && vertical === 'bottom') {
+      posStyles = tw`md:(right[24px] bottom[24px] left-auto)`
+    } else if (horizontal === 'left' && vertical === 'bottom') {
+      posStyles = tw`md:(left[24px] bottom[24px] right-auto)`
+    } else if (horizontal === 'center' && vertical === 'bottom') {
+      posStyles = tw`bottom[24px] left-1/2 -translate-x-1/2 right-auto`
+    }
+  }
+  return (
+    <>
+      {
+        open ? (
+          <div css={[tw`fixed z-index[1400] flex items-center justify-start`, mobilePosStyles, posStyles]} ref={ref} {...rest}>
+            {children}
+          </div>
+        ) : null
+      }
+    </>
+  )
+})
+export { MenuItem, IconButton, SvgIcon, LightButton, Button, Checkbox, TextArea, TextField, ChipLink, Avatar, Link, Divider, EmptyLink, VButton, VButtonGroup, Menu, Autocomplete, ChipWithClose, InputAdornment, Alert, Snackbar };

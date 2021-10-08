@@ -1,7 +1,7 @@
 import { useStateContext } from '../context/state'
 
-import { Snackbar } from '@material-ui/core'
-import Alert from '@material-ui/lab/Alert'
+// import { Snackbar } from '@material-ui/core'
+import { Alert, Snackbar } from './CompStore.js'
 
 const ToastNotification = () => {
   const { notification, clearNotif } = useStateContext()

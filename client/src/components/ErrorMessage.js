@@ -1,4 +1,5 @@
-import { Alert, AlertTitle } from '@material-ui/lab'
+// import { Alert, AlertTitle } from '@material-ui/lab'
+import { Alert } from './CompStore';
 import { useAlertStyles } from '../styles/muiStyles'
 
 const AlertMessage = ({ errorMsg, clearErrorMsg }) => {
@@ -10,8 +11,7 @@ const AlertMessage = ({ errorMsg, clearErrorMsg }) => {
 
   return (
     <div className={classes.root}>
-      <Alert severity="error" onClose={clearErrorMsg}>
-        <AlertTitle>Error</AlertTitle>
+      <Alert severity="error" title="Error" onClose={clearErrorMsg}>
         {errorMsg}
       </Alert>
     </div>
