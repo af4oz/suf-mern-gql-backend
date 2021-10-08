@@ -5,18 +5,19 @@ import { Link as RouterLink } from 'react-router-dom';
 import { useEffect } from 'react';
 import { useState } from 'react';
 import useModal from '../hooks/useModal';
+import ClearIcon from '@material-ui/icons/Clear'
 
 const SvgIcon = tw.svg`fill-current width[1em] height[1em] inline-block transition-colors flex-shrink-0 user-select[none] font-size[32px]`
 
 const LightButton = props => (
   <button
-    tw="cursor-pointer text-gray-600 bg-transparent border-0 rounded-sm text-xs hover:text-gray-800 outline-color[darkorange]"
+    css={[tw`cursor-pointer text-gray-600 bg-transparent border-0 rounded-sm text-xs hover:text-gray-800 outline-color[darkorange]`]}
     tabIndex={0}
     {...props}
   />
 )
 
-const Button = tw.button`font[inherit] no-underline padding[.4em .8em] bg-blue-600  hover:active:bg-blue-700 text-white rounded-sm leading-none whitespace-nowrap inline-block border-0 cursor-pointer transition-colors align-middle outline-color[salmon]`;
+const Button = tw.button`font[inherit] no-underline padding[.4em .8em] bg-blue-600  hover:bg-blue-700 text-white rounded-sm leading-none whitespace-nowrap inline-block border-0 cursor-pointer transition-colors align-middle outline-color[salmon]`;
 
 const VButton = styled(Button)(({ variant }) => [
   tw`rounded-none  padding[.5em .6em]`,
@@ -42,7 +43,7 @@ const VButtonGroup = styled.div(() => [
 const Checkbox = ({ checkedIcon, checked, icon, onChange, ...otherProps }) => {
   return (
     <button
-      tw="padding[9px] bg-transparent border-none text-decoration[none] user-select[none] items-center justify-center vertical-align[middle] border-radius[50%] hover:bg-gray-200  focus:bg-gray-200 cursor-pointer outline-none transition-colors "
+      css={[tw`padding[9px] bg-transparent border-none text-decoration[none] user-select[none] items-center justify-center vertical-align[middle] border-radius[50%] hover:bg-gray-200  focus:bg-gray-200 cursor-pointer outline-none transition-colors `]}
       onClick={onChange}
       {...otherProps}
     >
@@ -51,10 +52,13 @@ const Checkbox = ({ checkedIcon, checked, icon, onChange, ...otherProps }) => {
   )
 }
 
+const iconButtonStyles = css`
+${tw`padding[9px] bg-transparent border-none text-decoration[none] user-select[none] flex items-center justify-center vertical-align[middle] border-radius[50%] hover:bg-gray-200  focus:bg-gray-200 cursor-pointer outline-none transition-colors `}
+`
 const IconButton = ({ children, ...otherProps }) => {
   return (
     <button
-      tw="padding[9px] bg-transparent border-none text-decoration[none] user-select[none] flex items-center justify-center vertical-align[middle] border-radius[50%] hover:bg-gray-200  focus:bg-gray-200 cursor-pointer outline-none transition-colors "
+      css={iconButtonStyles}
       type="button"
       {...otherProps}
     >
@@ -80,65 +84,100 @@ const TextArea = React.forwardRef((props, ref) => {
   )
 })
 
-const textInputBorderStyles = [
-  tw` text-left absolute top[-5px] left-0 right-0 bottom-0 m-0 py-0 px-2 pointer-events-none overflow-hidden min-w-0 rounded-sm border-width[1px] border-gray-400 border-solid`
+const inputBorderStyles = [
+  tw` text-left absolute inset-0 m-0 py-0 px-2 pointer-events-none overflow-hidden min-w-0 rounded-sm border-width[1px] border-gray-400 border-solid`
 ];
-const textInputStyles = css`
-    ${tw`w-full px-1 py-2 border-none outline-none font[inherit] color[currentColor]`}
+const inputStyles = css`
+    ${tw`w-full border-none outline-none font[inherit] color[currentColor]`}
     &:focus ~ fieldset {
       ${tw`border-2 border-purple-600`}
     }
   `;
 
-const textInputRootStyles = css`
-    ${tw`relative inline-flex font[inherit]`}
+const inputRootStyles = css`
+    ${tw`px-1 py-2 relative inline-flex font[inherit]`}
     &:hover > fieldset {
       ${tw`border-gray-800`}
     }
   `;
-const TextField = React.forwardRef((props, ref) => {
-  const { InputProps, fullWidth, ...rest } = props;
+const fieldRootStyles = css`
+  ${tw`p-0 align-top min-w-0 border-0 inline-flex flex-col relative`}
+`
+const inputLabelStyles = css`
+    ${tw`block font[inherit] p-0 text-black text-opacity-[.5] transform-origin[left top] whitespace-nowrap transition-default overflow-ellipsis z-index[1] transform translate-x-3 translate-y-2  scale-100 absolute top-0 left-0 overflow-hidden`}
+`
+const inputLabelActiveStyles = css`
+${tw`translate-y-[-.4em] scale-75 color[inherit]`}
+`;
+
+const InputAdornment = React.forwardRef(function InputAdornment(props, ref) {
+  return (
+    <div tw="inline-flex justify-center items-center px-1" {...props} ref={ref}>
+    </div>
+  )
+})
+
+const TextField = React.forwardRef(function TextField(props, ref) {
+  const { InputProps = {}, fullWidth, label, multiline, error, helperText, ...rest } = props;
+  const { startAdornment, endAdornment, styles } = InputProps;
 
   return (
-    <div css={[textInputRootStyles, fullWidth && tw`w-full`]} >
+    <div css={[fieldRootStyles, fullWidth && tw`w-full`, styles && styles.fieldRoot]}>
+      <div css={[inputRootStyles, fullWidth && tw`w-full`, styles && styles.inputRoot]} >
+        {
+          label ? (<label css={[inputLabelStyles, inputLabelActiveStyles, error && tw`text-red-500!`]}>{label}</label>) : null
+        }
+        {
+          startAdornment ? (
+            startAdornment
+          ) : null
+        }
+        {
+          multiline ? (
+            <textarea ref={ref} {...rest} css={[inputStyles, styles && styles.input]} />
+          ) : (
+            <input type="text" ref={ref} {...rest} css={[inputStyles, styles && styles.input]} />
+          )
+        }
+        <fieldset aria-hidden="true" css={[inputBorderStyles, error && tw`border-red-500!`]}>
+          <legend tw="block max-w-0 p-0 invisible line-height[11px]" style={{ maxWidth: "100%" }}>
+            <span>{label}</span>
+          </legend>
+        </fieldset>
+        {
+          endAdornment ? (
+            endAdornment
+
+          ) : null
+        }
+      </div >
       {
-        InputProps.startAdornment ? (
-          <div tw="mr-1 inline-flex justify-center items-center pl-2">
-            {InputProps.startAdornment}
-          </div>
-        ) : null
-      }
-      <input type="text" ref={ref} {...rest} css={textInputStyles} />
-      <fieldset aria-hidden="true" css={textInputBorderStyles}>
-        <legend tw="block w-0 p-0 invisible line-height[11px]">
-          <span>Required&nbsp;*</span>
-        </legend>
-      </fieldset>
-      {
-        InputProps.endAdornment ? (
-          <div tw="ml-1 inline-flex justify-center items-center pr-2">
-            {InputProps.endAdornment}
-          </div>
+        error ? (
+          <p css={[tw`text-xs`, error && tw`text-red-500!`]}>{helperText}</p>
         ) : null
       }
     </div>
   )
 })
 
+const chipStyles = css`
+${tw` bg-purple-200 text-purple-900 hover:(bg-purple-900 text-white) outline-color[darkorange] text-xs opacity-75 border-solid border-width[1px] border-purple-800 rounded-sm padding[.1rem .5rem] no-underline`}
+`;
+
 const ChipLink = (props) => {
   const { label, to, ...rest } = props
 
   return (
-    <RouterLink to={to} {...rest} tw=" bg-purple-200 text-purple-900 hover:(bg-purple-900 text-white) outline-color[darkorange] text-xs opacity-75 border-solid border-width[1px] border-purple-800 rounded-sm padding[.1rem .5rem] no-underline">
+    <RouterLink to={to} {...rest} css={chipStyles}>
       {label}
     </RouterLink>
   )
 }
 const Avatar = (props) => {
-  const { src, alt, to, ...rest } = props
+  const { src, alt, to, styles, ...rest } = props
   return (
-    <RouterLink to={to || '#'} tw="w-10 h-10 rounded-sm mr-2" {...rest}>
-      <img src={src} alt={alt} tw="text-transparent w-full h-full object-cover text-center "></img>
+    <RouterLink to={to || '#'} css={[tw`w-10 h-10 rounded-sm mr-2`, styles && styles.avatarRoot]} {...rest}>
+      <img src={src} alt={alt} css={[tw`text-transparent w-full h-full object-cover text-center `, styles && styles.img]}></img>
     </RouterLink>
   )
 }
@@ -156,12 +195,18 @@ const Divider = styled.hr(({ orientation }) => [
   orientation === 'vertical' ? tw`border-l-0 border-right-color[lightgray]` : tw`border-b-0 border-top-color[lightgray] `
 ]);
 
-const MenuItem = styled(RouterLink)(({ selected }) => [
-  tw`flex items-center justify-start whitespace-nowrap no-underline relative text-left overflow-hidden transition-colors w-auto px-2 py-1 font[inherit] hover:(bg-black bg-opacity-5) align-middle margin[.1em]`,
+const MenuItemLink = styled.div(({ selected }) => [
+  tw`flex items-center justify-start whitespace-nowrap no-underline relative text-left overflow-hidden transition-colors w-auto px-2 py-1 font[inherit] bg-white text-black hover:(bg-black bg-opacity-5) align-middle margin[.1em] rounded-sm`,
   selected && tw`bg-black bg-opacity-10`,
   css`-webkit-tap-highlight-color: transparent;`
 ])
-
+const MenuItem = ({ to, selected, ...rest }) => {
+  return (
+    <RouterLink to={to || '#'}>
+      <MenuItemLink selected={selected} {...rest} />
+    </RouterLink>
+  )
+}
 const MenuContainer = styled.div(({ open }) => [
   tw`fixed z-index[1300] inset-0 invisible`,
   open && tw`visible`
@@ -188,7 +233,8 @@ const Menu = ({ open, anchorEl, anchorOrigin, transformOrigin, onClose, children
 
   const { ref, modalRoot } = useModal({
     onClose,
-    focusAfterClosed: anchorEl
+    focusAfterClosed: anchorEl,
+    overlayModal: false
   })
 
 
@@ -226,4 +272,160 @@ const Menu = ({ open, anchorEl, anchorOrigin, transformOrigin, onClose, children
   return ReactDOM.createPortal(menu, modalRoot)
 }
 
-export { MenuItem, IconButton, SvgIcon, LightButton, Button, Checkbox, TextArea, TextField, ChipLink, Avatar, Link, Divider, EmptyLink, VButton, VButtonGroup, Menu };
+const ChipWithClose = (props) => {
+  const { label, onDelete, ...rest } = props
+  return (
+    <span css={chipStyles} {...rest} tw="flex items-center h-6 box-content margin[2px] pl-3 pr-1">
+      {label}
+      <button type="button" onClick={onDelete} tw="ml-1 font-bold bg-transparent text-xs text-purple-800">&#x2716;</button>
+    </span>
+  )
+}
+
+const Autocomplete = React.forwardRef(function Autocomplete({ disabled, value: valueProp, inputValue: inputValueProp, onInputChange, onChange, renderInput, renderTags, fullWidth, ChipProps, ...rest }, ref) {
+
+  const hasClearIcon = !disabled && (inputValueProp || valueProp.length > 0);
+  const [value, setValue] = useState(valueProp);
+  const [inputValue, setInputValue] = useState(inputValueProp || '');
+
+  const handleValue = (event, newValue, reason, details) => {
+    if (value === newValue) return;
+
+    if (onChange) {
+      onChange(event, newValue, reason, details);
+    }
+    setValue(newValue)
+  }
+  const handleTagDelete = (index) => (event) => {
+    const newValue = value.slice();
+    newValue.splice(index, 1);
+    handleValue(event, newValue, 'removeOption', {
+      option: value[index]
+    })
+  }
+  const handleClear = (e) => {
+    setInputValue('')
+
+    if (onInputChange) {
+      onInputChange(e, '', 'clear')
+    }
+
+    handleValue(e, [], 'clear')
+  }
+  const handleInputChange = (event) => {
+    const newValue = event.target.value;
+
+    if (inputValue !== newValue) {
+      setInputValue(newValue)
+
+      if (onInputChange) {
+        onInputChange(event, newValue, 'input')
+      }
+    }
+  }
+  const resetInputValue = React.useCallback((event, newValue) => {
+
+    let newInputValue;
+    if (!newValue) {
+      newInputValue = '';
+    }
+    else {
+      newInputValue = newValue
+    }
+
+    setInputValue(newInputValue);
+
+    if (onInputChange) onInputChange(event, newValue, 'reset');
+
+  }, [setInputValue, onInputChange])
+
+  const selectNewValue = (event, option, reason = 'selectOption') => {
+    let newValue = Array.isArray(value) ? value.slice() : [];
+
+    const itemIndex = value.findIndex((val) => val === option)
+
+    if (itemIndex === -1) {
+      newValue.push(option)
+      handleValue(event, newValue, reason, { option })
+    }
+    resetInputValue(event, '')
+
+  }
+  const handleKeyDown = (event) => {
+
+    switch (event.key) {
+      case "Enter":
+        // Avoid early form validation
+        event.preventDefault();
+
+        if (disabled) return;
+
+        if (!inputValue) return;
+
+        selectNewValue(event, inputValue, 'selectOption');
+        break;
+      default:
+        return;
+    }
+  }
+
+  const getTagProps = ({ index }) => ({
+    key: index,
+    'data-tag-index': index,
+    tabIndex: -1,
+    onDelete: handleTagDelete(index)
+  })
+  const getClearProps = () => ({
+    tabIndex: -1,
+    onClick: handleClear
+  })
+
+  let startAdornment;
+  if (value.length > 0) {
+    if (renderTags) {
+      startAdornment = renderTags(value, getTagProps)
+    } else {
+      startAdornment = value.map((option, index) => (
+        <ChipWithClose
+          label={option}
+          {...getTagProps({ index })}
+          {...ChipProps}
+        />
+      ))
+    }
+  }
+  return (
+    <>
+      <div
+        onKeyDown={handleKeyDown}
+      >
+        {renderInput({
+          disabled,
+          fullWidth: true,
+          ref,
+          value: inputValue,
+          onChange: handleInputChange,
+          tw: "flex-grow[1]",
+          InputProps: {
+            startAdornment,
+            endAdornment: (
+              hasClearIcon ? (
+                <InputAdornment {...getClearProps()}>
+                  <ClearIcon ></ClearIcon>
+                </InputAdornment>
+              ) : null
+            ),
+            styles: {
+              input: tw`flex-grow-default w-0 min-w-[8em] `,
+              inputRoot: tw`flex-wrap`,
+            }
+
+          },
+          ...rest
+        })}
+      </div>
+    </>
+  )
+})
+
+export { MenuItem, IconButton, SvgIcon, LightButton, Button, Checkbox, TextArea, TextField, ChipLink, Avatar, Link, Divider, EmptyLink, VButton, VButtonGroup, Menu, Autocomplete, ChipWithClose, InputAdornment };

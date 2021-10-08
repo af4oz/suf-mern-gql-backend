@@ -5,7 +5,7 @@ import LoadingSpinner from '../components/LoadingSpinner'
 import { useStateContext } from '../context/state'
 import { getErrorMsg } from '../utils/helperFuncs'
 
-import { TextField, ChipLink } from '../components/CompStore'
+import { TextField, ChipLink, InputAdornment } from '../components/CompStore'
 import SearchIcon from '@material-ui/icons/Search'
 import tw, { styled } from 'twin.macro' // eslint-disable-line no-unused-vars
 
@@ -44,7 +44,9 @@ const AllTagsPage = () => {
         tw="leading-3"
         InputProps={{
           startAdornment: (
-            <SearchIcon color="primary" />
+            <InputAdornment>
+              <SearchIcon color="primary" />
+            </InputAdornment>
           ),
         }}
       />

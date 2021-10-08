@@ -15,7 +15,7 @@ import LockIcon from '@material-ui/icons/Lock'
 import ExitToAppIcon from '@material-ui/icons/ExitToApp'
 import VisibilityOffIcon from '@material-ui/icons/VisibilityOff'
 import VisibilityIcon from '@material-ui/icons/Visibility'
-import { TextField, IconButton, EmptyLink, Button } from './CompStore';
+import { TextField, IconButton, InputAdornment, EmptyLink, Button } from './CompStore';
 import tw from 'twin.macro' // eslint-disable-line no-unused-vars
 
 const validationSchema = yup.object({
@@ -85,7 +85,7 @@ const LoginForm = ({ setAuthType, closeModal }) => {
               endAdornment: (
                 <IconButton
                   onClick={() => setShowPass(prevState => !prevState)}
-                  size="small"
+                  tw="p-0"
                 >
                   {showPass ? (
                     <VisibilityOffIcon color="secondary" />
@@ -95,7 +95,9 @@ const LoginForm = ({ setAuthType, closeModal }) => {
                 </IconButton>
               ),
               startAdornment: (
-                <LockIcon color="primary" />
+                <InputAdornment>
+                  <LockIcon color="primary" />
+                </InputAdornment>
               ),
             }}
           />

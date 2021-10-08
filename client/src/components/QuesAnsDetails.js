@@ -13,7 +13,7 @@ import * as yup from 'yup'
 
 import Tag, { Tags } from './Tag'
 import tw from 'twin.macro' // eslint-disable-line no-unused-vars
-import { LightButton, TextArea } from './CompStore'
+import { LightButton, TextField } from './CompStore'
 
 const validationSchema = yup.object({
   editedAnswerBody: yup.string().min(30, 'Must be at least 30 characters'),
@@ -109,7 +109,7 @@ const QuesAnsDetails = ({
           <p tw="m-0 pb-1 text-sm text-gray-800">{body}</p>
         ) : (
           <form onSubmit={handleSubmit(handleAnswerEdit)}>
-            <TextArea
+            <TextField
               name="editedAnswerBody"
               value={editedAnswerBody}
               fullWidth
@@ -124,6 +124,7 @@ const QuesAnsDetails = ({
               onChange={e => setEditedAnswerBody(e.target.value)}
               type="text"
               placeholder="Enter at least 30 characters"
+              multiline
               rows={4}
             />
             <div tw="">

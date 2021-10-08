@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import DeleteDialog from './DeleteDialog'
 import { formatDayTime } from '../utils/helperFuncs'
 
-import { Link, TextArea, LightButton } from './CompStore'
+import { Link, TextField, LightButton } from './CompStore'
 
 import tw, { styled } from 'twin.macro' //eslint-disable-line no-unused-vars
 
@@ -62,7 +62,7 @@ const Comment = ({ comment, user, quesAnsId, editComment, deleteComment }) => {
         </div>
       ) : (
         <form tw="mt-3" onSubmit={handleCommentEdit}>
-          <TextArea
+          <TextField
             value={editedCommentBody}
             required
             fullWidth

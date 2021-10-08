@@ -35,7 +35,7 @@ export const Dialog = (
   useEffect(() => {
   })
 
-  const { ref, modalRoot } = useModal({ autoFocus, focusFirst, focusAfterClosed, onClose });
+  const { ref, modalRoot } = useModal({ autoFocus, focusFirst, focusAfterClosed, onClose, overlayModal: true });
 
   const modal = (
     <div role="presentation" tw="fixed z-index[1300] inset-0">

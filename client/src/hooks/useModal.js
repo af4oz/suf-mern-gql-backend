@@ -21,7 +21,7 @@ const getDOMRef = (value) => {
  * @param {() =>  void} props.onClose 
  * @returns 
  */
-const useModal = ({ focusFirst, onClose, focusAfterClosed, autoFocus }) => {
+const useModal = ({ focusFirst, onClose, focusAfterClosed, autoFocus, overlayModal = true }) => {
   let modalRoot = document.getElementById("modal-root");
   if (!modalRoot) {
     modalRoot = document.createElement("div");
@@ -137,18 +137,22 @@ const useModal = ({ focusFirst, onClose, focusAfterClosed, autoFocus }) => {
       }
     };
 
-    document.body.classList.add("has-dialog");
+    if (overlayModal) {
+      document.body.classList.add("has-dialog");
+    }
     document.addEventListener("focus", trapFocus, true);
 
     return () => {
-      document.body.classList.remove("has-dialog");
+      if (overlayModal) {
+        document.body.classList.remove("has-dialog");
+      }
       document.removeEventListener("focus", trapFocus, true);
 
       if (_focusAfterClosed) {
         _focusAfterClosed.focus()
       }
     };
-  }, [_focusFirst, _focusAfterClosed, autoFocus]);
+  }, [_focusFirst, _focusAfterClosed, autoFocus, overlayModal]);
 
   return { ref, modalRoot };
 };

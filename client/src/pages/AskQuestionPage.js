@@ -9,15 +9,8 @@ import * as yup from 'yup'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { getErrorMsg } from '../utils/helperFuncs'
 
-import {
-  Typography,
-  TextField,
-  Button,
-  InputAdornment,
-  Chip,
-} from '@material-ui/core'
-import Autocomplete from '@material-ui/lab/Autocomplete'
-import { useAskQuesPageStyles } from '../styles/muiStyles'
+import tw, { styled, css } from 'twin.macro' // eslint-disable-line no-unused-vars
+import { TextField, Button, ChipWithClose, Autocomplete } from '../components/CompStore'
 
 const validationSchema = yup.object({
   title: yup
@@ -31,7 +24,6 @@ const validationSchema = yup.object({
 })
 
 const AskQuestionPage = () => {
-  const classes = useAskQuesPageStyles()
   const history = useHistory()
   const { editValues, clearEdit, notify } = useStateContext()
   const [tagInput, setTagInput] = useState('')
@@ -89,110 +81,81 @@ const AskQuestionPage = () => {
       },
     })
   }
+  const handleInputChange = (value) => {
+    const newInputValue = value.toLowerCase().trim();
 
-  const handleTags = e => {
-    if (!e || (!e.target.value && e.target.value !== '')) return
-    const value = e.target.value.toLowerCase().trim()
-    setTagInput(value)
-
-    const keyCode = e.target.value
-      .charAt(e.target.selectionStart - 1)
-      .charCodeAt()
-
-    if (keyCode === 32 && value.trim() !== '') {
-      if (tags.includes(value))
-        return setErrorMsg(
-          "Duplicate tag found! You can't add the same tag twice."
-        )
-
-      if (!/^[a-zA-Z0-9-]*$/.test(value)) {
-        return setErrorMsg('Only alphanumeric characters & dash are allowed.')
-      }
-
-      if (tags.length >= 5) {
-        setTagInput('')
-        return setErrorMsg('Max 5 tags can be added! Not more than that.')
-      }
-
-      if (value.length > 15) {
-        return setErrorMsg("A single tag can't have more than 15 characters.")
-      }
-
-      setTags(prevTags => [...prevTags, value])
-      setTagInput('')
+    if (!/^[a-zA-Z0-9-]*$/.test(value)) {
+      return setErrorMsg('Only alphanumeric characters & dash are allowed.');
     }
-  }
+    if (newInputValue.length > 15) {
+      return setErrorMsg("A single tag can't have more than 15 characters.");
+    }
 
+    setTagInput(newInputValue)
+  }
+  const handleChange = (value) => {
+
+    if (tags.length >= 5) {
+      setTagInput('')
+      return setErrorMsg('Max 5 tags can be added! Not more than that.');
+    }
+    if (tags.includes(value)) {
+      return setErrorMsg(
+        "Duplicate tag found! You can't add the same tag twice."
+      );
+    }
+    setTags(value)
+  }
   return (
-    <div className={classes.root}>
-      <Typography variant="h5" color="secondary">
+    <div tw="w-full mt-6 mx-3">
+      <h1 tw="text-purple-900 text-xl">
         {editValues ? 'Edit Your Question' : 'Ask A Question'}
-      </Typography>
+      </h1>
       <form
-        className={classes.quesForm}
+        tw="mt-4 text-purple-800"
         onSubmit={
           editValues ? handleSubmit(editQuestion) : handleSubmit(postQuestion)
         }
       >
-        <div className={classes.inputWrapper}>
-          <Typography variant="caption" color="secondary">
+        <div tw="mb-4">
+          <p tw=" text-xs mb-2">
             Be specific and imagine you’re asking a question to another person
-          </Typography>
+          </p>
           <TextField
             required
             fullWidth
-            inputRef={register}
+            ref={register}
             name="title"
             placeholder="Enter atleast 15 characters"
             type="text"
             label="Title"
-            variant="outlined"
-            size="small"
             error={'title' in errors}
             helperText={'title' in errors ? errors.title.message : ''}
-            className={classes.inputField}
-            InputProps={{
-              startAdornment: (
-                <InputAdornment position="start">
-                  <div></div>
-                </InputAdornment>
-              ),
-            }}
           />
         </div>
-        <div className={classes.inputWrapper}>
-          <Typography variant="caption" color="secondary">
+        <div tw="mb-4">
+          <p tw="text-xs mb-2">
             Include all the information someone would need to answer your
             question
-          </Typography>
+          </p>
           <TextField
             required
             multiline
             rows={5}
             fullWidth
-            inputRef={register}
+            ref={register}
             name="body"
             placeholder="Enter atleast 30 characters"
             type="text"
             label="Body"
-            variant="outlined"
-            size="small"
             error={'body' in errors}
             helperText={'body' in errors ? errors.body.message : ''}
-            className={classes.inputField}
-            InputProps={{
-              startAdornment: (
-                <InputAdornment position="start">
-                  <div></div>
-                </InputAdornment>
-              ),
-            }}
           />
         </div>
-        <div className={classes.inputWrapper}>
-          <Typography variant="caption" color="secondary">
+        <div tw="mb-4">
+          <p tw="text-xs mb-2">
             Add up to 5 tags to describe what your question is about
-          </Typography>
+          </p>
           <Autocomplete
             multiple
             freeSolo
@@ -200,25 +163,23 @@ const AskQuestionPage = () => {
             getOptionLabel={option => option}
             value={tags}
             inputValue={tagInput}
-            onInputChange={handleTags}
+            onInputChange={(e, value) => {
+              handleInputChange(value)
+            }}
             onChange={(e, value, reason) => {
-              setTags(value)
+              handleChange(value)
             }}
             renderInput={params => (
               <TextField
                 {...params}
-                variant="outlined"
                 label="Tags"
-                placeholder="Enter space button to add tags"
-                onKeyDown={handleTags}
+                placeholder="press Enter to add tags"
                 fullWidth
-                className={classes.inputField}
-                size="small"
               />
             )}
             renderTags={(value, getTagProps) =>
               value.map((option, index) => (
-                <Chip
+                <ChipWithClose
                   variant="outlined"
                   label={option}
                   color="primary"
@@ -231,10 +192,7 @@ const AskQuestionPage = () => {
         </div>
         <Button
           type="submit"
-          color="primary"
-          variant="contained"
-          size="large"
-          className={classes.submitBtn}
+          tw="bg-purple-700 hover:bg-purple-800 text-sm sm:text-base"
           disabled={addQuesLoading || editQuesLoading}
         >
           {editValues ? 'Update Your Question' : 'Post Your Question'}

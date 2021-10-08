@@ -7,7 +7,7 @@ import { formatDateAgo, getErrorMsg } from '../utils/helperFuncs'
 
 import SearchIcon from '@material-ui/icons/Search'
 import tw from 'twin.macro';
-import { TextField, Avatar, Link } from '../components/CompStore'
+import { TextField, Avatar, Link, InputAdornment } from '../components/CompStore'
 
 const AllUsersPage = () => {
   const { notify } = useStateContext()
@@ -30,7 +30,9 @@ const AllUsersPage = () => {
         onChange={e => setFilterInput(e.target.value)}
         InputProps={{
           startAdornment: (
-            <SearchIcon tw="text-purple-600" />
+            <InputAdornment>
+              <SearchIcon tw="text-purple-600" />
+            </InputAdornment>
           ),
         }}
       />

@@ -35,7 +35,7 @@ const UserMenuDesktop = ({ user, logoutUser }) => {
             <Avatar
               alt={user.username}
               src={`https://secure.gravatar.com/avatar/${user.id}?s=164&d=identicon`}
-              tw="width[2em] height[2em]"
+              tw="width[1.5em] height[1.5em]"
             />
             <span tw="text-purple-900">
               {user.username}

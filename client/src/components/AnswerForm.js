@@ -10,7 +10,7 @@ import { yupResolver } from '@hookform/resolvers/yup'
 import { getErrorMsg } from '../utils/helperFuncs'
 
 import 'twin.macro'
-import { TextArea, Button, Link } from './CompStore'
+import { TextField, Button, Link } from './CompStore'
 import Tag from './Tag'
 
 
@@ -64,17 +64,18 @@ const AnswerForm = ({ quesId, tags }) => {
       {user && <h3 tw="text-purple-900">Your Answer</h3>}
       {user && (
         <form onSubmit={handleSubmit(postAnswer)}>
-          <TextArea
+          <TextField
             ref={register}
             name="answerBody"
             required
+            multiline
+            rows={5}
             fullWidth
             type="text"
             placeholder="Enter atleast 30 characters"
             size="small"
             error={'answerBody' in errors}
             helperText={'answerBody' in errors ? errors.answerBody.message : ''}
-            rows={5}
           />
           <div>
             <Button

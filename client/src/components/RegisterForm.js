@@ -17,7 +17,7 @@ import PersonAddIcon from '@material-ui/icons/PersonAdd'
 import VisibilityOffIcon from '@material-ui/icons/VisibilityOff'
 import VisibilityIcon from '@material-ui/icons/Visibility'
 
-import { TextField, IconButton, EmptyLink, Button } from './CompStore';
+import { TextField, IconButton, InputAdornment, EmptyLink, Button } from './CompStore';
 import tw from 'twin.macro' // eslint-disable-line no-unused-vars
 
 const validationSchema = yup.object({
@@ -82,7 +82,7 @@ const RegisterForm = ({ setAuthType, closeModal }) => {
           <TextField
             required
             fullWidth
-            inputRef={register}
+            ref={register}
             name="username"
             placeholder="username"
             type="text"
@@ -99,7 +99,7 @@ const RegisterForm = ({ setAuthType, closeModal }) => {
           <TextField
             required
             fullWidth
-            inputRef={register}
+            ref={register}
             name="password"
             placeholder="password"
             type={showPass ? 'text' : 'password'}
@@ -109,7 +109,7 @@ const RegisterForm = ({ setAuthType, closeModal }) => {
               endAdornment: (
                 <IconButton
                   onClick={() => setShowPass(prevState => !prevState)}
-                  size="small"
+                  tw="p-0"
                 >
                   {showPass ? (
                     <VisibilityOffIcon color="secondary" />
@@ -119,7 +119,9 @@ const RegisterForm = ({ setAuthType, closeModal }) => {
                 </IconButton>
               ),
               startAdornment: (
-                <LockIcon color="primary" />
+                <InputAdornment>
+                  <LockIcon color="primary" />
+                </InputAdornment>
               ),
             }}
           />
@@ -128,7 +130,7 @@ const RegisterForm = ({ setAuthType, closeModal }) => {
           <TextField
             required
             fullWidth
-            inputRef={register}
+            ref={register}
             name="confirmPassword"
             placeholder="confirmPassword"
             type={showConfPass ? 'text' : 'password'}
@@ -140,7 +142,7 @@ const RegisterForm = ({ setAuthType, closeModal }) => {
               endAdornment: (
                 <IconButton
                   onClick={() => setShowConfPass(prevState => !prevState)}
-                  size="small"
+                  tw="p-0"
                 >
                   {showConfPass ? (
                     <VisibilityOffIcon color="secondary" />
@@ -150,7 +152,9 @@ const RegisterForm = ({ setAuthType, closeModal }) => {
                 </IconButton>
               ),
               startAdornment: (
-                <EnhancedEncryptionIcon color="primary" />
+                <InputAdornment>
+                  <EnhancedEncryptionIcon color="primary" />
+                </InputAdornment>
               ),
             }}
           />

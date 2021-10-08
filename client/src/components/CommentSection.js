@@ -4,7 +4,7 @@ import Comment from './Comment'
 import * as yup from 'yup'
 import { yupResolver } from '@hookform/resolvers/yup'
 
-import { LightButton ,TextArea} from './CompStore'
+import { LightButton, TextField } from './CompStore'
 import tw from 'twin.macro';// eslint-disable-line no-unused-vars
 
 const validationSchema = yup.object({
@@ -34,7 +34,7 @@ const CommentSection = ({
     setIsCollapsed(false)
   }
 
-  const handleCommentAdd = ({ commentBody}) => {
+  const handleCommentAdd = ({ commentBody }) => {
     addComment(commentBody, quesAnsId)
     showComments()
     closeInput()
@@ -71,12 +71,13 @@ const CommentSection = ({
       )}
       {inputOpen && (
         <form onSubmit={handleSubmit(handleCommentAdd)} tw="mt-1">
-          <TextArea
+          <TextField
             ref={register}
             name="commentBody"
             required
             type="text"
             placeholder="Enter at least 5 characters"
+            multiline
             rows={3}
             fullWidth
             size="small"
