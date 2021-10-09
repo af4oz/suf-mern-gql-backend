@@ -9,7 +9,7 @@ import * as yup from 'yup'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { getErrorMsg } from '../utils/helperFuncs'
 
-import tw, { styled, css } from 'twin.macro' // eslint-disable-line no-unused-vars
+import tw from 'twin.macro' // eslint-disable-line no-unused-vars
 import { TextField, Button, ChipWithClose, Autocomplete } from '../components/CompStore'
 
 const validationSchema = yup.object({
@@ -107,7 +107,7 @@ const AskQuestionPage = () => {
     setTags(value)
   }
   return (
-    <div tw="w-full mt-6 mx-3">
+    <div tw="w-full my-6 mx-3">
       <h1 tw="text-purple-900 text-xl">
         {editValues ? 'Edit Your Question' : 'Ask A Question'}
       </h1>

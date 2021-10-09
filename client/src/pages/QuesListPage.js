@@ -100,7 +100,7 @@ const QuesListPage = ({ tagFilterActive, searchFilterActive }) => {
       <QuestionListBody>
         {loading && page === 1 && (
           <div style={{ minWidth: '100%', marginTop: '1em' }}>
-            <LoadingSpinner size={60} />
+            <LoadingSpinner size="large" />
           </div>
         )}
         {quesData &&

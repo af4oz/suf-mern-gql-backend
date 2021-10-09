@@ -1,7 +1,6 @@
 import { useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { useState, useEffect } from 'react'
-import { Link as RouterLink } from 'react-router-dom'
 import { UpvoteButton, DownvoteButton } from './VoteButtons'
 import { useAuthContext } from '../context/auth'
 import PostedByUser from './PostedByUser'
@@ -11,9 +10,8 @@ import DeleteDialog from './DeleteDialog'
 import AuthFormModal from './AuthFormModal'
 import * as yup from 'yup'
 
-import Tag, { Tags } from './Tag'
 import tw from 'twin.macro' // eslint-disable-line no-unused-vars
-import { LightButton, TextField } from './CompStore'
+import { LightButton, TextField, Tag } from './CompStore'
 
 const validationSchema = yup.object({
   editedAnswerBody: yup.string().min(30, 'Must be at least 30 characters'),
@@ -138,11 +136,11 @@ const QuesAnsDetails = ({
           </form>
         )}
         {tags && (
-          <Tags>
+          <div tw="flex flex-wrap">
             {tags.map(t => (
-              <Tag key={t} label={t} component={RouterLink} to={`/tags/${t}`} />
+              <Tag key={t} label={t} to={`/tags/${t}`} />
             ))}
-          </Tags>
+          </div>
         )}
         <div tw="flex flex-row flex-wrap justify-between my-5">
           {!editAnsOpen && (

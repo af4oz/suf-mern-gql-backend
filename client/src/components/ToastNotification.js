@@ -1,6 +1,5 @@
 import { useStateContext } from '../context/state'
 
-// import { Snackbar } from '@material-ui/core'
 import { Alert, Snackbar } from './CompStore.js'
 
 const ToastNotification = () => {

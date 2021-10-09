@@ -1,7 +1,77 @@
 # Stack Underflow | SOF Clone | MERN-GraphQL
 
+**Note:** This project is a fork from [amand33p](https://github.com/amand33p). I have been making some efforts to replace `material-ui` with `twin.macro` just to learn react, CSS and make reusable components myself. It's been a great journey so far and I learned a lot from `material-ui`, they did solid work with their lib.
+
+## Future
+1. Add Dark Mode
+
+## Usage
+
+#### Env variable:
+
+Create a .env file in server directory and add the following:
+
+```
+MONGODB_URI = "Your Mongo URI"
+PORT = 4000
+SECRET = "Your JWT secret"
+
+```
+
+#### Client:
+
+Open client/src/backendUrl.js & change "backend" variable to `"http://localhost:4000"`
+
+```
+cd client
+npm install
+npm start
+```
+
+#### Server:
+
+Note: Make sure that you have installed 'nodemon' as global package.
+
+```
+cd server
+npm install
+npm run dev
+```
+
 Fullstack [Stack Overflow](https://stackoverflow.com/) clone (QnA site) made with MERN + GraphQL
 
+## Usage
+
+#### Env variable:
+
+Create a .env file in server directory and add the following:
+
+```
+MONGODB_URI = "Your Mongo URI"
+PORT = 4000
+SECRET = "Your JWT secret"
+
+```
+
+#### Client:
+
+Open client/src/backendUrl.js & change "backend" variable to `"http://localhost:4000"`
+
+```
+cd client
+npm install
+npm start
+```
+
+#### Server:
+
+Note: Make sure that you have installed 'nodemon' as global package.
+
+```
+cd server
+npm install
+npm run dev
+```
 ## Built using
 
 #### Front-end
@@ -11,7 +81,7 @@ Fullstack [Stack Overflow](https://stackoverflow.com/) clone (QnA site) made wit
 - [Context API w/ hooks](https://reactjs.org/docs/context.html) - For state of user, toast notifs, theme etc.
 - [React Router](https://reactrouter.com/) - For general routing & navigation
 - [React Hook Form](https://react-hook-form.com/) - For flexible forms
-- [Material-UI w/ lots of CSS customisations](https://material-ui.com/) - UI library
+- ~~[Material-UI w/ lots of CSS customisations](https://material-ui.com/)~~ now using [twin.macro](https://github.com/ben-rogerson/twin.macro)- UI library
 - [Yup](https://github.com/jquense/yup) - For form validation
 - [date-fns](https://date-fns.org/) - For manipulating & formatting of dates
 
@@ -62,35 +132,3 @@ Fullstack [Stack Overflow](https://stackoverflow.com/) clone (QnA site) made wit
 ![Mobile-4](https://github.com/amand33p/stack-underflow-mern-gql/blob/master/screenshots/mobile-4.jpg)
 ![Mobile-5](https://github.com/amand33p/stack-underflow-mern-gql/blob/master/screenshots/mobile-5.jpg)
 
-## Usage
-
-#### Env variable:
-
-Create a .env file in server directory and add the following:
-
-```
-MONGODB_URI = "Your Mongo URI"
-PORT = 4000
-SECRET = "Your JWT secret"
-
-```
-
-#### Client:
-
-Open client/src/backendUrl.js & change "backend" variable to `"http://localhost:4000"`
-
-```
-cd client
-npm install
-npm start
-```
-
-#### Server:
-
-Note: Make sure that you have installed 'nodemon' as global package.
-
-```
-cd server
-npm install
-npm run dev
-```

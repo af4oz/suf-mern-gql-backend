@@ -3,13 +3,12 @@ import { GET_ALL_TAGS } from '../graphql/queries'
 import LoadingSpinner from './LoadingSpinner'
 import { useStateContext } from '../context/state'
 import { getErrorMsg } from '../utils/helperFuncs'
-import { useMediaQuery } from 'react-responsive'
 import tw from 'twin.macro'; //eslint-disable-line no-unused-vars
 import Tag, { Tags } from './Tag'
 
 const Grid = tw.div`m-0 w-1/3 mt-4 rounded-sm hidden md:block`
 
-const Heading = tw.h3`text-purple-600 text-center mb-4`
+const Heading = tw.h3`text-purple-900 text-center mb-4`
 
 const RightSidePanel = () => {
   const { notify } = useStateContext()
@@ -18,17 +17,10 @@ const RightSidePanel = () => {
       notify(getErrorMsg(err), 'error')
     },
   })
-  if (
-    !useMediaQuery({
-      query: '(min-device-width: 1024px)',
-    })
-  ) {
-    return null
-  }
 
   return (
     <Grid>
-      <div tw="min-height[35vh] p-2 bg-purple-200 bg-opacity-50 rounded-sm border-purple-600">
+      <div tw="hidden md:block min-height[35vh] p-2 bg-purple-100 bg-opacity-75 rounded-sm border-purple-600">
         <Heading>Top Tags</Heading>
         {!loading && data ? (
           <Tags col>
@@ -46,9 +38,7 @@ const RightSidePanel = () => {
             ))}
           </Tags>
         ) : (
-          <div style={{ minWidth: '200px' }}>
-            <LoadingSpinner size={40} />
-          </div>
+          <LoadingSpinner size="large" />
         )}
       </div>
     </Grid>

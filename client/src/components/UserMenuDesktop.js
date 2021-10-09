@@ -1,11 +1,11 @@
 import { useState } from 'react'
-import { Link as RouterLink } from 'react-router-dom'
 import AuthFormModal from './AuthFormModal'
 
-import { Menu, MenuItem, Avatar, EmptyLink } from './CompStore'
-import AccountCircleIcon from '@material-ui/icons/AccountCircle'
-import PowerSettingsNewIcon from '@material-ui/icons/PowerSettingsNew'
-import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown'
+import { Menu, MenuItem, Avatar, EmptyLink, SvgIcon } from './CompStore'
+import { MdAccountCircle as AccountCircleIcon } from 'react-icons/md';
+import { IoMdPower as PowerIcon } from 'react-icons/io';
+import { MdKeyboardArrowDown as ArrowDownIcon } from 'react-icons/md';
+
 import tw from 'twin.macro' // eslint-disable-line no-unused-vars
 
 const UserMenuDesktop = ({ user, logoutUser }) => {
@@ -44,7 +44,9 @@ const UserMenuDesktop = ({ user, logoutUser }) => {
             <span tw="text-purple-900">
               {user.username}
             </span>
-            <KeyboardArrowDownIcon />
+            <SvgIcon>
+              <ArrowDownIcon />
+            </SvgIcon>
           </EmptyLink>
           <Menu
             anchorEl={anchorEl}
@@ -60,15 +62,18 @@ const UserMenuDesktop = ({ user, logoutUser }) => {
             onClose={handleCloseMenu}
           >
             <MenuItem
-              component={RouterLink}
               to={`/user/${user.username}`}
               onClick={handleCloseMenu}
             >
-              <AccountCircleIcon tw="mr-2" />
+              <SvgIcon tw="mr-2">
+                <AccountCircleIcon />
+              </SvgIcon>
               My Profile
             </MenuItem>
-            <MenuItem to="#" onClick={handleLogoutClick}>
-              <PowerSettingsNewIcon tw="mr-2" />
+            <MenuItem onClick={handleLogoutClick}>
+              <SvgIcon tw="mr-2">
+                <PowerIcon />
+              </SvgIcon>
               Logout
             </MenuItem>
           </Menu>

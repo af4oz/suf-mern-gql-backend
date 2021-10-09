@@ -5,7 +5,7 @@ import LoadingSpinner from '../components/LoadingSpinner'
 import { useStateContext } from '../context/state'
 import { formatDateAgo, getErrorMsg } from '../utils/helperFuncs'
 
-import SearchIcon from '@material-ui/icons/Search'
+import { MdSearch as SearchIcon } from 'react-icons/md';
 import tw from 'twin.macro';
 import { TextField, Avatar, Link, InputAdornment } from '../components/CompStore'
 
@@ -30,20 +30,20 @@ const AllUsersPage = () => {
         onChange={e => setFilterInput(e.target.value)}
         InputProps={{
           startAdornment: (
-            <InputAdornment>
-              <SearchIcon tw="text-purple-600" />
+            <InputAdornment tw="text-purple-600 font-size[1.5em]">
+              <SearchIcon />
             </InputAdornment>
           ),
         }}
       />
       {!loading && data ? (
-        <div tw="flex mt-6">
+        <div tw="flex mt-6 flex-wrap">
           {data.getAllUsers
             .filter(u =>
               u.username.toLowerCase().includes(filterInput.toLowerCase())
             )
             .map((u, i) => (
-              <div key={u.id} css={[i !== 0 && tw`ml-2`, tw`flex `]}>
+              <div key={u.id} css={[tw`flex m-1`]}>
                 <Avatar
                   src={`https://secure.gravatar.com/avatar/${u.id}?s=164&d=identicon`}
                   alt={u.username}
@@ -62,7 +62,7 @@ const AllUsersPage = () => {
         </div>
       ) : (
         <div style={{ minWidth: '100%' }}>
-          <LoadingSpinner size={80} />
+          <LoadingSpinner />
         </div>
       )}
     </div>

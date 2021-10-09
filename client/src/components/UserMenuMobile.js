@@ -1,11 +1,11 @@
 import { useState } from 'react'
 import AuthFormModal from './AuthFormModal'
 
-import MoreVertIcon from '@material-ui/icons/MoreVert'
-import AccountCircleIcon from '@material-ui/icons/AccountCircle'
-import PowerSettingsNewIcon from '@material-ui/icons/PowerSettingsNew'
+import { IoMdMore as MoreVertIcon } from 'react-icons/io';
+import { MdAccountCircle as AccountCircleIcon } from 'react-icons/md';
+import { IoMdPower as PowerIcon } from 'react-icons/io';
 
-import { Menu, MenuItem, IconButton, Avatar } from './CompStore';
+import { Menu, MenuItem, IconButton, SvgIcon, Avatar } from './CompStore';
 
 import tw from 'twin.macro' // eslint-disable-line no-unused-vars
 
@@ -27,23 +27,18 @@ const MobileUserMenu = ({ user, logoutUser }) => {
 
   return (
     <div>
-      {user ? (
-        <IconButton onClick={handleOpenMenu} >
-          <Avatar
-            alt={user.username}
-            src={`https://secure.gravatar.com/avatar/${user.id}?s=164&d=identicon`}
-            tw="width[1.2em] height[1.2em]"
-          />
-          <MoreVertIcon color="primary" />
-        </IconButton>
-      ) : (
-        <IconButton
-          onClick={handleOpenMenu}
-          color="primary"
-        >
-          <MoreVertIcon color="primary" />
-        </IconButton>
-      )}
+      <IconButton onClick={handleOpenMenu} tw="font-size[1.5em]" >
+        {
+          user ? (
+            <Avatar
+              alt={user.username}
+              src={`https://secure.gravatar.com/avatar/${user.id}?s=164&d=identicon`}
+              tw="width[1.2em] height[1.2em] font-size[.8em]"
+            />
+          ) : null
+        }
+        <MoreVertIcon />
+      </IconButton>
       <Menu
         anchorEl={anchorEl}
         anchorOrigin={{
@@ -63,11 +58,15 @@ const MobileUserMenu = ({ user, logoutUser }) => {
               to={`/user/${user.username}`}
               onClick={handleCloseMenu}
             >
-              <AccountCircleIcon tw="mr-2" />
+              <SvgIcon tw="mr-2">
+                <AccountCircleIcon />
+              </SvgIcon>
               My Profile
             </MenuItem>
-            <MenuItem to="#" onClick={handleLogoutClick}>
-              <PowerSettingsNewIcon tw="mr-2" />
+            <MenuItem onClick={handleLogoutClick}>
+              <SvgIcon tw="mr-2">
+                <PowerIcon />
+              </SvgIcon>
               Logout: {user.username}
             </MenuItem>
           </div>

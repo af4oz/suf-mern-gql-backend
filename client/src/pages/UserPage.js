@@ -16,10 +16,10 @@ const UserInfo = styled.div`
 const UserActivity = styled.div`${tw`mt-4`}`
 
 const UserAvatar = styled.div`
-  ${tw`bg-purple-200 bg-opacity-50 h-56 w-48 flex flex-col justify-center items-center rounded-sm`}
+  ${tw`bg-purple-200 bg-opacity-50 h-56 w-48 flex flex-col justify-center items-center rounded-sm mx-auto`}
 `
 const UserCard = styled.div`
-${tw`w-full mt-4 ml-2 flex flex-row flex-wrap text-sm md:text-base`}
+${tw`w-full my-4 ml-2 mx-1 sm:ml-2 flex flex-row flex-wrap text-sm md:text-base`}
 `
 const UserPage = () => {
   const { notify } = useStateContext()
@@ -45,7 +45,7 @@ const UserPage = () => {
   if (loading || !fetchedUser) {
     return (
       <div style={{ minWidth: '100%', marginTop: '20%' }}>
-        <LoadingSpinner size={80} />
+        <LoadingSpinner />
       </div>
     )
   }

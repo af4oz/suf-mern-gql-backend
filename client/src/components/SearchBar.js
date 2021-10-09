@@ -1,15 +1,16 @@
 import { useState } from 'react'
 import { useHistory } from 'react-router-dom'
 
-import { InputAdornment, IconButton, TextField } from '@material-ui/core'
-import { useNavStyles } from '../styles/muiStyles'
-import SearchIcon from '@material-ui/icons/Search'
-import ArrowBackIcon from '@material-ui/icons/ArrowBack'
+import { InputAdornment, IconButton, TextField } from './CompStore'
 
-const SearchBar = ({ isMobile, setSearchOpen }) => {
+import { MdSearch as SearchIcon } from 'react-icons/md';
+import { IoMdArrowBack as ArrowBackIcon } from 'react-icons/io';
+
+import tw from 'twin.macro' // eslint-disable-line no-unused-vars
+
+const SearchBar = ({ setSearchOpen, ...rest }) => {
   const [searchInput, setSearchInput] = useState('')
   const history = useHistory()
-  const classes = useNavStyles()
 
   const handleSearch = e => {
     e.preventDefault()
@@ -18,32 +19,33 @@ const SearchBar = ({ isMobile, setSearchOpen }) => {
   }
 
   const clearSearch = () => {
-    if (isMobile) {
+    if (setSearchOpen) {
       setSearchOpen(false)
     }
     setSearchInput('')
   }
 
   return (
-    <div className={classes.searchBar}>
+    <div css={[tw`flex-grow[.6]`,]} {...rest}>
       <form onSubmit={handleSearch}>
         <TextField
           type="search"
-          size="small"
           placeholder="Search for questions…"
           value={searchInput}
           onChange={e => setSearchInput(e.target.value)}
-          variant="outlined"
+          styles={{
+            inputRoot: tw`py-1`
+          }}
           fullWidth
           InputProps={{
             startAdornment: (
-              <InputAdornment position="start">
-                <SearchIcon color="primary" />
+              <InputAdornment tw="font-size[1.5em]">
+                <SearchIcon />
               </InputAdornment>
             ),
-            endAdornment: (searchInput || isMobile) && (
-              <InputAdornment position="end">
-                <IconButton color="primary" size="small" onClick={clearSearch}>
+            endAdornment: (searchInput || setSearchOpen) && (
+              <InputAdornment >
+                <IconButton tw="p-0 font-size[1.5em]" onClick={clearSearch}>
                   <ArrowBackIcon />
                 </IconButton>
               </InputAdornment>

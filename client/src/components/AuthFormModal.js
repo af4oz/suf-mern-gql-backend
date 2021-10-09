@@ -4,8 +4,9 @@ import RegisterForm from './RegisterForm'
 import { ReactComponent as UpvoteIcon } from '../svg/upvote.svg'
 import { ReactComponent as DownvoteIcon } from '../svg/downvote.svg'
 
-import PersonAddIcon from '@material-ui/icons/PersonAdd'
-import ExitToAppIcon from '@material-ui/icons/ExitToApp'
+import { BsFillPersonFill as PersonAddIcon } from 'react-icons/bs'
+import { IoMdExit as ExitToAppIcon } from 'react-icons/io';
+
 import { SvgIcon, Button, IconButton, Link, MenuItem } from './CompStore';
 import { Dialog, DialogTitle, DialogContent } from './Dialog'
 import 'twin.macro';
@@ -77,11 +78,11 @@ const AuthFormModal = ({ closeMenu, buttonType }) => {
       return (
         <div>
           <MenuItem onClick={handleLoginModal}>
-            <ExitToAppIcon tw="mr-2" />
+            <ExitToAppIcon tw="mr-2 font-size[1.2em]" />
             Log In
           </MenuItem>
           <MenuItem onClick={handleSignupModal}>
-            <PersonAddIcon tw="mr-2" />
+            <PersonAddIcon tw="mr-2 font-size[1.2em]" />
             Sign Up
           </MenuItem>
         </div>

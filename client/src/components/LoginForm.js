@@ -10,12 +10,13 @@ import { yupResolver } from '@hookform/resolvers/yup'
 import SofLogo from '../svg/stack-overflow.svg'
 import { getErrorMsg } from '../utils/helperFuncs'
 
-import PersonIcon from '@material-ui/icons/Person'
-import LockIcon from '@material-ui/icons/Lock'
-import ExitToAppIcon from '@material-ui/icons/ExitToApp'
-import VisibilityOffIcon from '@material-ui/icons/VisibilityOff'
-import VisibilityIcon from '@material-ui/icons/Visibility'
-import { TextField, IconButton, InputAdornment, EmptyLink, Button } from './CompStore';
+import { BsFillPersonFill as PersonIcon } from 'react-icons/bs'
+import { IoMdLock as LockIcon } from 'react-icons/io';
+import { IoMdExit as ExitToAppIcon } from 'react-icons/io';
+import { MdVisibility as VisibilityIcon } from 'react-icons/md';
+import { MdVisibilityOff as VisibilityOffIcon } from 'react-icons/md';
+
+import { TextField, IconButton, InputAdornment, EmptyLink, Button, SvgIcon } from './CompStore';
 import tw from 'twin.macro' // eslint-disable-line no-unused-vars
 
 const validationSchema = yup.object({
@@ -66,7 +67,9 @@ const LoginForm = ({ setAuthType, closeModal }) => {
             helperText={'username' in errors ? errors.username.message : ''}
             InputProps={{
               startAdornment: (
-                <PersonIcon color="primary" />
+                <InputAdornment tw="font-size[1.5em] text-purple-700">
+                  <PersonIcon color="primary" />
+                </InputAdornment>
               ),
             }}
           />
@@ -85,7 +88,7 @@ const LoginForm = ({ setAuthType, closeModal }) => {
               endAdornment: (
                 <IconButton
                   onClick={() => setShowPass(prevState => !prevState)}
-                  tw="p-0"
+                  tw="p-0 font-size[1.5em] text-purple-700"
                 >
                   {showPass ? (
                     <VisibilityOffIcon color="secondary" />
@@ -95,8 +98,8 @@ const LoginForm = ({ setAuthType, closeModal }) => {
                 </IconButton>
               ),
               startAdornment: (
-                <InputAdornment>
-                  <LockIcon color="primary" />
+                <InputAdornment tw="font-size[1.5em] text-purple-700">
+                  <LockIcon />
                 </InputAdornment>
               ),
             }}
@@ -107,7 +110,9 @@ const LoginForm = ({ setAuthType, closeModal }) => {
           type="submit"
           disabled={loading}
         >
-          <ExitToAppIcon />
+          <SvgIcon>
+            <ExitToAppIcon />
+          </SvgIcon>
           &nbsp;Log In
         </Button>
       </form>

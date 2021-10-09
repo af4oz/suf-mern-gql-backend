@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom'
 import PostedByUser from './PostedByUser'
 import tw from 'twin.macro'; //eslint-disable-line no-unused-vars
 
-import Tag, { Tags } from './Tag'
+import { Tag } from './CompStore';
 
 const StatsContainer = tw.div`ml-0 mr-1 sm:(ml-2 mr-3) text-center text-xs`
 
@@ -48,13 +48,13 @@ const QuesCard = ({ question }) => {
           </Link>
         </Question>
         <p tw="m-0 pb-1 text-xs">{body}</p>
-        <Tags floatLeft>
+        <div tw="flex flex-wrap float-left">
           {tags.map(t => (
-            <Tag key={t} to={`/tags/${t}`}>
+            <Tag key={t} to={`/tags/${t}`} styles={{ link: tw`margin[0 .25em .25em]` }}>
               {t}
             </Tag>
           ))}
-        </Tags>
+        </div>
         <PostedByUser
           username={author.username}
           userId={author.id}

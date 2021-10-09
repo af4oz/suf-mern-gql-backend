@@ -10,14 +10,14 @@ import { yupResolver } from '@hookform/resolvers/yup'
 import SofLogo from '../svg/stack-overflow.svg'
 import { getErrorMsg } from '../utils/helperFuncs'
 
-import PersonIcon from '@material-ui/icons/Person'
-import LockIcon from '@material-ui/icons/Lock'
-import EnhancedEncryptionIcon from '@material-ui/icons/EnhancedEncryption'
-import PersonAddIcon from '@material-ui/icons/PersonAdd'
-import VisibilityOffIcon from '@material-ui/icons/VisibilityOff'
-import VisibilityIcon from '@material-ui/icons/Visibility'
+import { BsFillPersonFill as PersonIcon } from 'react-icons/bs'
+import { IoMdLock as LockIcon } from 'react-icons/io';
+import { MdEnhancedEncryption as EnhancedEncryptionIcon } from 'react-icons/md';
+import { IoMdPersonAdd as PersonAddIcon } from 'react-icons/io';
+import { MdVisibility as VisibilityIcon } from 'react-icons/md';
+import { MdVisibilityOff as VisibilityOffIcon } from 'react-icons/md';
 
-import { TextField, IconButton, InputAdornment, EmptyLink, Button } from './CompStore';
+import { TextField, IconButton, InputAdornment, EmptyLink, Button, SvgIcon } from './CompStore';
 import tw from 'twin.macro' // eslint-disable-line no-unused-vars
 
 const validationSchema = yup.object({
@@ -90,7 +90,9 @@ const RegisterForm = ({ setAuthType, closeModal }) => {
             helperText={'username' in errors ? errors.username.message : ''}
             InputProps={{
               startAdornment: (
-                <PersonIcon color="primary" />
+                <InputAdornment tw="font-size[1.5em] text-purple-700">
+                  <PersonIcon />
+                </InputAdornment>
               ),
             }}
           />
@@ -109,7 +111,7 @@ const RegisterForm = ({ setAuthType, closeModal }) => {
               endAdornment: (
                 <IconButton
                   onClick={() => setShowPass(prevState => !prevState)}
-                  tw="p-0"
+                  tw="p-0 font-size[1.5em] text-purple-700"
                 >
                   {showPass ? (
                     <VisibilityOffIcon color="secondary" />
@@ -119,8 +121,8 @@ const RegisterForm = ({ setAuthType, closeModal }) => {
                 </IconButton>
               ),
               startAdornment: (
-                <InputAdornment>
-                  <LockIcon color="primary" />
+                <InputAdornment tw="font-size[1.5em] text-purple-700">
+                  <LockIcon />
                 </InputAdornment>
               ),
             }}
@@ -142,7 +144,7 @@ const RegisterForm = ({ setAuthType, closeModal }) => {
               endAdornment: (
                 <IconButton
                   onClick={() => setShowConfPass(prevState => !prevState)}
-                  tw="p-0"
+                  tw="p-0 font-size[1.5em] text-purple-700"
                 >
                   {showConfPass ? (
                     <VisibilityOffIcon color="secondary" />
@@ -152,7 +154,7 @@ const RegisterForm = ({ setAuthType, closeModal }) => {
                 </IconButton>
               ),
               startAdornment: (
-                <InputAdornment>
+                <InputAdornment tw="font-size[1.5em] text-purple-700">
                   <EnhancedEncryptionIcon color="primary" />
                 </InputAdornment>
               ),
@@ -163,9 +165,12 @@ const RegisterForm = ({ setAuthType, closeModal }) => {
           fullWidth
           type="submit"
           disabled={loading}
-          tw="w-full bg-purple-600 hover:bg-purple-700"
+          tw="w-full bg-purple-600 hover:bg-purple-700 flex items-center justify-center"
         >
-          <PersonAddIcon /> &nbsp;
+          <SvgIcon tw="font-size[1.2em]">
+            <PersonAddIcon />
+          </SvgIcon>
+          &nbsp;
           Sign Up
         </Button>
       </form>

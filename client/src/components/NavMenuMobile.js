@@ -1,11 +1,11 @@
 import { useState } from 'react'
 import { useLocation } from 'react-router-dom'
 
-import MenuIcon from '@material-ui/icons/Menu'
-import CloseIcon from '@material-ui/icons/Close'
-import PublicIcon from '@material-ui/icons/Public'
-import LocalOfferIcon from '@material-ui/icons/LocalOffer'
-import PeopleIcon from '@material-ui/icons/People'
+import { IoMdMenu as MenuIcon } from 'react-icons/io';
+import { MdClear as CloseIcon } from 'react-icons/md';
+import { GoGlobe as PublicIcon } from 'react-icons/go'
+import { MdLocalOffer as LocalOfferIcon } from 'react-icons/md';
+import { MdPeopleAlt as PeopleIcon } from 'react-icons/md';
 import { MenuItem, IconButton, Menu } from './CompStore';
 
 import tw from 'twin.macro' // eslint-disable-line no-unused-vars
@@ -23,8 +23,8 @@ const MobileNavMenu = () => {
   }
 
   return (
-    <div>
-      <IconButton color="primary" onClick={handleOpenMenu}>
+    <div >
+      <IconButton tw="font-size[1.5em]" onClick={handleOpenMenu}>
         {!anchorEl ? <MenuIcon /> : <CloseIcon />}
       </IconButton>
 

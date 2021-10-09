@@ -5,16 +5,17 @@ import LoadingSpinner from '../components/LoadingSpinner'
 import { useStateContext } from '../context/state'
 import { getErrorMsg } from '../utils/helperFuncs'
 
-import { TextField, ChipLink, InputAdornment } from '../components/CompStore'
-import SearchIcon from '@material-ui/icons/Search'
+import { TextField, InputAdornment, Tag } from '../components/CompStore'
+import { MdSearch as SearchIcon } from 'react-icons/md';
 import tw, { styled } from 'twin.macro' // eslint-disable-line no-unused-vars
 
-const Tags = styled.div`
-${tw`flex mt-4`}
-`
-const Tag = styled.div`
-${tw`border-gray-400 border-width[1px] border-solid rounded-sm p-2 min-width[8em]`}
-`
+const Tags = styled.div(() => [
+  tw`flex mt-4 flex-wrap`
+])
+
+const TagContainer = styled.div(() => [
+  tw`border-gray-400 border-width[1px] border-solid rounded-sm p-2 m-1 min-width[8em]`
+])
 
 const AllTagsPage = () => {
   const { notify } = useStateContext()
@@ -27,7 +28,7 @@ const AllTagsPage = () => {
   const [filterInput, setFilterInput] = useState('')
 
   return (
-    <div tw="p-3 mt-2">
+    <div tw="p-3 mt-2 w-full">
       <h2 tw="text-xl text-purple-900  font-normal my-2">
         Tags
       </h2>
@@ -44,8 +45,8 @@ const AllTagsPage = () => {
         tw="leading-3"
         InputProps={{
           startAdornment: (
-            <InputAdornment>
-              <SearchIcon color="primary" />
+            <InputAdornment tw="text-purple-600 font-size[1.5em]">
+              <SearchIcon />
             </InputAdornment>
           ),
         }}
@@ -57,23 +58,23 @@ const AllTagsPage = () => {
               t.tagName.toLowerCase().includes(filterInput.toLowerCase())
             )
             .map((t, i) => (
-              <Tag key={t.tagName} css={[i !== 0 && tw`ml-2`]}>
-                <ChipLink
+              <TagContainer key={t.tagName} >
+                <Tag
                   label={t.tagName}
                   tw="mb-2"
                   to={`/tags/${t.tagName}`}
                 />
                 <div tw="mt-2">
-                  <span tw="text-xs text-purple-800">
+                  <span tw="text-xs text-blue-800">
                     {t.count} questions
                   </span>
                 </div>
-              </Tag>
+              </TagContainer>
             ))}
         </Tags>
       ) : (
         <div style={{ minWidth: '100%' }}>
-          <LoadingSpinner size={80} />
+          <LoadingSpinner />
         </div>
       )}
     </div>

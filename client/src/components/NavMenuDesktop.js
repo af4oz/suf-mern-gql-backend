@@ -1,16 +1,16 @@
 import { useLocation } from 'react-router-dom'
 
-import PublicIcon from '@material-ui/icons/Public'
-import LocalOfferIcon from '@material-ui/icons/LocalOffer'
-import PeopleIcon from '@material-ui/icons/People'
+import { GoGlobe as PublicIcon } from 'react-icons/go'
+import { MdLocalOffer as LocalOfferIcon } from 'react-icons/md';
+import { MdPeopleAlt as PeopleIcon } from 'react-icons/md';
 
-import tw, { styled, css } from 'twin.macro' // eslint-disable-line no-unused-vars
+import tw, { css } from 'twin.macro' // eslint-disable-line no-unused-vars
 import { Divider, MenuItem } from './CompStore'
 
 const DesktopNavMenu = () => {
   const { pathname } = useLocation()
   const iconStyles = css`
-    ${tw`width[.8em] height[.8em] mr-2`}
+    ${tw`width[.8em] height[.8em] mr-2 font-size[1.5em]`}
   `
 
   return (

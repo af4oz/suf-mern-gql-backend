@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from "react";
 import ReactDOM from "react-dom";
 import { IconButton } from './CompStore'
-import CloseIcon from '@material-ui/icons/Close'
+import { MdClear as CloseIcon } from 'react-icons/md';
 import tw, { styled } from 'twin.macro' // eslint-disable-line no-unused-vars
 import useModal from "../hooks/useModal";
 
@@ -72,8 +72,10 @@ export const DialogTitle = ({ onClose, children, styles, ...rest }) => {
         onClose ? (
           <IconButton
             aria-label="close"
-            tw="absolute right[8px] top[8px]"
-            css={[styles && styles.closeBtn]}
+            tw="absolute right[8px] top[8px] font-size[1.5em]"
+            styles={{
+              iconButton: styles && styles.closeBtn
+            }}
             onClick={onClose}
           >
             <CloseIcon />

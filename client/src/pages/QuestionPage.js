@@ -9,7 +9,7 @@ import AuthFormModal from '../components/AuthFormModal'
 import LoadingSpinner from '../components/LoadingSpinner'
 import { formatDateAgo, getErrorMsg } from '../utils/helperFuncs'
 
-import tw, { styled } from 'twin.macro' //eslint-disable-line no-unused-vars
+import tw from 'twin.macro' //eslint-disable-line no-unused-vars
 
 const Container = tw.div`p-2 w-full`;
 const Header = tw.div``;
@@ -39,7 +39,7 @@ const QuestionPage = () => {
   if (loading || !question) {
     return (
       <Container >
-        <LoadingSpinner size={80} />
+        <LoadingSpinner />
       </Container>
     )
   }
