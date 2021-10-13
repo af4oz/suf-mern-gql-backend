@@ -1,48 +1,68 @@
-const { UserInputError, AuthenticationError } = require('apollo-server')
-const Question = require('../../models/question')
-const User = require('../../models/user')
-const authChecker = require('../../utils/authChecker')
-const errorHandler = require('../../utils/errorHandler')
-const { upvoteIt, downvoteIt, ansRep } = require('../../utils/helperFuncs')
+import { UserInputError, AuthenticationError } from 'apollo-server'
+import { ObjectId } from 'mongodb'
+import { Arg, Ctx, ID, Mutation, Query, Resolver } from 'type-graphql'
+import { Answer, AnswerModel } from '../entities/Answer'
+import { Question, QuestionModel } from '../entities/Question'
+import { User, UserModel } from '../entities/User'
+import { TContext } from '../types'
+import authChecker from '../utils/authChecker'
+import errorHandler from '../utils/errorHandler'
+import { upvoteIt, downvoteIt, ansRep } from '../utils/helperFuncs'
+
+@Resolver(of => Answer)
+export class AnswerResolver {
+  @Mutation(returns => [Answer])
+  async postAnswer(@Arg('quesId', type => ID) quesId: string, @Arg('body') body: string, @Ctx() context: TContext): Promise<Answer[]> {
+    const loggedUser = authChecker(context)
+
+    if (body.trim() === '' || body.length < 30) {
+      throw new UserInputError('Answer must be atleast 30 characters long.')
+    }
+
+    try {
+      if (typeof loggedUser === 'string') {
+        throw new Error('expected jwt payload, instead got string!')
+      }
+      const author = await UserModel.findById(loggedUser.id)
+      const question = await QuestionModel.findById(quesId)
+      if (!author) {
+        throw new UserInputError(
+          `User with ID: ${loggedUser.id} does not exist in DB.`
+        )
+      }
+      if (!question) {
+        throw new UserInputError(
+          `Question with ID: ${quesId} does not exist in DB.`
+        )
+      }
+      const answer = new AnswerModel({
+        body,
+        author: author._id
+      })
+      await answer.save();
+
+      question.answers.push(answer)
+      const savedQues = await question.save()
+      const populatedQues = await savedQues
+        .populate('answers.author', 'username')
+        .populate('answers.comments.author', 'username')
+        .execPopulate()
+
+      author.answers.push({
+        ansId: savedQues.answers[savedQues.answers.length - 1],
+      })
+      await author.save()
+
+      return populatedQues.answers
+    } catch (err) {
+      throw new UserInputError(errorHandler(err))
+    }
+  }
+}
 
 module.exports = {
   Mutation: {
     postAnswer: async (_, args, context) => {
-      const loggedUser = authChecker(context)
-      const { quesId, body } = args
-
-      if (body.trim() === '' || body.length < 30) {
-        throw new UserInputError('Answer must be atleast 30 characters long.')
-      }
-
-      try {
-        const author = await User.findById(loggedUser.id)
-        const question = await Question.findById(quesId)
-        if (!question) {
-          throw new UserInputError(
-            `Question with ID: ${quesId} does not exist in DB.`
-          )
-        }
-
-        question.answers.push({
-          body,
-          author: author._id,
-        })
-        const savedQues = await question.save()
-        const populatedQues = await savedQues
-          .populate('answers.author', 'username')
-          .populate('answers.comments.author', 'username')
-          .execPopulate()
-
-        author.answers.push({
-          ansId: savedQues.answers[savedQues.answers.length - 1]._id,
-        })
-        await author.save()
-
-        return populatedQues.answers
-      } catch (err) {
-        throw new UserInputError(errorHandler(err))
-      }
     },
     deleteAnswer: async (_, args, context) => {
       const loggedUser = authChecker(context)

@@ -1,10 +1,10 @@
-const userResolvers = require('./user')
-const questionResolvers = require('./question')
-const answerResolvers = require('./answer')
-const quesCommentResolvers = require('./quesComment')
-const ansCommentResolvers = require('./ansComment')
-const tagResolvers = require('./tag')
-const { GraphQLDateTime } = require('graphql-iso-date')
+import userResolvers from './user'
+import questionResolvers from './question'
+import answerResolvers from './answer'
+import quesCommentResolvers from './quesComment'
+import ansCommentResolvers from './ansComment'
+import tagResolvers from './tag'
+import { GraphQLDateTime } from 'graphql-iso-date'
 
 module.exports = {
   Query: {

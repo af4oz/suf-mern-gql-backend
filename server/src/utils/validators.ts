@@ -1,5 +1,7 @@
-const registerValidator = (username, password) => {
-  const errors = {}
+import { IError } from "../types"
+
+export const registerValidator = (username: string, password: string) => {
+  const errors: IError = {}
 
   if (username.trim() === '' || username.length > 20 || username.length < 3) {
     errors.username = 'Username must be in range of 3-20 characters length .'
@@ -19,8 +21,8 @@ const registerValidator = (username, password) => {
   }
 }
 
-const loginValidator = (username, password) => {
-  const errors = {}
+export const loginValidator = (username: string, password: string) => {
+  const errors: IError = {}
 
   if (username.trim() === '') {
     errors.username = 'Username field must not be empty.'
@@ -36,8 +38,8 @@ const loginValidator = (username, password) => {
   }
 }
 
-const questionValidator = (title, body, tags) => {
-  const errors = {}
+export const questionValidator = (title: string, body: string, tags: string[]) => {
+  const errors: IError = {}
 
   if (title.trim() === '' || title.length < 15) {
     errors.title = 'Title must be atleast 15 characters long.'
@@ -69,4 +71,3 @@ const questionValidator = (title, body, tags) => {
   }
 }
 
-module.exports = { registerValidator, loginValidator, questionValidator }

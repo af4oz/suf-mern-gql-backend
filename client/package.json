@@ -43,8 +43,5 @@
     "not dead",
     "not op_mini all"
   ],
-  "devDependencies": {
-    "@emotion/react": "^11.1.5",
-    "postcss": "^8.3.8"
-  }
+  "devDependencies": {}
 }
