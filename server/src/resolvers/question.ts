@@ -1,6 +1,7 @@
 import { DocumentType } from '@typegoose/typegoose'
 import { AuthenticationError, UserInputError } from 'apollo-server'
-import { Arg, Args, ArgsType, Ctx, Field, ID, Mutation, ObjectType, Query, registerEnumType, Resolver } from 'type-graphql'
+import { Arg, Args, ArgsType, Ctx, Field, ID, Int, Mutation, Query, Resolver } from 'type-graphql'
+import { PaginatedQuesList, SortByType, VoteType } from '../entities'
 import { Question, QuestionModel } from '../entities/Question'
 import { UserModel } from '../entities/User'
 import { TContext } from '../types'
@@ -9,70 +10,17 @@ import errorHandler from '../utils/errorHandler'
 import { downvoteIt, paginateResults, quesRep, upvoteIt } from '../utils/helperFuncs'
 import { questionValidator } from '../utils/validators'
 
-@ObjectType()
-class Author {
-  @Field(type => ID)
-  id: string;
 
-  @Field()
-  username: string;
-}
-
-@ObjectType()
-export class NextPrevPage {
-  @Field()
-  page: number
-
-  @Field()
-  limit: number
-}
-
-@ObjectType()
-class PaginatedQuesList {
-  @Field(type => [Question], { nullable: 'items' })
-  questions: Question[];
-
-  @Field({ nullable: true })
-  next?: NextPrevPage;
-
-  @Field({ nullable: true })
-  previous?: NextPrevPage;
-
-}
-
-@ObjectType()
-class Tag {
-
-  @Field()
-  tagName: string;
-
-  @Field()
-  count: number;
-}
-
-enum VoteType {
-  UPVOTE,
-  DOWNVOTE
-}
-enum SortByType {
-  HOT,
-  VOTES,
-  VIEWS,
-  NEWEST,
-  OLDEST
-}
-registerEnumType(SortByType, { name: "SortByType" });
-registerEnumType(VoteType, { name: "VoteType" });
 
 @ArgsType()
 class GetQuestionsArgs {
-  @Field()
+  @Field(type => SortByType)
   sortBy: SortByType
 
-  @Field()
+  @Field(type => Int)
   page: number
 
-  @Field()
+  @Field(type => Int)
   limit: number
 
   @Field({ nullable: true })
@@ -147,14 +95,10 @@ export class QuestionResolver {
 
       return paginatedQues
     } catch (err) {
-      if (err instanceof Error) {
-        throw new UserInputError(errorHandler(err))
-      } else {
-        throw new UserInputError(JSON.stringify(err))
-      }
+      throw new UserInputError(errorHandler(err))
     }
   }
-  @Query()
+  @Query(returns => Question)
   async viewQuestion(@Arg('quesId', type => ID) quesId: string): Promise<Question> {
 
     try {
@@ -163,25 +107,18 @@ export class QuestionResolver {
         throw new Error(`Question with ID: ${quesId} does not exist in DB.`)
       }
 
-      question.views++
+      question.views = question.views + 1;
       const savedQues = await question.save()
-      const populatedQues = await savedQues
-        .populate('author', 'username')
-        .populate('comments.author', 'username')
-        .populate('answers.author', 'username')
-        .populate('answers.comments.author', 'username')
-        .execPopulate()
+
+      const populatedQues = await savedQues.populate(['author', 'comments.author', 'answers.author', 'answers.comments.author']);
+
 
       return populatedQues
     } catch (err) {
-      if (err instanceof Error) {
-        throw new UserInputError(errorHandler(err))
-      } else {
-        throw new UserInputError(JSON.stringify(err))
-      }
+      throw new UserInputError(errorHandler(err))
     }
   }
-  @Mutation()
+  @Mutation(returns => Question)
   async postQuestion(@Arg('title') title: string, @Arg("body") body: string, @Arg('tags', type => [String]) tags: string[], @Ctx() context: TContext): Promise<Question> {
     const loggedUser = authChecker(context)
 
@@ -209,8 +146,7 @@ export class QuestionResolver {
       })
       const savedQues = await newQuestion.save()
       const populatedQues = await savedQues
-        .populate('author', 'username')
-        .execPopulate()
+        .populate('author', 'username');
 
       author.questions.push({ quesId: savedQues._id })
       await author.save()
@@ -226,7 +162,7 @@ export class QuestionResolver {
     }
   }
 
-  @Mutation()
+  @Mutation(returns => ID)
   async deleteQuestion(@Arg('quesId', type => ID) quesId: string, @Ctx() context: TContext): Promise<string> {
     const loggedUser = authChecker(context)
 
@@ -256,16 +192,11 @@ export class QuestionResolver {
       await QuestionModel.findByIdAndDelete(quesId)
       return question._id.toString();
     } catch (err) {
-      if (err instanceof Error) {
-        throw new UserInputError(errorHandler(err))
-      }
-      else {
-        throw new UserInputError(JSON.stringify(err))
-      }
+      throw new UserInputError(errorHandler(err))
     }
   }
-  @Mutation()
-  async editQuestion(@Arg('quesId', type => ID) quesId: string, @Arg('title') title: string, @Arg("body") body: string, @Arg('tags', type => [String]) tags: string[], @Ctx() context: TContext): Promise<Question> {
+  @Mutation(returns => Question)
+  async editQuestion(@Arg('quesId', type => ID,) quesId: string, @Arg('title') title: string, @Arg("body") body: string, @Arg('tags', type => [String]) tags: string[], @Ctx() context: TContext): Promise<Question> {
     const loggedUser = authChecker(context)
 
     const { errors, valid } = questionValidator(title, body, tags)
@@ -277,7 +208,7 @@ export class QuestionResolver {
       title,
       body,
       tags,
-      updatedAt: Date.now(),
+      updatedAt: new Date(),
     }
 
     try {
@@ -311,16 +242,11 @@ export class QuestionResolver {
 
       return updatedQues
     } catch (err) {
-      if (err instanceof Error) {
-        throw new UserInputError(errorHandler(err))
-      }
-      else {
-        throw new UserInputError(JSON.stringify(err))
-      }
+      throw new UserInputError(errorHandler(err))
     }
   }
-  @Mutation()
-  async voteQuestion(@Arg('quesId', type => ID) quesId: string, @Arg('voteType') voteType: VoteType, @Ctx() context: TContext): Promise<Question> {
+  @Mutation(returns => Question)
+  async voteQuestion(@Arg('quesId', type => ID) quesId: string, @Arg('voteType', type => VoteType) voteType: VoteType, @Ctx() context: TContext): Promise<Question> {
     const loggedUser = authChecker(context)
 
     try {
@@ -355,7 +281,7 @@ export class QuestionResolver {
       votedQues.hotAlgo =
         Math.log(Math.max(Math.abs(votedQues.points), 1)) +
         Math.log(Math.max(votedQues.views * 2, 1)) +
-        votedQues.createdAt / 4500;
+        votedQues.createdAt.getTime() / 4500;
 
       const savedQues = await votedQues.save()
       const author = await UserModel.findById(question.author)
@@ -367,19 +293,11 @@ export class QuestionResolver {
       const addedRepAuthor = quesRep(question, author)
       await addedRepAuthor.save()
 
-      return await savedQues
-        .populate('author', 'username')
-        .populate('comments.author', 'username')
-        .populate('answers.author', 'username')
-        .populate('answers.comments.author', 'username')
-        .execPopulate()
+      return await savedQues.populate([
+        'author', 'comments.author', 'answers.author', 'answers.comments.author'
+      ]);
     } catch (err) {
-      if (err instanceof Error) {
-        throw new UserInputError(errorHandler(err))
-      }
-      else {
-        throw new UserInputError(JSON.stringify(err))
-      }
+      throw new UserInputError(errorHandler(err))
     }
   }
 }

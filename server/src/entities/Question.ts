@@ -1,12 +1,12 @@
-import mongoose from 'mongoose'
-import schemaCleaner from '../utils/schemaCleaner'
+import { getModelForClass, modelOptions, prop } from '@typegoose/typegoose';
+import { ObjectId } from 'mongodb';
+import { Schema } from 'mongoose';
 import { Field, ID, Int, ObjectType, Root } from 'type-graphql';
 import { Ref } from '../types';
-import { User } from './User';
-import { getModelForClass, modelOptions, prop } from '@typegoose/typegoose';
-import { Comment } from './Comment';
+import schemaCleaner from '../utils/schemaCleaner';
 import { Answer } from './Answer';
-import { ObjectId } from 'mongodb';
+import { Comment } from './Comment';
+import { User } from './User';
 
 @modelOptions({
   schemaOptions: {
@@ -18,11 +18,8 @@ export class Question {
   @Field(() => ID)
   readonly _id: ObjectId;
 
-  @Field(() => ID)
-  id: string;
-
   @Field(type => User)
-  @prop({ ref: () => User, required: true })
+  @prop({ ref: () => 'User', required: true })
   author: Ref<User>;
 
   @Field()
@@ -33,16 +30,16 @@ export class Question {
   @prop({ required: true, trim: true, minlength: 30 })
   body: string;
 
-  @Field()
+  @Field(type => [String])
   @prop({ type: () => [String], required: true, trim: true })
   tags: [string];
 
   @Field(type => [Comment], { nullable: 'items' })
-  @prop({ ref: () => Comment, default: [] })
+  @prop({ ref: () => 'Comment', default: [] })
   comments: Ref<Comment>[];
 
   @Field(type => [Answer], { nullable: 'items' })
-  @prop({ ref: () => Answer, default: [] })
+  @prop({ ref: () => 'Answer', default: [], type: Schema.Types.ObjectId })
   answers: Ref<Answer>[];
 
   @Field(type => Int)
@@ -50,19 +47,19 @@ export class Question {
     return question.answers.length;
   }
 
-  @Field()
+  @Field(type => Int)
   @prop({ default: 0 })
   points: number;
 
   @Field(type => [User], { nullable: 'items' })
-  @prop({ ref: () => User, default: [] })
+  @prop({ ref: () => "User", default: [] })
   upvotedBy: Ref<User>[];
 
   @Field(type => [User], { nullable: 'items' })
-  @prop({ ref: () => User, default: [] })
+  @prop({ ref: () => "User", default: [] })
   downvotedBy: Ref<User>[];
 
-  @Field()
+  @Field(type => Int)
   @prop({ default: 0 })
   views: number;
 
@@ -71,16 +68,16 @@ export class Question {
   hotAlgo: number;
 
   @Field(type => Answer)
-  @prop({ ref: () => Answer })
+  @prop({ ref: () => "Answer" })
   acceptedAnswer?: Ref<Answer>
 
-  @Field()
-  @prop({ default: Date.now })
-  createdAt: number;
+  @Field(type => Date)
+  @prop({ default: Date })
+  createdAt: Date;
 
-  @Field()
-  @prop({ default: Date.now })
-  updatedAt: number;
+  @Field(type => Date)
+  @prop({ default: Date })
+  updatedAt: Date;
 }
 
 export const QuestionModel = getModelForClass(Question)

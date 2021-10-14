@@ -1,11 +1,9 @@
-import { PaginateResults } from "../types"
-
 import { User } from '../entities/User';
 import { Question } from '../entities/Question';
 import { Answer } from "../entities/Answer";
 import { DocumentType } from "@typegoose/typegoose";
 import { ObjectId } from "mongodb";
-import { NextPrevPage } from "../resolvers/question";
+import { NextPrevPage } from "../entities";
 
 export const paginateResults = (page: number, limit: number, docCount: number) => {
   const startIndex = (page - 1) * limit
@@ -34,7 +32,7 @@ export const paginateResults = (page: number, limit: number, docCount: number) =
 }
 
 export const upvoteIt = (quesAns: DocumentType<Question | Answer>, user: DocumentType<User>) => {
-  if (quesAns.upvotedBy.includes(user._id.toString())) {
+  if (quesAns.upvotedBy.includes(user._id)) {
     quesAns.upvotedBy = quesAns.upvotedBy.filter(
       u => u.toString() !== user._id.toString()
     )
@@ -50,7 +48,7 @@ export const upvoteIt = (quesAns: DocumentType<Question | Answer>, user: Documen
 }
 
 export const downvoteIt = (quesAns: DocumentType<Question | Answer>, user: DocumentType<User>) => {
-  if (quesAns.downvotedBy.includes(user._id.toString())) {
+  if (quesAns.downvotedBy.includes(user._id)) {
     quesAns.downvotedBy = quesAns.downvotedBy.filter(
       d => d.toString() !== user._id.toString()
     )

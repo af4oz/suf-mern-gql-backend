@@ -1,24 +1,23 @@
-import mongoose from 'mongoose'
-import { addModelToTypegoose, buildSchema, getModelForClass, modelOptions, prop } from '@typegoose/typegoose';
-import { Field, ID, ObjectType } from 'type-graphql';
-import schemaCleaner from '../utils/schemaCleaner'
-import { User } from './User';
-import { Comment } from './Comment';
-import { Ref } from '../types';
+import { getModelForClass, modelOptions, prop, Severity } from '@typegoose/typegoose';
 import { ObjectId } from 'mongodb';
+import { Field, ID, ObjectType } from 'type-graphql';
+import { Ref } from '../types';
+import schemaCleaner from '../utils/schemaCleaner';
+import { Comment } from './Comment';
+import { User } from './User';
 
 @modelOptions({
   schemaOptions: {
     toJSON: schemaCleaner
-  }
+  },
+  options: {
+    allowMixed: Severity.ALLOW
+  },
 })
 @ObjectType()
 export class Answer {
   @Field(() => ID)
   readonly _id: ObjectId;
-
-  @Field(() => ID)
-  readonly id: string;
 
   @Field(type => User)
   @prop({ required: true })
@@ -36,20 +35,20 @@ export class Answer {
   @prop({ default: 0 })
   points?: number;
 
-  @Field(type => User, { nullable: 'items' })
+  @Field(type => [User], { nullable: 'items' })
   @prop({ ref: () => User, default: [] })
-  upvotedBy?: Ref<User>[]
+  upvotedBy: Ref<User>[]
 
-  @Field(type => User, { nullable: 'items' })
+  @Field(type => [User], { nullable: 'items' })
   @prop({ ref: () => User, default: [] })
-  downvotedBy?: Ref<User>[]
+  downvotedBy: Ref<User>[]
 
-  @Field()
-  @prop({ default: Date.now })
+  @Field(type => Date)
+  @prop({ default: Date })
   createdAt?: Date;
 
-  @Field()
-  @prop({ default: Date.now })
+  @Field(type => Date)
+  @prop({ default: Date })
   updatedAt?: Date;
 }
 

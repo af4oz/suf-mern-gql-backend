@@ -1,5 +1,5 @@
 import { AuthenticationError } from 'apollo-server'
-import jwt from 'jsonwebtoken'
+import jwt, { JwtPayload } from 'jsonwebtoken'
 import { TContext } from '../types'
 import { SECRET } from './config'
 
@@ -12,7 +12,7 @@ const authChecker = (context: TContext) => {
   if (!SECRET) throw new Error('please provide valid jwt token!');
   try {
     const decodedUser = jwt.verify(token, SECRET)
-    return decodedUser
+    return decodedUser as JwtPayload;
   } catch (err) {
     if (err instanceof Error) {
       throw new AuthenticationError(err.message)

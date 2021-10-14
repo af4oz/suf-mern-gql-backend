@@ -1,13 +1,14 @@
-import { UserInputError, AuthenticationError } from 'apollo-server'
-import { ObjectId } from 'mongodb'
+import { DocumentType } from '@typegoose/typegoose'
+import { AuthenticationError, UserInputError } from 'apollo-server'
 import { Arg, Ctx, ID, Mutation, Query, Resolver } from 'type-graphql'
+import { VoteType } from '../entities'
 import { Answer, AnswerModel } from '../entities/Answer'
 import { Question, QuestionModel } from '../entities/Question'
-import { User, UserModel } from '../entities/User'
+import { UserModel } from '../entities/User'
 import { TContext } from '../types'
 import authChecker from '../utils/authChecker'
 import errorHandler from '../utils/errorHandler'
-import { upvoteIt, downvoteIt, ansRep } from '../utils/helperFuncs'
+import { ansRep, downvoteIt, upvoteIt } from '../utils/helperFuncs'
 
 @Resolver(of => Answer)
 export class AnswerResolver {
@@ -20,11 +21,8 @@ export class AnswerResolver {
     }
 
     try {
-      if (typeof loggedUser === 'string') {
-        throw new Error('expected jwt payload, instead got string!')
-      }
       const author = await UserModel.findById(loggedUser.id)
-      const question = await QuestionModel.findById(quesId)
+      const question = await QuestionModel.findById(quesId).populate('answers').exec();
       if (!author) {
         throw new UserInputError(
           `User with ID: ${loggedUser.id} does not exist in DB.`
@@ -41,216 +39,206 @@ export class AnswerResolver {
       })
       await answer.save();
 
-      question.answers.push(answer)
+
+      question.answers.push(answer._id)
       const savedQues = await question.save()
-      const populatedQues = await savedQues
-        .populate('answers.author', 'username')
-        .populate('answers.comments.author', 'username')
-        .execPopulate()
+      const populatedQues = await savedQues.populate({
+        path: 'answers',
+        populate: {
+          path: 'author'
+        }
+      })
+      console.log('popualted:', populatedQues);
+
 
       author.answers.push({
         ansId: savedQues.answers[savedQues.answers.length - 1],
       })
       await author.save()
 
-      return populatedQues.answers
+      return populatedQues.answers as Answer[];
     } catch (err) {
       throw new UserInputError(errorHandler(err))
     }
   }
-}
+  @Mutation(returns => ID)
+  async deleteAnswer(@Arg('quesId') quesId: string, @Arg('ansId') ansId: string, @Ctx() context: TContext): Promise<string> {
+    const loggedUser = authChecker(context)
 
-module.exports = {
-  Mutation: {
-    postAnswer: async (_, args, context) => {
-    },
-    deleteAnswer: async (_, args, context) => {
-      const loggedUser = authChecker(context)
-      const { quesId, ansId } = args
-
-      try {
-        const user = await User.findById(loggedUser.id)
-        const question = await Question.findById(quesId)
-        if (!question) {
-          throw new UserInputError(
-            `Question with ID: ${quesId} does not exist in DB.`
-          )
-        }
-
-        const targetAnswer = question.answers.find(
-          a => a._id.toString() === ansId
+    try {
+      const user = await UserModel.findById(loggedUser.id)
+      if (!user) {
+        throw new UserInputError(
+          `User with ID: ${loggedUser.id} does not exist in DB.`
         )
-
-        if (!targetAnswer) {
-          throw new UserInputError(
-            `Answer with ID: '${ansId}' does not exist in DB.`
-          )
-        }
-
-        if (
-          targetAnswer.author.toString() !== user._id.toString() &&
-          user.role !== 'admin'
-        ) {
-          throw new AuthenticationError('Access is denied.')
-        }
-
-        question.answers = question.answers.filter(
-          a => a._id.toString() !== ansId
-        )
-        await question.save()
-        return ansId
-      } catch (err) {
-        throw new UserInputError(errorHandler(err))
       }
-    },
-    editAnswer: async (_, args, context) => {
-      const loggedUser = authChecker(context)
-      const { quesId, ansId, body } = args
+      const question = await QuestionModel.findById(quesId)
+      if (!question) {
+        throw new UserInputError(
+          `Question with ID: ${quesId} does not exist in DB.`
+        )
+      }
+      const answer = await AnswerModel.findByIdAndDelete(ansId)
+      console.log(answer);
 
-      if (body.trim() === '' || body.length < 30) {
-        throw new UserInputError('Answer must be atleast 30 characters long.')
+      const targetAnswerId = question.answers.find(
+        a => a.toString() === ansId
+      )
+
+      if (!targetAnswerId) {
+        throw new UserInputError(
+          `Answer with ID: '${ansId}' does not exist in DB.`
+        )
       }
 
-      try {
-        const question = await Question.findById(quesId)
-        if (!question) {
-          throw new UserInputError(
-            `Question with ID: ${quesId} does not exist in DB.`
-          )
-        }
-
-        const targetAnswer = question.answers.find(
-          a => a._id.toString() === ansId
-        )
-
-        if (!targetAnswer) {
-          throw new UserInputError(
-            `Answer with ID: '${ansId}' does not exist in DB.`
-          )
-        }
-
-        if (targetAnswer.author.toString() !== loggedUser.id.toString()) {
-          throw new AuthenticationError('Access is denied.')
-        }
-
-        targetAnswer.body = body
-        targetAnswer.updatedAt = Date.now()
-
-        question.answers = question.answers.map(a =>
-          a._id.toString() !== ansId ? a : targetAnswer
-        )
-
-        const savedQues = await question.save()
-        const populatedQues = await savedQues
-          .populate('answers.author', 'username')
-          .populate('answers.comments.author', 'username')
-          .execPopulate()
-
-        return populatedQues.answers
-      } catch (err) {
-        throw new UserInputError(errorHandler(err))
+      if (
+        targetAnswerId.toString() !== user._id.toString() &&
+        user.role !== 'admin'
+      ) {
+        throw new AuthenticationError('Access is denied.')
       }
-    },
-    voteAnswer: async (_, args, context) => {
-      const loggedUser = authChecker(context)
-      const { quesId, ansId, voteType } = args
 
-      try {
-        const user = await User.findById(loggedUser.id)
-        const question = await Question.findById(quesId)
-        if (!question) {
-          throw new UserInputError(
-            `Question with ID: ${quesId} does not exist in DB.`
-          )
-        }
+      question.answers = question.answers.filter(
+        a => a.toString() !== ansId
+      )
+      await question.save()
+      return ansId
+    } catch (err) {
+      throw new UserInputError(errorHandler(err))
+    }
+  }
+  @Mutation(returns => [Answer], { nullable: false })
+  async editAnswer(@Arg('quesId') quesId: string, @Arg('ansId') ansId: string, @Arg('body') body: string, @Ctx() context: TContext): Promise<Answer[]> {
+    const loggedUser = authChecker(context)
 
-        const targetAnswer = question.answers.find(
-          a => a._id.toString() === ansId
+    if (body.trim() === '' || body.length < 30) {
+      throw new UserInputError('Answer must be atleast 30 characters long.')
+    }
+
+    try {
+      const answer = await AnswerModel.findById(ansId);
+      if (!answer) {
+        throw new UserInputError(
+          `Answer with ID: ${ansId} does not exist in DB.`
         )
-
-        if (!targetAnswer) {
-          throw new UserInputError(
-            `Answer with ID: '${ansId}' does not exist in DB.`
-          )
-        }
-
-        if (targetAnswer.author.toString() === user._id.toString()) {
-          throw new UserInputError("You can't vote for your own post.")
-        }
-
-        let votedAns
-        if (voteType === 'upvote') {
-          votedAns = upvoteIt(targetAnswer, user)
-        } else {
-          votedAns = downvoteIt(targetAnswer, user)
-        }
-
-        question.answers = question.answers.map(a =>
-          a._id.toString() !== ansId ? a : votedAns
-        )
-
-        const savedQues = await question.save()
-        const populatedQues = await savedQues
-          .populate('answers.author', 'username')
-          .populate('answers.comments.author', 'username')
-          .execPopulate()
-
-        const author = await User.findById(targetAnswer.author)
-        const addedRepAuthor = ansRep(targetAnswer, author)
-        await addedRepAuthor.save()
-
-        return populatedQues.answers.find(a => a._id.toString() === ansId)
-      } catch (err) {
-        throw new UserInputError(errorHandler(err))
       }
-    },
-    acceptAnswer: async (_, args, context) => {
-      const loggedUser = authChecker(context)
-      const { quesId, ansId } = args
 
-      try {
-        const question = await Question.findById(quesId)
-        if (!question) {
-          throw new UserInputError(
-            `Question with ID: ${quesId} does not exist in DB.`
-          )
-        }
-
-        const targetAnswer = question.answers.find(
-          a => a._id.toString() === ansId
-        )
-
-        if (!targetAnswer) {
-          throw new UserInputError(
-            `Answer with ID: '${ansId}' does not exist in DB.`
-          )
-        }
-
-        if (question.author.toString() !== loggedUser.id.toString()) {
-          throw new UserInputError(
-            'Only the author of question can accept answers.'
-          )
-        }
-
-        if (
-          !question.acceptedAnswer ||
-          !question.acceptedAnswer.equals(targetAnswer._id)
-        ) {
-          question.acceptedAnswer = targetAnswer._id
-        } else {
-          question.acceptedAnswer = null
-        }
-
-        const savedQues = await question.save()
-        const populatedQues = await savedQues
-          .populate('answers.author', 'username')
-          .populate('answers.comments.author', 'username')
-          .execPopulate()
-
-        return populatedQues
-      } catch (err) {
-        throw new UserInputError(errorHandler(err))
+      if (answer.author.toString() !== loggedUser.id.toString()) {
+        throw new AuthenticationError('Access is denied.')
       }
-    },
-  },
+      answer.body = body;
+      answer.updatedAt = new Date();
+      await answer.save()
+
+      const question = await QuestionModel.findById(quesId)
+      if (!question) {
+        throw new UserInputError(
+          `Question with ID: ${quesId} does not exist in DB.`
+        )
+      }
+      const populatedQues = await question.populate(['answers', 'answers.author', 'answers.comments.author']);
+
+      console.log('populated  question:', populatedQues);
+
+      return populatedQues.answers as Answer[];
+    } catch (err) {
+      throw new UserInputError(errorHandler(err))
+    }
+  }
+  @Mutation(returns => Answer)
+  async voteAnswer(@Arg('quesId') quesId: string, @Arg('ansId') ansId: string, @Arg('voteType', type => VoteType) voteType: VoteType, @Ctx() context: TContext): Promise<Answer> {
+    const loggedUser = authChecker(context);
+
+    try {
+      const user = await UserModel.findById(loggedUser.id)
+      const question = await QuestionModel.findById(quesId)
+      if (!user) {
+        throw new UserInputError(
+          `User with ID: ${loggedUser.id} does not exist in DB.`
+        )
+      }
+      if (!question) {
+        throw new UserInputError(
+          `Question with ID: ${quesId} does not exist in DB.`
+        )
+      }
+      const answer = await AnswerModel.findById(ansId)
+
+      if (!answer) {
+        throw new UserInputError(
+          `Answer with ID: ${ansId} does not exist in DB.`
+        )
+      }
+
+      if (answer._id.toString() === user._id.toString()) {
+        throw new UserInputError("You can't vote for your own post.")
+      }
+
+      let votedAns: DocumentType<Answer>;
+      if (voteType === VoteType.UPVOTE) {
+        votedAns = upvoteIt(answer, user)
+      } else {
+        votedAns = downvoteIt(answer, user)
+      }
+      await votedAns.save();
+
+      const populatedAns = await votedAns.populate(['author', 'comments.author']);
+
+      const author = await UserModel.findById(votedAns.author);
+      if (!author) {
+        throw new UserInputError(
+          `User with ID: ${votedAns.author} does not exist in DB.`
+        )
+      }
+      const addedRepAuthor = ansRep(populatedAns, author)
+      await addedRepAuthor.save()
+
+      return populatedAns;
+    } catch (err) {
+      throw new UserInputError(errorHandler(err))
+    }
+  }
+  @Mutation(returns => Question)
+  async acceptAnswer(@Arg('quesId') quesId: string, @Arg('ansId') ansId: string, @Ctx() context: TContext): Promise<Question> {
+    const loggedUser = authChecker(context)
+
+    try {
+      const question = await QuestionModel.findById(quesId)
+      if (!question) {
+        throw new UserInputError(
+          `Question with ID: ${quesId} does not exist in DB.`
+        )
+      }
+
+      const targetAnswerId = question.answers.find(
+        a => a.toString() === ansId
+      )
+
+      if (!targetAnswerId) {
+        throw new UserInputError(
+          `Answer with ID: '${ansId}' does not exist in DB.`
+        )
+      }
+
+      if (question.author.toString() !== loggedUser.id.toString()) {
+        throw new UserInputError(
+          'Only the author of question can accept answers.'
+        )
+      }
+
+      if (
+        !question.acceptedAnswer ||
+        !(question.acceptedAnswer.toString() === targetAnswerId.toString()
+        )) {
+        question.acceptedAnswer = targetAnswerId;
+      }
+      const savedQues = await question.save()
+      const populatedQues = await savedQues
+        .populate(['answers.author', 'answers.comments.author']);
+
+      return populatedQues as Question;
+    } catch (err) {
+      throw new UserInputError(errorHandler(err))
+    }
+  }
 }

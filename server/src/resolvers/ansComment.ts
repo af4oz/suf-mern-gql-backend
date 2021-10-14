@@ -1,176 +1,123 @@
-const { UserInputError, AuthenticationError } = require('apollo-server')
-const Question = require('../../models/question')
-const User = require('../../models/user')
-const authChecker = require('../../utils/authChecker')
-const errorHandler = require('../../utils/errorHandler')
+import { AuthenticationError, UserInputError } from 'apollo-server'
+import { ObjectId } from 'mongodb'
+import { Arg, Ctx, ID, Mutation, Resolver, Query } from 'type-graphql'
+import { AnswerModel } from '../entities/Answer'
+import { Comment, CommentModel } from '../entities/Comment'
+import { UserModel } from '../entities/User'
+import { TContext } from '../types'
+import authChecker from '../utils/authChecker'
+import errorHandler from '../utils/errorHandler'
 
-module.exports = {
-  Mutation: {
-    addAnsComment: async (_, args, context) => {
-      const loggedUser = authChecker(context)
-      const { quesId, ansId, body } = args
+@Resolver(of => Comment)
+export class AnsCommentResolver {
+  @Mutation(returns => [Comment])
+  async addAnsComment(@Arg('ansId') ansId: string, @Arg('body') body: string, @Ctx() context: TContext): Promise<Comment[]> {
+    const loggedUser = authChecker(context)
 
-      if (body.trim() === '' || body.length < 5) {
-        throw new UserInputError('Comment must be atleast 5 characters long.')
+    if (body.trim() === '' || body.length < 5) {
+      throw new UserInputError('Comment must be atleast 5 characters long.')
+    }
+
+    try {
+      const answer = await AnswerModel.findById(ansId)
+      if (!answer) {
+        throw new UserInputError(
+          `Answer with ID: ${ansId} does not exist in DB.`
+        );
+      }
+      const comment = await CommentModel.create({
+        body,
+        author: new ObjectId(loggedUser.id),
+      });
+      answer.comments?.push(comment._id);
+
+      const savedAns = await answer.save()
+      const populatedAns = await savedAns
+        .populate('answers.comments.author', 'username');
+
+      return populatedAns.comments as Comment[];
+    } catch (err) {
+      throw new UserInputError(errorHandler(err))
+    }
+  }
+  @Mutation(returns => ID)
+  async deleteAnsComment(@Arg('ansId') ansId: string, @Arg('commentId') commentId: string, @Ctx() context: TContext): Promise<string> {
+
+    const loggedUser = authChecker(context)
+
+    try {
+      const user = await UserModel.findById(loggedUser.id)
+      const answer = await AnswerModel.findById(ansId)
+      if (!answer) {
+        throw new UserInputError(
+          `Answer with ID: ${ansId} does not exist in DB.`
+        )
+      }
+      const comment = await CommentModel.findById(commentId)
+
+      if (!comment) {
+        throw new UserInputError(
+          `Comment with ID: '${commentId}' does not exist in DB.`
+        )
       }
 
-      try {
-        const question = await Question.findById(quesId)
-        if (!question) {
-          throw new UserInputError(
-            `Question with ID: ${quesId} does not exist in DB.`
-          )
-        }
-
-        const targetAnswer = question.answers.find(
-          a => a._id.toString() === ansId
-        )
-
-        if (!targetAnswer) {
-          throw new UserInputError(
-            `Answer with ID: '${ansId}' does not exist in DB.`
-          )
-        }
-
-        targetAnswer.comments.push({
-          body,
-          author: loggedUser.id,
-        })
-
-        question.answers = question.answers.map(a =>
-          a._id.toString() !== ansId ? a : targetAnswer
-        )
-
-        const savedQues = await question.save()
-        const populatedQues = await savedQues
-          .populate('answers.comments.author', 'username')
-          .execPopulate()
-
-        const updatedAnswer = populatedQues.answers.find(
-          a => a._id.toString() === ansId
-        )
-        return updatedAnswer.comments
-      } catch (err) {
-        throw new UserInputError(errorHandler(err))
+      if (
+        comment.author.toString() !== user!._id.toString() &&
+        user!.role !== 'admin'
+      ) {
+        throw new AuthenticationError('Access is denied.')
       }
-    },
-    deleteAnsComment: async (_, args, context) => {
-      const loggedUser = authChecker(context)
-      const { quesId, ansId, commentId } = args
+      const deletedComment = await CommentModel.findByIdAndDelete(commentId);
+      console.log('deleted comment:', deletedComment);
 
-      try {
-        const user = await User.findById(loggedUser.id)
-        const question = await Question.findById(quesId)
-        if (!question) {
-          throw new UserInputError(
-            `Question with ID: ${quesId} does not exist in DB.`
-          )
-        }
+      answer.comments = answer.comments?.filter(
+        c => c.toString() !== commentId
+      )
 
-        const targetAnswer = question.answers.find(
-          a => a._id.toString() === ansId
+      await answer.save()
+      return commentId;
+    } catch (err) {
+      throw new UserInputError(errorHandler(err))
+    }
+  }
+  @Mutation(returns => [Comment])
+  async editAnsComment(@Arg('ansId') ansId: string, @Arg('commentId') commentId: string, @Arg('body') body: string, @Ctx() context: TContext): Promise<Comment[]> {
+    const loggedUser = authChecker(context)
+
+    if (body.trim() === '' || body.length < 5) {
+      throw new UserInputError('Comment must be atleast 5 characters long.')
+    }
+
+    try {
+      const comment = await CommentModel.findById(commentId);
+      if (!comment) {
+        throw new UserInputError(
+          `Comment with ID: '${commentId}' does not exist in DB.`
         )
-
-        if (!targetAnswer) {
-          throw new UserInputError(
-            `Answer with ID: '${ansId}' does not exist in DB.`
-          )
-        }
-
-        const targetComment = targetAnswer.comments.find(
-          c => c._id.toString() === commentId
-        )
-
-        if (!targetComment) {
-          throw new UserInputError(
-            `Comment with ID: '${commentId}' does not exist in DB.`
-          )
-        }
-
-        if (
-          targetComment.author.toString() !== user._id.toString() &&
-          user.role !== 'admin'
-        ) {
-          throw new AuthenticationError('Access is denied.')
-        }
-
-        targetAnswer.comments = targetAnswer.comments.filter(
-          c => c._id.toString() !== commentId
-        )
-
-        question.answers = question.answers.map(a =>
-          a._id.toString() !== ansId ? a : targetAnswer
-        )
-
-        await question.save()
-        return commentId
-      } catch (err) {
-        throw new UserInputError(errorHandler(err))
-      }
-    },
-    editAnsComment: async (_, args, context) => {
-      const loggedUser = authChecker(context)
-      const { quesId, ansId, commentId, body } = args
-
-      if (body.trim() === '' || body.length < 5) {
-        throw new UserInputError('Comment must be atleast 5 characters long.')
       }
 
-      try {
-        const question = await Question.findById(quesId)
-        if (!question) {
-          throw new UserInputError(
-            `Question with ID: ${quesId} does not exist in DB.`
-          )
-        }
-
-        const targetAnswer = question.answers.find(
-          a => a._id.toString() === ansId
-        )
-
-        if (!targetAnswer) {
-          throw new UserInputError(
-            `Answer with ID: '${ansId}' does not exist in DB.`
-          )
-        }
-
-        const targetComment = targetAnswer.comments.find(
-          c => c._id.toString() === commentId
-        )
-
-        if (!targetComment) {
-          throw new UserInputError(
-            `Comment with ID: '${commentId}' does not exist in DB.`
-          )
-        }
-
-        if (targetComment.author.toString() !== loggedUser.id.toString()) {
-          throw new AuthenticationError('Access is denied.')
-        }
-
-        targetComment.body = body
-        targetComment.updatedAt = Date.now()
-
-        targetAnswer.comments = targetAnswer.comments.map(c =>
-          c._id.toString() !== commentId ? c : targetComment
-        )
-        question.answers = question.answers.map(a =>
-          a._id.toString() !== ansId ? a : targetAnswer
-        )
-
-        const savedQues = await question.save()
-        const populatedQues = await savedQues
-          .populate('answers.comments.author', 'username')
-          .execPopulate()
-
-        const updatedAnswer = populatedQues.answers.find(
-          a => a._id.toString() === ansId
-        )
-
-        return updatedAnswer.comments
-      } catch (err) {
-        throw new UserInputError(errorHandler(err))
+      if (comment.author.toString() !== loggedUser.id.toString()) {
+        throw new AuthenticationError('Access is denied.')
       }
-    },
-  },
+
+      comment.body = body;
+      comment.updatedAt = new Date();
+
+      await comment.save()
+
+      const answer = await AnswerModel.findById(ansId);
+      if (!answer) {
+        throw new UserInputError(
+          `Answer with ID: ${ansId} does not exist in DB.`
+        )
+      }
+
+      const populatedAns = await answer
+        .populate('answers.comments.author', 'username');
+
+      return populatedAns.comments as Comment[];
+    } catch (err) {
+      throw new UserInputError(errorHandler(err))
+    }
+  }
 }

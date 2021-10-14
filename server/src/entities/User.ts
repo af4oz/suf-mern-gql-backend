@@ -1,19 +1,20 @@
-import { prop, plugin, modelOptions, getModelForClass } from '@typegoose/typegoose';
+import { prop, plugin, modelOptions, getModelForClass, Severity } from '@typegoose/typegoose';
 import uniqueValidator from 'mongoose-unique-validator'
 import schemaCleaner from '../utils/schemaCleaner'
-import { Field, ID, Int, ObjectType, registerEnumType, Root } from 'type-graphql';
+import { Field, ID, Int, ObjectType, Root } from 'type-graphql';
 import { Answer } from './Answer';
 import { Question } from './Question';
 import { ObjectId } from 'mongodb';
 import { Ref } from '../types';
+import { RoleType } from './'
 
 @ObjectType()
 class QuestionRep {
-  @Field()
+  @Field(type => Question)
   @prop({ ref: () => Question })
   quesId: Ref<Question>
 
-  @Field({ nullable: true })
+  @Field({ nullable: false })
   @prop({ default: 0 })
   rep?: number;
 }
@@ -21,11 +22,11 @@ class QuestionRep {
 
 @ObjectType()
 class AnswerRep {
-  @Field()
+  @Field(type => Answer)
   @prop({ ref: () => Answer })
   ansId: Ref<Answer>
 
-  @Field({ nullable: true })
+  @Field({ nullable: false })
   @prop({ default: 0 })
   rep?: number
 }
@@ -33,45 +34,25 @@ class AnswerRep {
 @ObjectType()
 export class RecentActivity {
   @Field(() => ID)
-  readonly id: string;
+  readonly _id: ObjectId;
 
   @Field()
   title: string
 
-  @Field()
+  @Field(type => Int)
   points: number
 
-  @Field()
-  createdAt: number
-}
-
-enum RoleType {
-  USER = 'user',
-  ADMIN = 'admin'
-}
-registerEnumType(RoleType, {
-  name: 'RoleType'
-})
-
-@ObjectType()
-export class LoggedUser {
-  @Field(() => ID)
-  id: string;
-
-  @Field()
-  username: string;
-
-  @Field()
-  token: string;
-
-  @Field()
-  role: RoleType
+  @Field(type => Date)
+  createdAt: Date
 }
 
 @ObjectType()
 @modelOptions({
   schemaOptions: {
     toJSON: schemaCleaner
+  },
+  options: {
+    allowMixed: Severity.ALLOW
   }
 })
 @plugin(uniqueValidator)
@@ -89,15 +70,15 @@ export class User {
   @prop({ required: true })
   passwordHash: string
 
-  @Field()
-  @prop({ default: RoleType.USER })
+  @Field(type => RoleType)
+  @prop({ default: "user" })
   role: RoleType;
 
-  @Field({ nullable: 'items' })
+  @Field(type => [QuestionRep], { nullable: 'items' })
   @prop({ default: [] })
   questions: QuestionRep[];
 
-  @Field({ nullable: 'items' })
+  @Field(type => [AnswerRep], { nullable: 'items' })
   @prop({ default: [] })
   answers: AnswerRep[];
 
@@ -119,13 +100,13 @@ export class User {
   recentAnswers: RecentActivity[];
 
   @Field(() => Int)
-  totalQuestions(): number {
-    return this.questions.length;
+  totalQuestions(@Root() user: User): number {
+    return user.questions.length;
   }
 
   @Field(() => Int)
-  totalAnswers(): number {
-    return this.answers.length;
+  totalAnswers(@Root() user: User): number {
+    return user.answers.length;
   }
 }
 
