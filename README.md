@@ -2,7 +2,7 @@
 
 **Note 1:** This project is a fork from [amand33p](https://github.com/amand33p). I have been making some efforts to replace `material-ui` with `twin.macro` just to learn react, CSS and make reusable components myself. It's been a great journey so far and I learned a lot from `material-ui`, they did solid work with their lib.
 
-**Note 2:** Migrated Server codebase to **Typescript** using **type-graphql**, **typegoose**.
+**Note 2:** Migrated Server codebase to **Typescript** using `type-graphql`, `typegoose`.
 
 ## Future
 1. Add Dark Mode
@@ -91,11 +91,13 @@ npm run dev
 
 - [Node.js](https://nodejs.org/en/) - Runtime environment for JS
 - [Apollo Server](https://www.apollographql.com/docs/apollo-server/) - To build a self-documenting GraphQL API server
+- [Type-graphql](https://typegraphql.com/docs/introduction.html) - For defining the Graphql schema using classes and decorators and additional features like dependency injection, validation and auth guards to embrace code reusability
 - [MongoDB](https://www.mongodb.com/) - Database to store document-based data
 - [Mongoose](https://mongoosejs.com/) - MongoDB object modeling for Node.js
+- [Typegoose](https://typegoose.github.io/typegoose/) - Define Mongoose models using TypeScript classes
 - [JSON Web Token](https://jwt.io/) - A standard to secure/authenticate HTTP requests
 - [Bcrypt.js](https://www.npmjs.com/package/bcryptjs) - For hashing passwords
-- [Mongoose Unique Validator](https://www.npmjs.com/package/mongoose-unique-validator) - Plugin for better error handling of unique fields within Mongoose schema
+- [Mongoose Unique Validator](https://www.npmjs.com/package/mongoose-unique-validator) - Plugin for better error handling of unique fields within Mongoose schema.
 - [Dotenv](https://www.npmjs.com/package/dotenv) - To load environment variables from a .env file
 
 ## Features
