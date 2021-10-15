@@ -30,7 +30,7 @@ registerEnumType(VoteType, { name: "VoteType" });
 @ObjectType()
 export class LoggedUser {
   @Field(() => ID)
-  id: string;
+  _id: string;
 
   @Field()
   username: string;
@@ -55,7 +55,7 @@ export class Tag {
 @ObjectType()
 export class Author {
   @Field(type => ID)
-  id: string;
+  _id: string;
 
   @Field()
   username: string;

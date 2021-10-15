@@ -1,6 +1,6 @@
 import { AuthenticationError, UserInputError } from 'apollo-server'
 import { ObjectId } from 'mongodb'
-import { Arg, Ctx, ID, Mutation, Resolver, Query } from 'type-graphql'
+import { Arg, Ctx, ID, Mutation, Resolver } from 'type-graphql'
 import { AnswerModel } from '../entities/Answer'
 import { Comment, CommentModel } from '../entities/Comment'
 import { UserModel } from '../entities/User'
@@ -33,7 +33,15 @@ export class AnsCommentResolver {
 
       const savedAns = await answer.save()
       const populatedAns = await savedAns
-        .populate('answers.comments.author', 'username');
+        .populate([{
+          path: 'comments',
+          model: CommentModel,
+          populate: {
+            path: 'author',
+            select: 'username',
+            model: UserModel
+          }
+        }]);
 
       return populatedAns.comments as Comment[];
     } catch (err) {
@@ -47,6 +55,11 @@ export class AnsCommentResolver {
 
     try {
       const user = await UserModel.findById(loggedUser.id)
+      if (!user) {
+        throw new UserInputError(
+          `user with ID: ${loggedUser.id} does not exist in DB.`
+        )
+      }
       const answer = await AnswerModel.findById(ansId)
       if (!answer) {
         throw new UserInputError(
@@ -62,13 +75,11 @@ export class AnsCommentResolver {
       }
 
       if (
-        comment.author.toString() !== user!._id.toString() &&
-        user!.role !== 'admin'
+        comment.author.toString() !== user._id.toString()
       ) {
         throw new AuthenticationError('Access is denied.')
       }
-      const deletedComment = await CommentModel.findByIdAndDelete(commentId);
-      console.log('deleted comment:', deletedComment);
+      await comment.delete();
 
       answer.comments = answer.comments?.filter(
         c => c.toString() !== commentId
@@ -96,6 +107,13 @@ export class AnsCommentResolver {
         )
       }
 
+      const answer = await AnswerModel.findById(ansId);
+      if (!answer) {
+        throw new UserInputError(
+          `Answer with ID: ${ansId} does not exist in DB.`
+        )
+      }
+
       if (comment.author.toString() !== loggedUser.id.toString()) {
         throw new AuthenticationError('Access is denied.')
       }
@@ -105,15 +123,16 @@ export class AnsCommentResolver {
 
       await comment.save()
 
-      const answer = await AnswerModel.findById(ansId);
-      if (!answer) {
-        throw new UserInputError(
-          `Answer with ID: ${ansId} does not exist in DB.`
-        )
-      }
-
       const populatedAns = await answer
-        .populate('answers.comments.author', 'username');
+        .populate([{
+          path: 'comments',
+          model: CommentModel,
+          populate: {
+            path: 'author',
+            select: 'username',
+            model: UserModel
+          }
+        }]);
 
       return populatedAns.comments as Comment[];
     } catch (err) {

@@ -103,7 +103,7 @@ export class UserResolver {
     )
 
     return {
-      id: savedUser._id.toString(),
+      _id: savedUser._id.toString(),
       username: savedUser.username,
       role: savedUser.role,
       token,
@@ -140,7 +140,7 @@ export class UserResolver {
     )
 
     return {
-      id: user._id.toString(),
+      _id: user._id.toString(),
       username: user.username,
       role: user.role,
       token,

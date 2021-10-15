@@ -7,11 +7,12 @@ import { Question } from './Question';
 import { ObjectId } from 'mongodb';
 import { Ref } from '../types';
 import { RoleType } from './'
+import { Schema } from 'mongoose';
 
 @ObjectType()
 class QuestionRep {
   @Field(type => Question)
-  @prop({ ref: () => Question })
+  @prop({ ref: () => Question, type: Schema.Types.ObjectId })
   quesId: Ref<Question>
 
   @Field({ nullable: false })
@@ -23,7 +24,7 @@ class QuestionRep {
 @ObjectType()
 class AnswerRep {
   @Field(type => Answer)
-  @prop({ ref: () => Answer })
+  @prop({ ref: () => Answer, type: Schema.Types.ObjectId })
   ansId: Ref<Answer>
 
   @Field({ nullable: false })
@@ -60,9 +61,6 @@ export class User {
   @Field(() => ID)
   readonly _id: ObjectId;
 
-  @Field(() => ID)
-  id: string;
-
   @Field()
   @prop({ required: true, minlength: 3, maxlength: 20, trim: true, unique: true })
   username: string;
@@ -88,8 +86,9 @@ export class User {
 
   @Field(() => Int)
   reputation(@Root() parent: User): number {
-    const questionRep = parent.questions.reduce((sum, q) => sum + q.rep!, 0)
-    const answerRep = parent.answers.reduce((sum, a) => sum + a.rep!, 0)
+    const questionRep = parent.questions.reduce((sum, q) => sum + (q.rep ? q.rep : 0), 0)
+    const answerRep = parent.answers.reduce((sum, a) => sum + (a.rep ? a.rep : 0), 0)
+
     return 1 + questionRep + answerRep
   }
 

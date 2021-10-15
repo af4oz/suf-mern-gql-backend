@@ -1,5 +1,6 @@
 import { AuthenticationError, UserInputError } from 'apollo-server';
-import { Arg, Ctx, ID, Mutation, Resolver, Query } from 'type-graphql';
+import { ObjectId } from 'mongodb';
+import { Arg, Ctx, ID, Mutation, Resolver } from 'type-graphql';
 import { Comment, CommentModel } from '../entities/Comment';
 import { QuestionModel } from '../entities/Question';
 import { UserModel } from '../entities/User';
@@ -11,6 +12,7 @@ import errorHandler from '../utils/errorHandler';
 export class QuesCommentResolver {
   @Mutation(returns => [Comment])
   async addQuesComment(@Arg('quesId') quesId: string, @Arg('body') body: string, @Ctx() context: TContext): Promise<Comment[]> {
+
     const loggedUser = authChecker(context)
 
     if (body.trim() === '' || body.length < 5) {
@@ -18,6 +20,7 @@ export class QuesCommentResolver {
     }
 
     try {
+
       const question = await QuestionModel.findById(quesId)
       if (!question) {
         throw new UserInputError(
@@ -34,7 +37,15 @@ export class QuesCommentResolver {
       const savedQues = await question.save();
 
       const populatedQues = await savedQues
-        .populate('comments.author', 'username');
+        .populate({
+          path: 'comments',
+          model: CommentModel,
+          populate: {
+            path: 'author',
+            select: 'username',
+            model: UserModel
+          }
+        });
 
       return populatedQues.comments as Comment[];
     } catch (err) {
@@ -48,6 +59,11 @@ export class QuesCommentResolver {
 
     try {
       const user = await UserModel.findById(loggedUser.id)
+      if (!user) {
+        throw new UserInputError(
+          `user with ID: ${loggedUser.id} does not exist in DB.`
+        )
+      }
       const question = await QuestionModel.findById(quesId)
       if (!question) {
         throw new UserInputError(
@@ -81,14 +97,20 @@ export class QuesCommentResolver {
   }
   @Mutation(returns => [Comment])
   async editQuesComment(@Arg('quesId') quesId: string, @Arg('commentId') commentId: string, @Arg('body') body: string, @Ctx() context: TContext): Promise<Comment[]> {
-    const loggedUser = authChecker(context)
+
+    const loggedUser = authChecker(context);
 
     if (body.trim() === '' || body.length < 5) {
       throw new UserInputError('Comment must be atleast 5 characters long.')
     }
 
     try {
-
+      const question = await QuestionModel.findById(quesId)
+      if (!question) {
+        throw new UserInputError(
+          `Question with ID: ${quesId} does not exist in DB.`
+        )
+      }
       const comment = await CommentModel.findById(commentId);
 
       if (!comment) {
@@ -105,14 +127,16 @@ export class QuesCommentResolver {
       comment.updatedAt = new Date();
       await comment.save();
 
-      const question = await QuestionModel.findById(quesId)
-      if (!question) {
-        throw new UserInputError(
-          `Question with ID: ${quesId} does not exist in DB.`
-        )
-      }
       const populatedQues = await question
-        .populate('comments.author', 'username');
+        .populate({
+          path: 'comments',
+          model: CommentModel,
+          populate: {
+            path: 'author',
+            select: 'username',
+            model: UserModel
+          }
+        });
 
       return populatedQues.comments as Comment[];
     } catch (err) {

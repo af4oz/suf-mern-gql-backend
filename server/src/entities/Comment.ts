@@ -1,6 +1,8 @@
 import { getModelForClass, modelOptions, prop, Severity } from '@typegoose/typegoose'
 import { ObjectId } from 'mongodb'
-import { Field, ID, ObjectType } from 'type-graphql'
+import { Schema } from 'mongoose'
+import { Field, ID, ObjectType, Root } from 'type-graphql'
+import { Author } from './'
 import { Ref } from '../types'
 import schemaCleaner from '../utils/schemaCleaner'
 import { User } from "./User"
@@ -20,12 +22,12 @@ export class Comment {
   @Field(() => ID)
   readonly _id: ObjectId;
 
-  @Field(type => User)
-  @prop({ required: true })
+  @Field(type => Author)
+  @prop({ required: true, type: Schema.Types.ObjectId })
   author: Ref<User>;
 
   @Field()
-  @prop({ required: true, trim: true, minlength: 5 })
+  @prop({ required: true, trim: true, minlength: 15 })
   body: string;
 
   @Field(type => Date, { nullable: false })

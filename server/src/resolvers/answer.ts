@@ -3,6 +3,7 @@ import { AuthenticationError, UserInputError } from 'apollo-server'
 import { Arg, Ctx, ID, Mutation, Query, Resolver } from 'type-graphql'
 import { VoteType } from '../entities'
 import { Answer, AnswerModel } from '../entities/Answer'
+import { CommentModel } from '../entities/Comment'
 import { Question, QuestionModel } from '../entities/Question'
 import { UserModel } from '../entities/User'
 import { TContext } from '../types'
@@ -14,6 +15,7 @@ import { ansRep, downvoteIt, upvoteIt } from '../utils/helperFuncs'
 export class AnswerResolver {
   @Mutation(returns => [Answer])
   async postAnswer(@Arg('quesId', type => ID) quesId: string, @Arg('body') body: string, @Ctx() context: TContext): Promise<Answer[]> {
+
     const loggedUser = authChecker(context)
 
     if (body.trim() === '' || body.length < 30) {
@@ -21,13 +23,14 @@ export class AnswerResolver {
     }
 
     try {
+
       const author = await UserModel.findById(loggedUser.id)
-      const question = await QuestionModel.findById(quesId).populate('answers').exec();
       if (!author) {
         throw new UserInputError(
           `User with ID: ${loggedUser.id} does not exist in DB.`
         )
       }
+      const question = await QuestionModel.findById(quesId);
       if (!question) {
         throw new UserInputError(
           `Question with ID: ${quesId} does not exist in DB.`
@@ -41,20 +44,23 @@ export class AnswerResolver {
 
 
       question.answers.push(answer._id)
-      const savedQues = await question.save()
-      const populatedQues = await savedQues.populate({
-        path: 'answers',
-        populate: {
-          path: 'author'
-        }
-      })
-      console.log('popualted:', populatedQues);
 
+      const savedQues = await question.save()
 
       author.answers.push({
         ansId: savedQues.answers[savedQues.answers.length - 1],
+        rep: 0
       })
       await author.save()
+
+      const populatedQues = await savedQues.populate({
+        path: 'answers',
+        model: AnswerModel,
+        populate: {
+          path: 'author',
+          model: UserModel
+        }
+      })
 
       return populatedQues.answers as Answer[];
     } catch (err) {
@@ -78,25 +84,21 @@ export class AnswerResolver {
           `Question with ID: ${quesId} does not exist in DB.`
         )
       }
-      const answer = await AnswerModel.findByIdAndDelete(ansId)
-      console.log(answer);
 
-      const targetAnswerId = question.answers.find(
-        a => a.toString() === ansId
-      )
-
-      if (!targetAnswerId) {
+      const targetAnswer = await AnswerModel.findById(ansId);
+      if (!targetAnswer) {
         throw new UserInputError(
           `Answer with ID: '${ansId}' does not exist in DB.`
         )
       }
 
       if (
-        targetAnswerId.toString() !== user._id.toString() &&
-        user.role !== 'admin'
+        targetAnswer.author.toString() !== user._id.toString()
       ) {
         throw new AuthenticationError('Access is denied.')
       }
+
+      await targetAnswer.delete();
 
       question.answers = question.answers.filter(
         a => a.toString() !== ansId
@@ -136,9 +138,24 @@ export class AnswerResolver {
           `Question with ID: ${quesId} does not exist in DB.`
         )
       }
-      const populatedQues = await question.populate(['answers', 'answers.author', 'answers.comments.author']);
-
-      console.log('populated  question:', populatedQues);
+      const populatedQues = await question.populate([
+        {
+          path: 'answers',
+          populate: [{
+            path: 'author',
+            select: 'username',
+            model: UserModel
+          }, {
+            path: 'comments',
+            model: CommentModel,
+            populate: {
+              path: 'author',
+              select: 'username',
+              model: UserModel
+            }
+          }]
+        }
+      ])
 
       return populatedQues.answers as Answer[];
     } catch (err) {
@@ -151,12 +168,12 @@ export class AnswerResolver {
 
     try {
       const user = await UserModel.findById(loggedUser.id)
-      const question = await QuestionModel.findById(quesId)
       if (!user) {
         throw new UserInputError(
           `User with ID: ${loggedUser.id} does not exist in DB.`
         )
       }
+      const question = await QuestionModel.findById(quesId)
       if (!question) {
         throw new UserInputError(
           `Question with ID: ${quesId} does not exist in DB.`
@@ -182,15 +199,27 @@ export class AnswerResolver {
       }
       await votedAns.save();
 
-      const populatedAns = await votedAns.populate(['author', 'comments.author']);
+      const populatedAns = await votedAns.populate([{
+        path: 'author',
+        select: 'username',
+        model: UserModel
+      }, {
+        path: 'comments',
+        model: CommentModel,
+        populate: {
+          path: 'author',
+          model: UserModel
+        }
+      }]);
 
-      const author = await UserModel.findById(votedAns.author);
-      if (!author) {
+
+      const ansAuthor = await UserModel.findById(votedAns.author);
+      if (!ansAuthor) {
         throw new UserInputError(
           `User with ID: ${votedAns.author} does not exist in DB.`
         )
       }
-      const addedRepAuthor = ansRep(populatedAns, author)
+      const addedRepAuthor = ansRep(populatedAns, ansAuthor)
       await addedRepAuthor.save()
 
       return populatedAns;
@@ -233,8 +262,28 @@ export class AnswerResolver {
         question.acceptedAnswer = targetAnswerId;
       }
       const savedQues = await question.save()
-      const populatedQues = await savedQues
-        .populate(['answers.author', 'answers.comments.author']);
+
+      const populatedQues = await savedQues.populate([{
+        path: 'author',
+        select: 'username',
+        model: UserModel
+      }, {
+        path: 'answers',
+        model: AnswerModel,
+        populate: [{
+          path: 'author',
+          select: 'username',
+          model: UserModel
+        }, {
+          path: 'comments',
+          model: CommentModel,
+          populate: {
+            path: 'author',
+            select: 'username',
+            model: UserModel
+          }
+        }]
+      }])
 
       return populatedQues as Question;
     } catch (err) {

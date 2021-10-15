@@ -1,7 +1,10 @@
 import { DocumentType } from '@typegoose/typegoose'
 import { AuthenticationError, UserInputError } from 'apollo-server'
+import { PopulateOptions } from 'mongoose'
 import { Arg, Args, ArgsType, Ctx, Field, ID, Int, Mutation, Query, Resolver } from 'type-graphql'
 import { PaginatedQuesList, SortByType, VoteType } from '../entities'
+import { AnswerModel } from '../entities/Answer'
+import { CommentModel } from '../entities/Comment'
 import { Question, QuestionModel } from '../entities/Question'
 import { UserModel } from '../entities/User'
 import { TContext } from '../types'
@@ -10,7 +13,29 @@ import errorHandler from '../utils/errorHandler'
 import { downvoteIt, paginateResults, quesRep, upvoteIt } from '../utils/helperFuncs'
 import { questionValidator } from '../utils/validators'
 
-
+let popQuestion: PopulateOptions[] = [{
+  path: 'author',
+  select: 'username',
+  model: UserModel
+},
+{
+  path: 'comments',
+  model: CommentModel,
+  populate: {
+    path: 'author',
+    select: 'username',
+    model: UserModel
+  }
+},
+{
+  path: 'answers',
+  model: AnswerModel,
+  populate: {
+    path: 'author',
+    select: 'username',
+    model: UserModel
+  }
+}];
 
 @ArgsType()
 class GetQuestionsArgs {
@@ -102,18 +127,18 @@ export class QuestionResolver {
   async viewQuestion(@Arg('quesId', type => ID) quesId: string): Promise<Question> {
 
     try {
-      const question = await QuestionModel.findById(quesId)
+      const question = await QuestionModel.findById(quesId);
       if (!question) {
-        throw new Error(`Question with ID: ${quesId} does not exist in DB.`)
+        throw new Error(`Question with ID: ${quesId} does not exist in DB.`);
       }
 
-      question.views = question.views + 1;
-      const savedQues = await question.save()
+      question.views++;
+      const savedQues = await question.save();
 
-      const populatedQues = await savedQues.populate(['author', 'comments.author', 'answers.author', 'answers.comments.author']);
+      const populatedQues = await savedQues.populate(popQuestion);
 
 
-      return populatedQues
+      return populatedQues;
     } catch (err) {
       throw new UserInputError(errorHandler(err))
     }
@@ -148,7 +173,7 @@ export class QuestionResolver {
       const populatedQues = await savedQues
         .populate('author', 'username');
 
-      author.questions.push({ quesId: savedQues._id })
+      author.questions.push({ quesId: savedQues._id, rep: 0 })
       await author.save()
 
       return populatedQues
@@ -218,10 +243,7 @@ export class QuestionResolver {
           `Question with ID: ${quesId} does not exist in DB.`
         )
       }
-      if (typeof loggedUser === 'string') {
-        throw new Error('expected jwt payload, instead got string!')
-      }
-      if (question.author.toString() !== loggedUser.id) {
+      if (question.author.toString() !== loggedUser.id.toString()) {
         throw new AuthenticationError('Access is denied.')
       }
 
@@ -230,10 +252,7 @@ export class QuestionResolver {
         updatedQuesObj,
         { new: true }
       )
-        .populate('author', 'username')
-        .populate('comments.author', 'username')
-        .populate('answers.author', 'username')
-        .populate('answers.comments.author', 'username')
+        .populate(popQuestion)
       if (!updatedQues) {
         throw new UserInputError(
           `Question with ID: ${quesId} does not exist in DB.`
@@ -293,9 +312,8 @@ export class QuestionResolver {
       const addedRepAuthor = quesRep(question, author)
       await addedRepAuthor.save()
 
-      return await savedQues.populate([
-        'author', 'comments.author', 'answers.author', 'answers.comments.author'
-      ]);
+      const populatedQues = await savedQues.populate(popQuestion);
+      return populatedQues;
     } catch (err) {
       throw new UserInputError(errorHandler(err))
     }

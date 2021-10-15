@@ -2,6 +2,7 @@ import { getModelForClass, modelOptions, prop } from '@typegoose/typegoose';
 import { ObjectId } from 'mongodb';
 import { Schema } from 'mongoose';
 import { Field, ID, Int, ObjectType, Root } from 'type-graphql';
+import { Author } from '.';
 import { Ref } from '../types';
 import schemaCleaner from '../utils/schemaCleaner';
 import { Answer } from './Answer';
@@ -18,7 +19,7 @@ export class Question {
   @Field(() => ID)
   readonly _id: ObjectId;
 
-  @Field(type => User)
+  @Field(type => Author)
   @prop({ ref: () => 'User', required: true })
   author: Ref<User>;
 
@@ -51,11 +52,11 @@ export class Question {
   @prop({ default: 0 })
   points: number;
 
-  @Field(type => [User], { nullable: 'items' })
+  @Field(type => [ID], { nullable: 'items' })
   @prop({ ref: () => "User", default: [] })
   upvotedBy: Ref<User>[];
 
-  @Field(type => [User], { nullable: 'items' })
+  @Field(type => [ID], { nullable: 'items' })
   @prop({ ref: () => "User", default: [] })
   downvotedBy: Ref<User>[];
 
@@ -67,8 +68,8 @@ export class Question {
   @prop({ default: Date.now })
   hotAlgo: number;
 
-  @Field(type => Answer)
-  @prop({ ref: () => "Answer" })
+  @Field(type => ID, { nullable: true })
+  @prop({ ref: () => "Answer", type: Schema.Types.ObjectId })
   acceptedAnswer?: Ref<Answer>
 
   @Field(type => Date)
