@@ -83,7 +83,7 @@ npm run dev
 - [Context API w/ hooks](https://reactjs.org/docs/context.html) - For state of user, toast notifs, theme etc.
 - [React Router](https://reactrouter.com/) - For general routing & navigation
 - [React Hook Form](https://react-hook-form.com/) - For flexible forms
-- ~~[Material-UI w/ lots of CSS customisations](https://material-ui.com/)~~ now using [twin.macro](https://github.com/ben-rogerson/twin.macro)- UI library
+- ~~[Material-UI w/ lots of CSS customisations](https://material-ui.com/)~~ now using [twin.macro](https://github.com/ben-rogerson/twin.macro)- CSS-in-JS library
 - [Yup](https://github.com/jquense/yup) - For form validation
 - [date-fns](https://date-fns.org/) - For manipulating & formatting of dates
 
