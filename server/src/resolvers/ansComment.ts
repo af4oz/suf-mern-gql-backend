@@ -11,7 +11,7 @@ import errorHandler from '../utils/errorHandler'
 @Resolver(of => Comment)
 export class AnsCommentResolver {
   @Mutation(returns => [Comment])
-  async addAnsComment(@Arg('ansId') ansId: string, @Arg('body') body: string, @Ctx() context: TContext): Promise<Comment[]> {
+  async addAnsComment(@Arg('ansId', type => ID) ansId: string, @Arg('body') body: string, @Ctx() context: TContext): Promise<Comment[]> {
     const loggedUser = authChecker(context)
 
     if (body.trim() === '' || body.length < 5) {
@@ -49,7 +49,7 @@ export class AnsCommentResolver {
     }
   }
   @Mutation(returns => ID)
-  async deleteAnsComment(@Arg('ansId') ansId: string, @Arg('commentId') commentId: string, @Ctx() context: TContext): Promise<string> {
+  async deleteAnsComment(@Arg('ansId', type => ID) ansId: string, @Arg('commentId', type => ID) commentId: string, @Ctx() context: TContext): Promise<string> {
 
     const loggedUser = authChecker(context)
 
@@ -92,7 +92,7 @@ export class AnsCommentResolver {
     }
   }
   @Mutation(returns => [Comment])
-  async editAnsComment(@Arg('ansId') ansId: string, @Arg('commentId') commentId: string, @Arg('body') body: string, @Ctx() context: TContext): Promise<Comment[]> {
+  async editAnsComment(@Arg('ansId', type => ID) ansId: string, @Arg('commentId', type => ID) commentId: string, @Arg('body') body: string, @Ctx() context: TContext): Promise<Comment[]> {
     const loggedUser = authChecker(context)
 
     if (body.trim() === '' || body.length < 5) {

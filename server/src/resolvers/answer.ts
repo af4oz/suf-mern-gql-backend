@@ -1,6 +1,6 @@
 import { DocumentType } from '@typegoose/typegoose'
 import { AuthenticationError, UserInputError } from 'apollo-server'
-import { Arg, Ctx, ID, Mutation, Query, Resolver } from 'type-graphql'
+import { Arg, Ctx, ID, Mutation, Resolver } from 'type-graphql'
 import { VoteType } from '../entities'
 import { Answer, AnswerModel } from '../entities/Answer'
 import { CommentModel } from '../entities/Comment'
@@ -163,7 +163,7 @@ export class AnswerResolver {
     }
   }
   @Mutation(returns => Answer)
-  async voteAnswer(@Arg('quesId') quesId: string, @Arg('ansId') ansId: string, @Arg('voteType', type => VoteType) voteType: VoteType, @Ctx() context: TContext): Promise<Answer> {
+  async voteAnswer(@Arg('quesId', type => ID) quesId: string, @Arg('ansId', type => ID) ansId: string, @Arg('voteType', type => VoteType) voteType: VoteType, @Ctx() context: TContext): Promise<Answer> {
     const loggedUser = authChecker(context);
 
     try {

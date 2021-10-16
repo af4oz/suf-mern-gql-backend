@@ -80,9 +80,9 @@ export class User {
   @prop({ default: [] })
   answers: AnswerRep[];
 
-  @Field()
-  @prop({ default: Date.now })
-  createdAt: number;
+  @Field(type => Date)
+  @prop({ default: Date })
+  createdAt: Date;
 
   @Field(() => Int)
   reputation(@Root() parent: User): number {
