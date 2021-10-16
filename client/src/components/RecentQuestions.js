@@ -16,7 +16,7 @@ const RecentQuestions = ({ question }) => {
           {question.points}
         </PointsBox>
         <Link
-          to={`/questions/${question.id}`}
+          to={`/questions/${question._id}`}
           tw="font-normal ml-2 sm:ml-1"
         >
           {question.title}

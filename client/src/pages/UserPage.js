@@ -51,7 +51,7 @@ const UserPage = () => {
   }
 
   const {
-    id,
+    _id,
     username: userName,
     createdAt,
     reputation,
@@ -69,7 +69,7 @@ const UserPage = () => {
           to={`/user/${username}`}
         >
           <img
-            src={`https://secure.gravatar.com/avatar/${id}?s=164&d=identicon`}
+            src={`https://secure.gravatar.com/avatar/${_id}?s=164&d=identicon`}
             alt={username}
           />
         </RouterLink>
@@ -124,7 +124,7 @@ const UserPage = () => {
             <Divider />
             {recentQuestions.length !== 0 ? (
               recentQuestions.map(q => (
-                <div key={q.id}>
+                <div key={q._id}>
                   <RecentQuestions question={q} />
                   <Divider />
                 </div>
@@ -142,7 +142,7 @@ const UserPage = () => {
             <Divider />
             {recentAnswers.length !== 0 ? (
               recentAnswers.map(q => (
-                <div key={q.id}>
+                <div key={q._id}>
                   <RecentQuestions question={q} />
                   <Divider />
                 </div>

@@ -56,7 +56,7 @@ export const DELETE_QUESTION = gql`
 export const VOTE_QUESTION = gql`
   mutation submitVote($quesId: ID!, $voteType: VoteType!) {
     voteQuestion(quesId: $quesId, voteType: $voteType) {
-      id
+      _id
       upvotedBy
       downvotedBy
       points
@@ -115,7 +115,7 @@ export const DELETE_ANSWER = gql`
 export const VOTE_ANSWER = gql`
   mutation submitVote($quesId: ID!, $ansId: ID!, $voteType: VoteType!) {
     voteAnswer(quesId: $quesId, ansId: $ansId, voteType: $voteType) {
-      id
+      _id
       upvotedBy
       downvotedBy
       points
@@ -126,15 +126,15 @@ export const VOTE_ANSWER = gql`
 export const ACCEPT_ANSWER = gql`
   mutation submitAcceptAns($quesId: ID!, $ansId: ID!) {
     acceptAnswer(quesId: $quesId, ansId: $ansId) {
-      id
+      _id
       acceptedAnswer
     }
   }
 `
 
 export const ADD_ANS_COMMENT = gql`
-  mutation postAnsComment($quesId: ID!, $ansId: ID!, $body: String!) {
-    addAnsComment(quesId: $quesId, ansId: $ansId, body: $body) {
+  mutation postAnsComment($ansId: ID!, $body: String!) {
+    addAnsComment(ansId: $ansId, body: $body) {
       ...CommentDetails
     }
   }
@@ -143,13 +143,11 @@ export const ADD_ANS_COMMENT = gql`
 
 export const EDIT_ANS_COMMENT = gql`
   mutation updateAnsComment(
-    $quesId: ID!
     $ansId: ID!
     $commentId: ID!
     $body: String!
   ) {
     editAnsComment(
-      quesId: $quesId
       ansId: $ansId
       commentId: $commentId
       body: $body
@@ -161,7 +159,7 @@ export const EDIT_ANS_COMMENT = gql`
 `
 
 export const DELETE_ANS_COMMENT = gql`
-  mutation removeAnsComment($quesId: ID!, $ansId: ID!, $commentId: ID!) {
-    deleteAnsComment(quesId: $quesId, ansId: $ansId, commentId: $commentId)
+  mutation removeAnsComment($ansId: ID!, $commentId: ID!) {
+    deleteAnsComment(ansId: $ansId, commentId: $commentId)
   }
 `

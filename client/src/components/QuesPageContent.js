@@ -18,9 +18,9 @@ import { getErrorMsg } from '../utils/helperFuncs'
 
 import tw from 'twin.macro'; //eslint-disable-line no-unused-vars 
 
-const QuesPageContent = ({ question,...rest }) => {
+const QuesPageContent = ({ question, ...rest }) => {
   const {
-    id: quesId,
+    _id,
     answers,
     acceptedAnswer,
     upvotedBy,
@@ -30,6 +30,7 @@ const QuesPageContent = ({ question,...rest }) => {
     tags,
     author,
   } = question
+  const quesId = String(_id);
 
   const { user } = useAuthContext()
   const { setEditValues, notify } = useStateContext()
@@ -78,7 +79,7 @@ const QuesPageContent = ({ question,...rest }) => {
         __typename: 'Mutation',
         voteQuestion: {
           __typename: 'Question',
-          id: quesId,
+          _id: quesId,
           upvotedBy: updatedUpvotedArr,
           downvotedBy: updatedDownvotedArr,
           points: updatedPoints,
@@ -100,7 +101,7 @@ const QuesPageContent = ({ question,...rest }) => {
         __typename: 'Mutation',
         voteQuestion: {
           __typename: 'Question',
-          id: quesId,
+          _id: quesId,
           upvotedBy: updatedUpvotedArr,
           downvotedBy: updatedDownvotedArr,
           points: updatedPoints,
@@ -168,7 +169,7 @@ const QuesPageContent = ({ question,...rest }) => {
         })
 
         const filteredComments = dataInCache.viewQuestion.comments.filter(
-          c => c.id !== data.deleteQuesComment
+          c => c._id !== data.deleteQuesComment
         )
 
         const updatedData = {

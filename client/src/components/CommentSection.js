@@ -47,7 +47,7 @@ const CommentSection = ({
     <div>
       {comments.length !== 0 && <div tw="height[1px] bg-gray-400" />}
       {visibleComments.map(c => (
-        <div key={c.id} tw="border-bottom[1px solid rgba(0,0,0,.08)]">
+        <div key={c._id} tw="border-bottom[1px solid rgba(0,0,0,.08)]">
           <Comment
             comment={c}
             user={user}

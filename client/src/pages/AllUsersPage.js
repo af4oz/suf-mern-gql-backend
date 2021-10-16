@@ -43,9 +43,9 @@ const AllUsersPage = () => {
               u.username.toLowerCase().includes(filterInput.toLowerCase())
             )
             .map((u, i) => (
-              <div key={u.id} css={[tw`flex m-1`]}>
+              <div key={u._id} css={[tw`flex m-1`]}>
                 <Avatar
-                  src={`https://secure.gravatar.com/avatar/${u.id}?s=164&d=identicon`}
+                  src={`https://secure.gravatar.com/avatar/${u._id}?s=164&d=identicon`}
                   alt={u.username}
                   to={`/user/${u.username}`}
                 />

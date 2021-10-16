@@ -20,7 +20,7 @@ const Comment = ({ comment, user, quesAnsId, editComment, deleteComment }) => {
 
   const handleCommentEdit = e => {
     e.preventDefault()
-    editComment(editedCommentBody, comment.id, quesAnsId)
+    editComment(editedCommentBody, comment._id, quesAnsId)
     closeInput()
   }
 
@@ -45,7 +45,7 @@ const Comment = ({ comment, user, quesAnsId, editComment, deleteComment }) => {
               )}
             </span>
           </p>
-          {user && user.id === comment.author.id && (
+          {user && user._id === comment.author._id && (
             <LightButton
               tw="mr-1"
               onClick={() => setEditOpen(true)}
@@ -53,10 +53,10 @@ const Comment = ({ comment, user, quesAnsId, editComment, deleteComment }) => {
               edit
             </LightButton>
           )}
-          {user && (user.id === comment.author.id || user.role === 'ADMIN') && (
+          {user && (user._id === comment.author._id || user.role === 'ADMIN') && (
             <DeleteDialog
               bodyType="comment"
-              handleDelete={() => deleteComment(comment.id, quesAnsId)}
+              handleDelete={() => deleteComment(comment._id, quesAnsId)}
             />
           )}
         </div>

@@ -75,7 +75,7 @@ const AskQuestionPage = () => {
     updateQuestion({
       variables: { quesId: editValues.quesId, title, body, tags },
       update: (_, { data }) => {
-        history.push(`/questions/${data.editQuestion.id}`)
+        history.push(`/questions/${data.editQuestion._id}`)
         clearEdit()
         notify('Question edited!')
       },

@@ -23,7 +23,7 @@ export const GET_QUESTIONS = gql`
         page
       }
       questions {
-        id
+        _id
         author {
           ...AuthorDetails
         }
@@ -44,7 +44,7 @@ export const GET_QUESTIONS = gql`
 export const VIEW_QUESTION = gql`
   query fetchQuestion($quesId: ID!) {
     viewQuestion(quesId: $quesId) {
-      id
+      _id
       author {
         ...AuthorDetails
       }
@@ -78,7 +78,7 @@ export const VIEW_QUESTION = gql`
 export const GET_USER = gql`
   query fetchUser($username: String!) {
     getUser(username: $username) {
-      id
+      _id
       username
       role
       createdAt
@@ -86,13 +86,13 @@ export const GET_USER = gql`
       totalQuestions
       totalAnswers
       recentQuestions {
-        id
+        _id
         title
         points
         createdAt
       }
       recentAnswers {
-        id
+        _id
         title
         points
         createdAt
@@ -113,7 +113,7 @@ export const GET_ALL_TAGS = gql`
 export const GET_ALL_USERS = gql`
   query {
     getAllUsers {
-      id
+      _id
       username
       createdAt
     }

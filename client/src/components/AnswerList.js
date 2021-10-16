@@ -76,7 +76,7 @@ const AnswerList = ({ quesId, answers, acceptedAnswer, quesAuthor }) => {
         __typename: 'Mutation',
         voteAnswer: {
           __typename: 'Answer',
-          id: ansId,
+          _id: ansId,
           upvotedBy: updatedUpvotedArr,
           downvotedBy: updatedDownvotedArr,
           points: updatedPoints,
@@ -98,7 +98,7 @@ const AnswerList = ({ quesId, answers, acceptedAnswer, quesAuthor }) => {
         __typename: 'Mutation',
         voteAnswer: {
           __typename: 'Answer',
-          id: ansId,
+          _id: ansId,
           upvotedBy: updatedUpvotedArr,
           downvotedBy: updatedDownvotedArr,
           points: updatedPoints,
@@ -126,7 +126,7 @@ const AnswerList = ({ quesId, answers, acceptedAnswer, quesAuthor }) => {
         })
 
         const filteredAnswers = dataInCache.viewQuestion.answers.filter(
-          c => c.id !== data.deleteAnswer
+          c => c._id !== data.deleteAnswer
         )
 
         const updatedData = {
@@ -150,7 +150,7 @@ const AnswerList = ({ quesId, answers, acceptedAnswer, quesAuthor }) => {
       variables: { quesId, ansId },
       optimisticResponse: {
         acceptAnswer: {
-          id: quesId,
+          _id: quesId,
           acceptedAnswer: acceptedAnswer === ansId ? null : ansId,
           __typename: 'Question',
         },
@@ -167,7 +167,7 @@ const AnswerList = ({ quesId, answers, acceptedAnswer, quesAuthor }) => {
 
   const addAnsComment = (commentBody, ansId) => {
     postAnsComment({
-      variables: { quesId, ansId, body: commentBody },
+      variables: { ansId, body: commentBody },
       update: (proxy, { data }) => {
         const dataInCache = proxy.readQuery({
           query: VIEW_QUESTION,
@@ -175,7 +175,7 @@ const AnswerList = ({ quesId, answers, acceptedAnswer, quesAuthor }) => {
         })
 
         const updatedAnswers = dataInCache.viewQuestion.answers.map(a =>
-          a.id === ansId ? { ...a, comments: data.addAnsComment } : a
+          a._id === ansId ? { ...a, comments: data.addAnsComment } : a
         )
 
         const updatedData = {
@@ -196,7 +196,7 @@ const AnswerList = ({ quesId, answers, acceptedAnswer, quesAuthor }) => {
 
   const editAnsComment = (editedCommentBody, commentId, ansId) => {
     updateAnsComment({
-      variables: { quesId, ansId, commentId, body: editedCommentBody },
+      variables: { ansId, commentId, body: editedCommentBody },
       update: () => {
         notify('Comment edited!')
       },
@@ -205,7 +205,7 @@ const AnswerList = ({ quesId, answers, acceptedAnswer, quesAuthor }) => {
 
   const deleteAnsComment = (commentId, ansId) => {
     removeAnsComment({
-      variables: { quesId, ansId, commentId },
+      variables: { ansId, commentId },
       update: (proxy, { data }) => {
         const dataInCache = proxy.readQuery({
           query: VIEW_QUESTION,
@@ -213,14 +213,14 @@ const AnswerList = ({ quesId, answers, acceptedAnswer, quesAuthor }) => {
         })
 
         const targetAnswer = dataInCache.viewQuestion.answers.find(
-          a => a.id === ansId
+          a => a._id === ansId
         )
         const updatedComments = targetAnswer.comments.filter(
-          c => c.id !== data.deleteAnsComment
+          c => c._id !== data.deleteAnsComment
         )
 
         const updatedAnswers = dataInCache.viewQuestion.answers.map(a =>
-          a.id === ansId ? { ...a, comments: updatedComments } : a
+          a._id === ansId ? { ...a, comments: updatedComments } : a
         )
 
         const updatedData = {
@@ -256,12 +256,12 @@ const AnswerList = ({ quesId, answers, acceptedAnswer, quesAuthor }) => {
       )}
       <div>
         {answerList.map(a => (
-          <div key={a.id} tw="mb-3">
+          <div key={a._id} tw="mb-3">
             <QuesAnsDetails
               quesAns={a}
-              upvoteQuesAns={() => upvoteAns(a.id, a.upvotedBy, a.downvotedBy)}
+              upvoteQuesAns={() => upvoteAns(a._id, a.upvotedBy, a.downvotedBy)}
               downvoteQuesAns={() =>
-                downvoteAns(a.id, a.upvotedBy, a.downvotedBy)
+                downvoteAns(a._id, a.upvotedBy, a.downvotedBy)
               }
               editQuesAns={editAns}
               deleteQuesAns={() => deleteAns(a.id)}

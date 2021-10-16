@@ -32,7 +32,7 @@ const QuesAnsDetails = ({
   quesAuthor,
 }) => {
   const {
-    id,
+    _id: id,
     author,
     body,
     tags,
@@ -78,7 +78,7 @@ const QuesAnsDetails = ({
       <div tw="flex flex-col items-center">
         {user ? (
           <UpvoteButton
-            checked={user ? upvotedBy.includes(user.id) : false}
+            checked={user ? upvotedBy.includes(user._id) : false}
             user={user}
             handleUpvote={upvoteQuesAns}
           />
@@ -88,14 +88,14 @@ const QuesAnsDetails = ({
         <span tw="">{points}</span>
         {user ? (
           <DownvoteButton
-            checked={user ? downvotedBy.includes(user.id) : false}
+            checked={user ? downvotedBy.includes(user._id) : false}
             user={user}
             handleDownvote={downvoteQuesAns}
           />
         ) : (
           <AuthFormModal buttonType="downvote" />
         )}
-        {isAnswer && user && user.id === quesAuthor.id && (
+        {isAnswer && user && user._id === quesAuthor._id && (
           <AcceptAnswerButton
             checked={acceptedAnswer === id}
             handleAcceptAns={acceptAnswer}
@@ -137,15 +137,15 @@ const QuesAnsDetails = ({
         )}
         {tags && (
           <div tw="flex flex-wrap">
-            {tags.map(t => (
-              <Tag key={t} label={t} to={`/tags/${t}`} />
+            {tags.map((t) => (
+              <Tag key={t} label={t} to={`/tags/${t}`} styles={{ link: tw`margin[0 .25em .25em]` }} />
             ))}
           </div>
         )}
         <div tw="flex flex-row flex-wrap justify-between my-5">
           {!editAnsOpen && (
             <div tw="inline-block">
-              {user && user.id === author.id && (
+              {user && user._id === author._id && (
                 <LightButton
                   tw="m-1 p-0"
                   onClick={isAnswer ? openEditInput : editQuesAns}
@@ -153,7 +153,7 @@ const QuesAnsDetails = ({
                   Edit
                 </LightButton>
               )}
-              {user && (user.id === author.id || user.role === 'ADMIN') && (
+              {user && (user._id === author._id || user.role === 'ADMIN') && (
                 <DeleteDialog
                   bodyType={isAnswer ? 'answer' : 'question'}
                   handleDelete={deleteQuesAns}
@@ -163,7 +163,7 @@ const QuesAnsDetails = ({
           )}
           <PostedByUser
             username={author.username}
-            userId={author.id}
+            userId={author._id}
             createdAt={createdAt}
             updatedAt={updatedAt}
             filledVariant={true}

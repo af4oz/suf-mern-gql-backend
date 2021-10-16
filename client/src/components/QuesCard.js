@@ -14,7 +14,7 @@ const Question = tw.h3`m-0 mb-2`
 
 const QuesCard = ({ question }) => {
   const {
-    id,
+    _id,
     title,
     author,
     body,
@@ -42,7 +42,7 @@ const QuesCard = ({ question }) => {
         <Question>
           <Link
             tw="no-underline text-blue-600 font-normal hover:text-blue-800"
-            to={`/questions/${id}`}
+            to={`/questions/${_id}`}
           >
             {title}
           </Link>
@@ -57,7 +57,7 @@ const QuesCard = ({ question }) => {
         </div>
         <PostedByUser
           username={author.username}
-          userId={author.id}
+          userId={author._id}
           createdAt={createdAt}
         />
       </QuestionContainer>

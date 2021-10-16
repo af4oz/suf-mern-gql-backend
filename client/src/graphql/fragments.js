@@ -2,14 +2,14 @@ import { gql } from '@apollo/client'
 
 export const AUTHOR_DETAILS = gql`
   fragment AuthorDetails on Author {
-    id
+    _id
     username
   }
 `
 
 export const COMMENT_DETAILS = gql`
   fragment CommentDetails on Comment {
-    id
+    _id
     author {
       ...AuthorDetails
     }
@@ -22,7 +22,7 @@ export const COMMENT_DETAILS = gql`
 
 export const ANSWER_DETAILS = gql`
   fragment AnswerDetails on Answer {
-    id
+    _id
     author {
       ...AuthorDetails
     }
@@ -42,7 +42,7 @@ export const ANSWER_DETAILS = gql`
 
 export const QUESTION_DETAILS = gql`
   fragment QuestionDetails on Question {
-    id
+    _id
     author {
       ...AuthorDetails
     }
@@ -70,7 +70,7 @@ export const QUESTION_DETAILS = gql`
 
 export const LOGGED_USER_DETAILS = gql`
   fragment LoggedUserDetails on LoggedUser {
-    id
+    _id
     username
     role
     token

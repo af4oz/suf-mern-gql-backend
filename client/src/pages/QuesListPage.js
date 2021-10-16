@@ -105,7 +105,7 @@ const QuesListPage = ({ tagFilterActive, searchFilterActive }) => {
         )}
         {quesData &&
           (quesData.questions.length !== 0 ? (
-            quesData.questions.map(q => <QuesCard key={q.id} question={q} />)
+            quesData.questions.map(q => <QuesCard key={q._id} question={q} />)
           ) : (
             <h3 tw="text-center text-purple-900 mt-10">
               {tagFilterActive
