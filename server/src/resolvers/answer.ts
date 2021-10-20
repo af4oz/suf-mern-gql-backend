@@ -68,7 +68,7 @@ export class AnswerResolver {
     }
   }
   @Mutation(returns => ID)
-  async deleteAnswer(@Arg('quesId') quesId: string, @Arg('ansId') ansId: string, @Ctx() context: TContext): Promise<string> {
+  async deleteAnswer(@Arg('quesId', type => ID) quesId: string, @Arg('ansId', type => ID) ansId: string, @Ctx() context: TContext): Promise<string> {
     const loggedUser = authChecker(context)
 
     try {
@@ -110,7 +110,7 @@ export class AnswerResolver {
     }
   }
   @Mutation(returns => [Answer], { nullable: false })
-  async editAnswer(@Arg('quesId') quesId: string, @Arg('ansId') ansId: string, @Arg('body') body: string, @Ctx() context: TContext): Promise<Answer[]> {
+  async editAnswer(@Arg('quesId', type => ID) quesId: string, @Arg('ansId', type => ID) ansId: string, @Arg('body') body: string, @Ctx() context: TContext): Promise<Answer[]> {
     const loggedUser = authChecker(context)
 
     if (body.trim() === '' || body.length < 30) {
@@ -228,7 +228,7 @@ export class AnswerResolver {
     }
   }
   @Mutation(returns => Question)
-  async acceptAnswer(@Arg('quesId') quesId: string, @Arg('ansId') ansId: string, @Ctx() context: TContext): Promise<Question> {
+  async acceptAnswer(@Arg('quesId', type => ID) quesId: string, @Arg('ansId', type => ID) ansId: string, @Ctx() context: TContext): Promise<Question> {
     const loggedUser = authChecker(context)
 
     try {

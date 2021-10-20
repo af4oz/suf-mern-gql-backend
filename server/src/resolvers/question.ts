@@ -221,7 +221,7 @@ export class QuestionResolver {
     }
   }
   @Mutation(returns => Question)
-  async editQuestion(@Arg('quesId', type => ID,) quesId: string, @Arg('title') title: string, @Arg("body") body: string, @Arg('tags', type => [String]) tags: string[], @Ctx() context: TContext): Promise<Question> {
+  async editQuestion(@Arg('quesId', type => ID) quesId: string, @Arg('title') title: string, @Arg("body") body: string, @Arg('tags', type => [String]) tags: string[], @Ctx() context: TContext): Promise<Question> {
     const loggedUser = authChecker(context)
 
     const { errors, valid } = questionValidator(title, body, tags)
