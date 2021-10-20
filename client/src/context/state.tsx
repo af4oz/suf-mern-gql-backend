@@ -1,18 +1,23 @@
-import { useReducer, createContext, useContext, useEffect } from 'react'
-import storage from '../utils/localStorage'
+import { useEffect, useReducer } from 'react';
+import createCtx from '../utils/createCtx';
+import storage from '../utils/localStorage';
 
-const StateContext = createContext({
-  editValues: null,
-  notification: null,
-  darkMode: false,
-  setEditValues: values => {},
-  clearEdit: () => {},
-  notify: (message, severity, duration) => {},
-  clearNotif: () => {},
-  toggleDarkMode: () => {},
-})
+interface IAppContext {
+  editValues: any;
+  notification: any;
+  darkMode: boolean;
+  setEditValues: (values: any) => void;
+  clearEdit: () => void;
+  notify: (message: string, severity?: "success" | "error" | "warning" | "info", duration?: number) => void;
+  clearNotif?: () => void;
+  toggleDarkMode: () => void;
+}
 
-const stateReducer = (state, action) => {
+const [useAppCtx, AppCtxProvider] = createCtx<IAppContext>()
+
+export const useAppContext = useAppCtx;
+
+const stateReducer = (state: any, action: any) => {
   switch (action.type) {
     case 'SET_EDIT':
       return {
@@ -44,7 +49,7 @@ const stateReducer = (state, action) => {
   }
 }
 
-export const StateProvider = ({ children }) => {
+export const AppProvider = ({ children }: { children: React.ReactNode }) => {
   const [state, dispatch] = useReducer(stateReducer, {
     editValues: null,
     notification: null,
@@ -61,7 +66,7 @@ export const StateProvider = ({ children }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
-  const setEditValues = valuesObj => {
+  const setEditValues: IAppContext['setEditValues'] = valuesObj => {
     dispatch({
       type: 'SET_EDIT',
       payload: valuesObj,
@@ -74,9 +79,9 @@ export const StateProvider = ({ children }) => {
     })
   }
 
-  let timeoutID = null
+  let timeoutID: any = null
 
-  const notify = (message, severity = 'success', duration = 5) => {
+  const notify: IAppContext['notify'] = (message, severity = 'success', duration = 5) => {
     clearTimeout(timeoutID)
 
     dispatch({
@@ -106,7 +111,7 @@ export const StateProvider = ({ children }) => {
   }
 
   return (
-    <StateContext.Provider
+    <AppCtxProvider
       value={{
         editValues: state.editValues,
         notification: state.notification,
@@ -116,11 +121,10 @@ export const StateProvider = ({ children }) => {
         notify,
         clearNotif,
         toggleDarkMode,
-      }}
+      }
+      }
     >
       {children}
-    </StateContext.Provider>
+    </AppCtxProvider>
   )
 }
-
-export const useStateContext = () => useContext(StateContext)

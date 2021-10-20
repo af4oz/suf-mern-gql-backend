@@ -1,0 +1,106 @@
+mutation registerUser($username: String!, $password: String!) {
+  register(username: $username, password: $password) {
+    ...LoggedUserDetails
+  }
+}
+
+mutation loginUser($username: String!, $password: String!) {
+  login(username: $username, password: $password) {
+    ...LoggedUserDetails
+  }
+}
+
+mutation addQuestion($title: String!, $body: String!, $tags: [String!]!) {
+  postQuestion(title: $title, body: $body, tags: $tags) {
+    ...QuestionDetails
+  }
+}
+
+mutation updateQuestion(
+  $quesId: ID!
+  $title: String!
+  $body: String!
+  $tags: [String!]!
+) {
+  editQuestion(quesId: $quesId, title: $title, body: $body, tags: $tags) {
+    ...QuestionDetails
+  }
+}
+
+mutation removeQuestion($quesId: ID!) {
+  deleteQuestion(quesId: $quesId)
+}
+
+mutation submitQuesVote($quesId: ID!, $voteType: VoteType!) {
+  voteQuestion(quesId: $quesId, voteType: $voteType) {
+    _id
+    upvotedBy
+    downvotedBy
+    points
+  }
+}
+
+mutation postQuesComment($quesId: ID!, $body: String!) {
+  addQuesComment(quesId: $quesId, body: $body) {
+    ...CommentDetails
+  }
+}
+
+mutation updateQuesComment($quesId: ID!, $commentId: ID!, $body: String!) {
+  editQuesComment(quesId: $quesId, commentId: $commentId, body: $body) {
+    ...CommentDetails
+  }
+}
+
+mutation removeQuesComment($quesId: ID!, $commentId: ID!) {
+  deleteQuesComment(quesId: $quesId, commentId: $commentId)
+}
+
+mutation addAnswer($quesId: ID!, $body: String!) {
+  postAnswer(quesId: $quesId, body: $body) {
+    ...AnswerDetails
+  }
+}
+mutation updateAnswer($quesId: ID!, $ansId: ID!, $body: String!) {
+  editAnswer(quesId: $quesId, ansId: $ansId, body: $body) {
+    ...AnswerDetails
+  }
+}
+mutation removeAnswer($quesId: ID!, $ansId: ID!) {
+  deleteAnswer(quesId: $quesId, ansId: $ansId)
+}
+mutation submitAnsVote($quesId: ID!, $ansId: ID!, $voteType: VoteType!) {
+  voteAnswer(quesId: $quesId, ansId: $ansId, voteType: $voteType) {
+    _id
+    upvotedBy
+    downvotedBy
+    points
+  }
+}
+mutation submitAcceptAns($quesId: ID!, $ansId: ID!) {
+  acceptAnswer(quesId: $quesId, ansId: $ansId) {
+    _id
+    acceptedAnswer
+  }
+}
+mutation postAnsComment($ansId: ID!, $body: String!) {
+  addAnsComment(ansId: $ansId, body: $body) {
+    ...CommentDetails
+  }
+}
+mutation updateAnsComment(
+  $ansId: ID!
+  $commentId: ID!
+  $body: String!
+) {
+  editAnsComment(
+    ansId: $ansId
+    commentId: $commentId
+    body: $body
+  ) {
+    ...CommentDetails
+  }
+}
+mutation removeAnsComment($ansId: ID!, $commentId: ID!) {
+  deleteAnsComment(ansId: $ansId, commentId: $commentId)
+}

@@ -1,13 +1,16 @@
-import { useReducer, createContext, useContext, useEffect } from 'react'
-import storage from '../utils/localStorage'
+import { ReactNode, useEffect, useReducer } from 'react';
+import createCtx from '../utils/createCtx';
+import storage from '../utils/localStorage';
 
-const AuthContext = createContext({
-  user: null,
-  setUser: userData => {},
-  logoutUser: () => {},
-})
+interface IAuthContext {
+  user: any;
+  setUser: (userData: any) => void;
+  logoutUser: () => void;
+}
+const [useAuthCtx, AuthCtxProvider] = createCtx<IAuthContext>();
 
-const authReducer = (state, action) => {
+
+const authReducer = (state: any, action: any) => {
   switch (action.type) {
     case 'LOGIN':
       return {
@@ -24,7 +27,7 @@ const authReducer = (state, action) => {
   }
 }
 
-export const AuthProvider = ({ children }) => {
+export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [state, dispatch] = useReducer(authReducer, { user: null })
 
   useEffect(() => {
@@ -38,7 +41,7 @@ export const AuthProvider = ({ children }) => {
     }
   }, [])
 
-  const setUser = userData => {
+  const setUser: IAuthContext['setUser'] = userData => {
     storage.saveUser(userData)
     dispatch({
       type: 'LOGIN',
@@ -52,10 +55,10 @@ export const AuthProvider = ({ children }) => {
   }
 
   return (
-    <AuthContext.Provider value={{ user: state.user, setUser, logoutUser }}>
+    <AuthCtxProvider value={{ user: state.user, setUser, logoutUser }}>
       {children}
-    </AuthContext.Provider>
+    </AuthCtxProvider>
   )
 }
 
-export const useAuthContext = () => useContext(AuthContext)
+export const useAuthContext = useAuthCtx;

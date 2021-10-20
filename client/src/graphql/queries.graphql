@@ -1,0 +1,100 @@
+query fetchQuestions(
+  $sortBy: SortByType!
+  $page: Int!
+  $limit: Int!
+  $filterByTag: String
+  $filterBySearch: String
+) {
+  getQuestions(
+    sortBy: $sortBy
+    page: $page
+    limit: $limit
+    filterByTag: $filterByTag
+    filterBySearch: $filterBySearch
+  ) {
+    next {
+      page
+    }
+    previous {
+      page
+    }
+    questions {
+      _id
+      author {
+        ...AuthorDetails
+      }
+      title
+      body
+      tags
+      points
+      views
+      createdAt
+      updatedAt
+      answerCount
+    }
+  }
+}
+ query fetchQuestion($quesId: ID!) {
+  viewQuestion(quesId: $quesId) {
+    _id
+    author {
+      ...AuthorDetails
+    }
+    title
+    body
+    tags
+    points
+    views
+    createdAt
+    updatedAt
+    answers {
+      ...AnswerDetails
+    }
+    author {
+      ...AuthorDetails
+    }
+    comments {
+      ...CommentDetails
+    }
+    acceptedAnswer
+    upvotedBy
+    downvotedBy
+  }
+} 
+query fetchUser($username: String!) {
+  getUser(username: $username) {
+    _id
+    username
+    role
+    createdAt
+    reputation
+    totalQuestions
+    totalAnswers
+    recentQuestions {
+      _id
+      title
+      points
+      createdAt
+    }
+    recentAnswers {
+      _id
+      title
+      points
+      createdAt
+    }
+  }
+}
+query fetchAllTags {
+  getAllTags {
+    tagName
+    count
+  }
+}
+
+query fetchAllUsers{
+  getAllUsers {
+    _id
+    username
+    createdAt
+  }
+}
