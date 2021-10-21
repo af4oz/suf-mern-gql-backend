@@ -1,8 +1,10 @@
 # Stack Underflow | SOF Clone | MERN-GraphQL
 
-**Update 1:** This project is a fork from [amand33p](https://github.com/amand33p). I have been making some efforts to replace `material-ui` with `twin.macro` just to learn react, CSS and make reusable components myself. It's been a great journey so far and I learned a lot from `material-ui`, they did solid work with their lib.
+**Update 1:** This project is a fork from [amand33p](https://github.com/amand33p). I have been making some efforts to replace `material-ui` with `twin.macro` just to learn react, CSS and make reusable components myself. It's been a great journey so far and I learned a lot from `material-ui`, they did solid work with their lib and also used a tonne of `useRef` 😅 .
 
 **Update 2:** Migrated Server codebase to **Typescript** using `type-graphql`, `typegoose`.
+
+**Update 3:** Migrated Client codebase to **Typescript** using `graphql`, `@graphql-codegen` 💚 ,`definitelyTyped` libs.
 
 ## Future
 1. Add Dark Mode
