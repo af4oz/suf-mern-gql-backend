@@ -1,55 +1,52 @@
-import { useEffect, useRef } from "react";
+import { RefObject, useEffect, useRef } from "react";
 
 
-const getDOMRef = (value) => {
+const getDOMRef = (value: string | RefObject<HTMLElement> | HTMLElement): HTMLElement | null => {
   if (typeof value == "string") {
     return document.querySelector(value);
   } else if (typeof value == "object") {
+    if (value instanceof HTMLElement) return value;
     if (value.current) return value.current;
-    return value;
-  } else {
-    return null;
   }
+  return null
 };
+interface UseModalProps {
+  focusFirst?: string | RefObject<HTMLElement> | HTMLElement;
+  focusAfterClosed?: string | RefObject<HTMLElement> | HTMLElement;
+  autoFocus?: boolean;
+  onClose: () => void;
+  overlayModal?: boolean;
+}
 
-/**
- * 
- * @param {Object} props  
- * @param {string | HTMLElement} props.focusFirst ref/html element to focus first when dialog opens
- * @param {string | HTMLElement} props.focusAfterClosed ref/html element to focus when dialog closes
- * @param {boolean} props.autoFocus if true,it tries to focus first descendants of modal children
- * @param {() =>  void} props.onClose 
- * @returns 
- */
-const useModal = ({ focusFirst, onClose, focusAfterClosed, autoFocus, overlayModal = true }) => {
+const useModal = <RefType extends HTMLElement>({ focusFirst, onClose, focusAfterClosed, autoFocus, overlayModal = true }: UseModalProps) => {
+
   let modalRoot = document.getElementById("modal-root");
   if (!modalRoot) {
     modalRoot = document.createElement("div");
     modalRoot.setAttribute("id", "modal-root");
     document.body.appendChild(modalRoot);
   }
-  const ref = useRef(null);
+
+  const ref = useRef<RefType | null>(null);
 
   let _focusFirst = focusFirst ? getDOMRef(focusFirst) : null;
   let _focusAfterClosed = focusAfterClosed ? getDOMRef(focusAfterClosed) : null;
 
-
-
   useEffect(() => {
-    function handleOutsideClick(e) {
+    function handleOutsideClick(e: MouseEvent) {
       if (!ref.current) {
         return
       }
-      if (!ref.current.contains(e.target)) {
+      if (!ref.current.contains(e.target as HTMLElement)) {
         onClose();
-        if (focusAfterClosed) focusAfterClosed.focus();
+        if (_focusAfterClosed) _focusAfterClosed.focus();
       }
     }
 
-    function handleKeyPress(e) {
+    function handleKeyPress(e: KeyboardEvent) {
       if (e.key === 'Escape') {
         onClose()
-        if (focusAfterClosed) focusAfterClosed.focus();
+        if (_focusAfterClosed) _focusAfterClosed.focus();
       }
     }
     document.body.addEventListener('keyup', handleKeyPress)
@@ -59,17 +56,17 @@ const useModal = ({ focusFirst, onClose, focusAfterClosed, autoFocus, overlayMod
       document.body.removeEventListener('click', handleOutsideClick, { capture: true });
       document.body.removeEventListener('keyup', handleKeyPress)
     }
-  }, [onClose, focusAfterClosed])
+  }, [onClose, _focusAfterClosed])
 
   useEffect(() => {
-    const isFocusable = (element) => {
+    const isFocusable = (element: HTMLElement): element is HTMLElement => {
       return typeof element.focus === "function";
     };
 
     // `focus` event can be triggered by keyboard(user input),javascript
     // we want to run some operations only when focus is triggered by keyboard
     let ignoreUntilFocusChanges = false;
-    const attempFocus = (element) => {
+    const attempFocus = (element: HTMLElement) => {
       if (!isFocusable(element)) {
         return false;
       }
@@ -83,20 +80,20 @@ const useModal = ({ focusFirst, onClose, focusAfterClosed, autoFocus, overlayMod
       ignoreUntilFocusChanges = false;
       return document.activeElement === element;
     };
-    const focusFirstDescendant = (element) => {
+    const focusFirstDescendant = (element: HTMLElement) => {
       for (var i = 0; i < element.childNodes.length; i++) {
         var child = element.childNodes[i];
 
-        if (attempFocus(child) || focusFirstDescendant(child)) {
+        if (attempFocus(child as HTMLElement) || focusFirstDescendant(child as HTMLElement)) {
           return true;
         }
       }
       return false;
     };
-    const focusLastDescendant = (element) => {
+    const focusLastDescendant = (element: HTMLElement) => {
       for (var i = element.childNodes.length - 1; i >= 0; i--) {
         var child = element.childNodes[i];
-        if (attempFocus(child) || focusLastDescendant(child)) {
+        if (attempFocus(child as HTMLElement) || focusLastDescendant(child as HTMLElement)) {
           return true;
         }
       }
@@ -110,8 +107,8 @@ const useModal = ({ focusFirst, onClose, focusAfterClosed, autoFocus, overlayMod
       }
     }
 
-    let lastFocus;
-    const trapFocus = (e) => {
+    let lastFocus: any;
+    const trapFocus = (e: FocusEvent) => {
 
       if (ignoreUntilFocusChanges) {
         return;
@@ -121,7 +118,7 @@ const useModal = ({ focusFirst, onClose, focusAfterClosed, autoFocus, overlayMod
         console.error("dialog not found");
         return;
       }
-      if (ref.current.contains(e.target)) {
+      if (ref.current.contains(e.target as HTMLElement)) {
         lastFocus = e.target;
       } else {
 

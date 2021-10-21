@@ -9,7 +9,7 @@ interface IAppContext {
   setEditValues: (values: any) => void;
   clearEdit: () => void;
   notify: (message: string, severity?: "success" | "error" | "warning" | "info", duration?: number) => void;
-  clearNotif?: () => void;
+  clearNotif: () => void;
   toggleDarkMode: () => void;
 }
 
