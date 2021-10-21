@@ -1,7 +1,7 @@
-import { ApolloClient, HttpLink, InMemoryCache } from '@apollo/client'
-import { setContext } from 'apollo-link-context'
-import storage from './utils/localStorage'
-import backendUrl from './backendUrl'
+import { ApolloClient, from, HttpLink, InMemoryCache } from '@apollo/client'
+import { setContext } from '@apollo/client/link/context';
+import storage from './utils/localStorage';
+import backendUrl from './backendUrl';
 
 const httpLink = new HttpLink({
   uri: backendUrl,
@@ -23,27 +23,27 @@ const client = new ApolloClient({
       Question: {
         fields: {
           upvotedBy: {
-            merge(existing, incoming) {
+            merge(_, incoming) {
               return incoming
             },
           },
           downvotedBy: {
-            merge(existing, incoming) {
+            merge(_, incoming) {
               return incoming
             },
           },
           comments: {
-            merge(existing, incoming) {
+            merge(_, incoming) {
               return incoming
             },
           },
           answers: {
-            merge(existing, incoming) {
+            merge(_, incoming) {
               return incoming
             },
           },
           tags: {
-            merge(existing, incoming) {
+            merge(_, incoming) {
               return incoming
             },
           },
@@ -52,17 +52,17 @@ const client = new ApolloClient({
       Answer: {
         fields: {
           upvotedBy: {
-            merge(existing, incoming) {
+            merge(_, incoming) {
               return incoming
             },
           },
           downvotedBy: {
-            merge(existing, incoming) {
+            merge(_, incoming) {
               return incoming
             },
           },
           comments: {
-            merge(existing, incoming) {
+            merge(_, incoming) {
               return incoming
             },
           },
@@ -70,7 +70,7 @@ const client = new ApolloClient({
       },
     },
   }),
-  link: authLink.concat(httpLink),
+  link: from([authLink, httpLink]),
 })
 
 export default client

@@ -7,7 +7,7 @@ import { Paper } from './components/CompStore';
 const App = () => {
 
   return (
-    <Paper elevation={0}>
+    <Paper >
       <ToastNotification />
       <NavBar />
       <Routes />

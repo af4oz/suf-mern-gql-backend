@@ -16,6 +16,9 @@ declare module 'react' {
   interface SVGProps<T> extends SVGProps<SVGSVGElement> {
     css?: CSSProp
   }
+  interface DOMAttributes {
+    css?: CSSProp
+  }
 }
 
 // The 'as' prop on styled components
