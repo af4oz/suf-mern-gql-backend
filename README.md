@@ -44,38 +44,6 @@ npm run dev
 
 Fullstack [Stack Overflow](https://stackoverflow.com/) clone (QnA site) made with MERN + GraphQL
 
-## Usage
-
-#### Env variable:
-
-Create a .env file in server directory and add the following:
-
-```
-MONGODB_URI = "Your Mongo URI"
-PORT = 4000
-SECRET = "Your JWT secret"
-
-```
-
-#### Client:
-
-Open client/src/backendUrl.js & change "backend" variable to `"http://localhost:4000"`
-
-```
-cd client
-npm install
-npm start
-```
-
-#### Server:
-
-Note: Make sure that you have installed 'nodemon' as global package.
-
-```
-cd server
-npm install
-npm run dev
-```
 ## Built using
 
 #### Front-end
