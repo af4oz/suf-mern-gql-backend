@@ -1,11 +1,15 @@
 # Stack Underflow | SOF Clone | MERN-GraphQL
 
-**Update 1:** This project is a fork from [amand33p](https://github.com/amand33p). I have been making some efforts to replace `material-ui` with `twin.macro` just to learn react, CSS and make reusable components myself. It's been a great journey so far and I learned a lot from `material-ui`, they did solid work with their lib.
+**Update 1:** This project is a fork from [amand33p](https://github.com/amand33p). I have been making some efforts to replace `material-ui` with `twin.macro` just to learn react, CSS and make reusable components myself. It's been a great journey so far and I learned a lot from `material-ui`, they did solid work with their lib and also used a tonne of `useRef` 😅 to opt-out of react default rendering  behaviour.
 
 **Update 2:** Migrated Server codebase to **Typescript** using `type-graphql`, `typegoose`.
 
+**Update 3:** Migrated Client codebase to **Typescript** using `graphql`, `@graphql-codegen` 💚 ,`definitelyTyped` libs.
+
 ## Future
-1. Add Dark Mode
+1. Replace constant growing arrays in schema as mongoose document sizelimit is **16MB**.
+2. Use transactions in mutation resolvers which involves multiple db operations.
+3. Add Dark Mode.
 
 ## Usage
 
@@ -42,38 +46,6 @@ npm run dev
 
 Fullstack [Stack Overflow](https://stackoverflow.com/) clone (QnA site) made with MERN + GraphQL
 
-## Usage
-
-#### Env variable:
-
-Create a .env file in server directory and add the following:
-
-```
-MONGODB_URI = "Your Mongo URI"
-PORT = 4000
-SECRET = "Your JWT secret"
-
-```
-
-#### Client:
-
-Open client/src/backendUrl.js & change "backend" variable to `"http://localhost:4000"`
-
-```
-cd client
-npm install
-npm start
-```
-
-#### Server:
-
-Note: Make sure that you have installed 'nodemon' as global package.
-
-```
-cd server
-npm install
-npm run dev
-```
 ## Built using
 
 #### Front-end
