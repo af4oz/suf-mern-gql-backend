@@ -1,7 +1,7 @@
-import { getModelForClass, modelOptions, prop, Severity } from '@typegoose/typegoose';
+import { DocumentType, getModelForClass, modelOptions, prop, Severity } from '@typegoose/typegoose';
 import { ObjectId } from 'mongodb';
-import { Schema } from 'mongoose';
-import { Field, ID, ObjectType } from 'type-graphql';
+import { Schema, Types } from 'mongoose';
+import { Field, ID, Int, ObjectType } from 'type-graphql';
 import { Author } from './';
 import { Ref } from '../types';
 import schemaCleaner from '../utils/schemaCleaner';
@@ -30,20 +30,25 @@ export class Answer {
   body: string
 
   @Field(type => [Comment], { nullable: 'items' })
-  @prop({ ref: () => 'Comment', default: [] })
-  comments?: Ref<Comment>[]
+  @prop({
+    ref: () => (doc: DocumentType<Answer>) => doc.from!,
+    foreignField: () => 'parentId',
+    localField: (doc: DocumentType<Answer>) => doc.local,
+    justOne: false
+  })
+  comments?: Ref<Comment>[];
 
   @Field()
   @prop({ default: 0 })
   points?: number;
 
-  @Field(type => [ID], { nullable: 'items' })
-  @prop({ ref: () => 'User', default: [] })
-  upvotedBy: Ref<User>[]
+  @Field(type => Int)
+  @prop({ default: 0 })
+  upvoteCount: number;
 
-  @Field(type => [ID], { nullable: 'items' })
-  @prop({ ref: () => 'User', default: [] })
-  downvotedBy: Ref<User>[]
+  @Field(type => Int)
+  @prop({ default: 0 })
+  downvoteCount: number;
 
   @Field(type => Date)
   @prop({ default: Date })
@@ -52,6 +57,15 @@ export class Answer {
   @Field(type => Date)
   @prop({ default: Date })
   updatedAt?: Date;
+
+  @prop({ required: true })
+  parentId: Types.ObjectId;
+
+  @prop({ default: '_id' })
+  local?: string;
+
+  @prop({ default: 'Comment' })
+  from?: string;
 }
 
 export const AnswerModel = getModelForClass(Answer);

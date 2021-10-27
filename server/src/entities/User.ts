@@ -7,30 +7,6 @@ import { Question } from './Question';
 import { ObjectId } from 'mongodb';
 import { Ref } from '../types';
 import { RoleType } from './'
-import { Schema } from 'mongoose';
-
-@ObjectType()
-class QuestionRep {
-  @Field(type => Question)
-  @prop({ ref: () => Question, type: Schema.Types.ObjectId })
-  quesId: Ref<Question>
-
-  @Field({ nullable: false })
-  @prop({ default: 0 })
-  rep?: number;
-}
-
-
-@ObjectType()
-class AnswerRep {
-  @Field(type => Answer)
-  @prop({ ref: () => Answer, type: Schema.Types.ObjectId })
-  ansId: Ref<Answer>
-
-  @Field({ nullable: false })
-  @prop({ default: 0 })
-  rep?: number
-}
 
 @ObjectType()
 export class RecentActivity {
@@ -72,25 +48,29 @@ export class User {
   @prop({ default: "user" })
   role: RoleType;
 
-  @Field(type => [QuestionRep], { nullable: 'items' })
-  @prop({ default: [] })
-  questions: QuestionRep[];
+  @Field(type => [Question], { nullable: 'items' })
+  @prop({
+    ref: () => Question,
+    foreignField: 'author',
+    localField: '_id'
+  })
+  questions: Ref<Question>[];
 
-  @Field(type => [AnswerRep], { nullable: 'items' })
-  @prop({ default: [] })
-  answers: AnswerRep[];
+  @Field(type => [Answer], { nullable: 'items' })
+  @prop({
+    ref: () => Answer,
+    foreignField: 'author',
+    localField: '_id'
+  })
+  answers: Ref<Answer>[];
 
   @Field(type => Date)
   @prop({ default: Date })
   createdAt: Date;
 
-  @Field(() => Int)
-  reputation(@Root() parent: User): number {
-    const questionRep = parent.questions.reduce((sum, q) => sum + (q.rep ? q.rep : 0), 0)
-    const answerRep = parent.answers.reduce((sum, a) => sum + (a.rep ? a.rep : 0), 0)
-
-    return 1 + questionRep + answerRep
-  }
+  @Field(() => Int, { nullable: false })
+  @prop({ default: 0 })
+  rep?: number;
 
   @Field(type => [RecentActivity], { nullable: 'items' })
   recentQuestions: RecentActivity[];

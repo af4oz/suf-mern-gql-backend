@@ -1,6 +1,6 @@
 import { getModelForClass, modelOptions, prop, Severity } from '@typegoose/typegoose'
 import { ObjectId } from 'mongodb'
-import { Schema } from 'mongoose'
+import { Schema, Types } from 'mongoose'
 import { Field, ID, ObjectType } from 'type-graphql'
 import { Author } from './'
 import { Ref } from '../types'
@@ -37,6 +37,9 @@ export class Comment {
   @Field(type => Date, { nullable: false })
   @prop({ default: Date })
   updatedAt?: Date;
+
+  @prop({ required: true })
+  parentId: Types.ObjectId;
 }
 
 

@@ -25,14 +25,13 @@ export class AnsCommentResolver {
           `Answer with ID: ${ansId} does not exist in DB.`
         );
       }
-      const comment = await CommentModel.create({
+      await CommentModel.create({
         body,
         author: new ObjectId(loggedUser.id),
+        parentId: answer._id
       });
-      answer.comments?.push(comment._id);
 
-      const savedAns = await answer.save()
-      const populatedAns = await savedAns
+      const populatedAns = await answer
         .populate([{
           path: 'comments',
           model: CommentModel,
@@ -57,20 +56,20 @@ export class AnsCommentResolver {
       const user = await UserModel.findById(loggedUser.id)
       if (!user) {
         throw new UserInputError(
-          `user with ID: ${loggedUser.id} does not exist in DB.`
+          `user with ID: ${loggedUser.id} does not exist!`
         )
       }
       const answer = await AnswerModel.findById(ansId)
       if (!answer) {
         throw new UserInputError(
-          `Answer with ID: ${ansId} does not exist in DB.`
+          `Answer with ID: ${ansId} does not exist!`
         )
       }
       const comment = await CommentModel.findById(commentId)
 
       if (!comment) {
         throw new UserInputError(
-          `Comment with ID: '${commentId}' does not exist in DB.`
+          `Comment with ID: '${commentId}' does not exist!`
         )
       }
 
@@ -81,11 +80,6 @@ export class AnsCommentResolver {
       }
       await comment.delete();
 
-      answer.comments = answer.comments?.filter(
-        c => c.toString() !== commentId
-      )
-
-      await answer.save()
       return commentId;
     } catch (err) {
       throw new UserInputError(errorHandler(err))

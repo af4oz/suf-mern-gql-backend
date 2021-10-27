@@ -6,6 +6,7 @@ import { PaginatedQuesList, SortByType, VoteType } from '../entities'
 import { AnswerModel } from '../entities/Answer'
 import { CommentModel } from '../entities/Comment'
 import { Question, QuestionModel } from '../entities/Question'
+import { QuestionVotesModel } from '../entities/QuestionVotes'
 import { UserModel } from '../entities/User'
 import { TContext } from '../types'
 import authChecker from '../utils/authChecker'
@@ -129,7 +130,7 @@ export class QuestionResolver {
     try {
       const question = await QuestionModel.findById(quesId);
       if (!question) {
-        throw new Error(`Question with ID: ${quesId} does not exist in DB.`);
+        throw new Error(`Question with ID: ${quesId} does not exist!`);
       }
 
       question.views++;
@@ -153,14 +154,11 @@ export class QuestionResolver {
     }
 
     try {
-      if (typeof loggedUser === 'string') {
-        throw new Error('expected jwt payload, instead got string!')
-      }
       const author = await UserModel.findById(loggedUser.id)
 
       if (!author) {
         throw new UserInputError(
-          `User with ID: ${loggedUser.id} does not exist in DB.`
+          `User with ID: ${loggedUser.id} does not exist!`
         )
       }
       const newQuestion = new QuestionModel({
@@ -172,9 +170,6 @@ export class QuestionResolver {
       const savedQues = await newQuestion.save()
       const populatedQues = await savedQues
         .populate('author', 'username');
-
-      author.questions.push({ quesId: savedQues._id, rep: 0 })
-      await author.save()
 
       return populatedQues
     } catch (err) {
@@ -192,30 +187,27 @@ export class QuestionResolver {
     const loggedUser = authChecker(context)
 
     try {
-      if (typeof loggedUser === 'string') {
-        throw new Error('expected jwt payload, instead got string!')
-      }
       const user = await UserModel.findById(loggedUser.id)
       if (!user) {
         throw new UserInputError(
-          `User with ID: ${loggedUser.id} does not exist in DB.`
+          `User with ID: ${loggedUser.id} does not exist!`
         )
       }
       const question = await QuestionModel.findById(quesId)
       if (!question) {
         throw new UserInputError(
-          `Question with ID: ${quesId} does not exist in DB.`
+          `Question with ID: ${quesId} does not exist!`
         )
       }
       if (
-        question.author.toString() !== user._id.toString() &&
-        user.role !== 'admin'
+        question.author.toString() !== user._id.toString()
       ) {
         throw new AuthenticationError('Access is denied.')
       }
 
-      await QuestionModel.findByIdAndDelete(quesId)
-      return question._id.toString();
+      await question.delete();
+
+      return quesId;
     } catch (err) {
       throw new UserInputError(errorHandler(err))
     }
@@ -240,7 +232,7 @@ export class QuestionResolver {
       const question = await QuestionModel.findById(quesId)
       if (!question) {
         throw new UserInputError(
-          `Question with ID: ${quesId} does not exist in DB.`
+          `Question with ID: ${quesId} does not exist!`
         )
       }
       if (question.author.toString() !== loggedUser.id.toString()) {
@@ -254,14 +246,13 @@ export class QuestionResolver {
       )
         .populate(popQuestion)
       if (!updatedQues) {
-        throw new UserInputError(
-          `Question with ID: ${quesId} does not exist in DB.`
+        throw new Error(
+          `something went wrong!`
         )
       }
-
       return updatedQues
     } catch (err) {
-      throw new UserInputError(errorHandler(err))
+      throw new Error(errorHandler(err))
     }
   }
   @Mutation(returns => Question)
@@ -269,20 +260,17 @@ export class QuestionResolver {
     const loggedUser = authChecker(context)
 
     try {
-      if (typeof loggedUser === 'string') {
-        throw new Error('expected jwt payload, instead got string!')
-      }
       const user = await UserModel.findById(loggedUser.id)
 
       if (!user) {
         throw new UserInputError(
-          `User with ID: ${loggedUser.id} does not exist in DB.`
+          `User with ID: ${loggedUser.id} does not exist!`
         )
       }
       const question = await QuestionModel.findById(quesId)
       if (!question) {
         throw new UserInputError(
-          `Question with ID: ${quesId} does not exist in DB.`
+          `Question with ID: ${quesId} does not exist!`
         )
       }
 
@@ -290,25 +278,22 @@ export class QuestionResolver {
         throw new UserInputError("You can't vote for your own post.")
       }
 
-      let votedQues;
-      if (voteType === VoteType.UPVOTE) {
-        votedQues = upvoteIt(question, user) as DocumentType<Question>;
-      } else {
-        votedQues = downvoteIt(question, user) as DocumentType<Question>;
-      }
+      await QuestionVotesModel.create({
+        userId: user._id,
+        quesId: question._id,
+        vote: voteType
+      })
 
-      votedQues.hotAlgo =
-        Math.log(Math.max(Math.abs(votedQues.points), 1)) +
-        Math.log(Math.max(votedQues.views * 2, 1)) +
-        votedQues.createdAt.getTime() / 4500;
-
-      const savedQues = await votedQues.save()
       const author = await UserModel.findById(question.author)
       if (!author) {
         throw new UserInputError(
-          `User with ID: ${question.author} does not exist in DB.`
+          `User with ID: ${question.author} does not exist!`
         )
       }
+      // TODO 
+      // how to update author rep,if question rep updated
+      // same applies to voteAnswer
+      const questionRep = question.populate('rep')
       const addedRepAuthor = quesRep(question, author)
       await addedRepAuthor.save()
 

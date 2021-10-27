@@ -24,19 +24,16 @@ export class QuesCommentResolver {
       const question = await QuestionModel.findById(quesId)
       if (!question) {
         throw new UserInputError(
-          `Question with ID: ${quesId} does not exist in DB.`
+          `Question with ID: ${quesId} does not exist!`
         )
       }
 
-      const comment = await CommentModel.create({
+      await CommentModel.create({
         body,
         author: loggedUser.id,
       });
 
-      question.comments.push(comment._id);
-      const savedQues = await question.save();
-
-      const populatedQues = await savedQues
+      const populatedQues = await question
         .populate({
           path: 'comments',
           model: CommentModel,
@@ -61,35 +58,30 @@ export class QuesCommentResolver {
       const user = await UserModel.findById(loggedUser.id)
       if (!user) {
         throw new UserInputError(
-          `user with ID: ${loggedUser.id} does not exist in DB.`
+          `user with ID: ${loggedUser.id} does not exist!`
         )
       }
       const question = await QuestionModel.findById(quesId)
       if (!question) {
         throw new UserInputError(
-          `Question with ID: ${quesId} does not exist in DB.`
+          `Question with ID: ${quesId} does not exist!`
         )
       }
 
       const comment = await CommentModel.findById(commentId);
       if (!comment) {
         throw new UserInputError(
-          `Comment with ID: '${commentId}' does not exist in DB.`
+          `Comment with ID: '${commentId}' does not exist!`
         )
       }
 
       if (
-        comment.author.toString() !== user!._id.toString() &&
-        user!.role !== 'admin'
+        comment.author.toString() !== user!._id.toString()
       ) {
         throw new AuthenticationError('Access is denied.')
       }
-      await CommentModel.findByIdAndDelete(commentId);
+      await comment.delete();
 
-      question.comments = question.comments.filter(
-        c => c.toString() !== commentId
-      )
-      await question.save()
       return commentId
     } catch (err) {
       throw new UserInputError(errorHandler(err))
@@ -108,14 +100,14 @@ export class QuesCommentResolver {
       const question = await QuestionModel.findById(quesId)
       if (!question) {
         throw new UserInputError(
-          `Question with ID: ${quesId} does not exist in DB.`
+          `Question with ID: ${quesId} does not exist!`
         )
       }
       const comment = await CommentModel.findById(commentId);
 
       if (!comment) {
         throw new UserInputError(
-          `Comment with ID: '${commentId}' does not exist in DB.`
+          `Comment with ID: '${commentId}' does not exist!`
         )
       }
 
