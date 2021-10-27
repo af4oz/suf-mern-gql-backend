@@ -7,9 +7,10 @@
 **Update 3:** Migrated Client codebase to **Typescript** using `graphql`, `@graphql-codegen` 💚 ,`definitelyTyped` libs.
 
 ## Future
-1. Replace constant growing arrays in schema as mongoose document sizelimit is **16MB**.
-2. Use transactions in mutation resolvers which involves multiple db operations.
-3. Add Dark Mode.
+1. Automate Graphql Testing 
+2. Replace constant growing arrays in schema as mongoose document sizelimit is **16MB**.
+3. Use transactions in mutation resolvers which involves multiple db operations.
+4. Add Dark Mode.
 
 ## Usage
 
