@@ -25,7 +25,7 @@ export class TagResolver {
 
       return result.sort((a, b) => b.count - a.count);
     } catch (err) {
-      throw new UserInputError(errorHandler(err))
+      throw new Error(errorHandler(err))
     }
   }
 }

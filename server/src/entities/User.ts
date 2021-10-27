@@ -69,8 +69,8 @@ export class User {
   createdAt: Date;
 
   @Field(() => Int, { nullable: false })
-  @prop({ default: 0 })
-  rep?: number;
+  @prop({ default: 1 })
+  rep: number;
 
   @Field(type => [RecentActivity], { nullable: 'items' })
   recentQuestions: RecentActivity[];

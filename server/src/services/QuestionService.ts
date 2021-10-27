@@ -6,7 +6,7 @@ export default {
   async getRecentQuestions(userId: ObjectId) {
     const recentQuestions = await QuestionModel.find({ author: userId })
       .sort({ createdAt: -1 })
-      .select('_id title points createdAt')
+      .select('_id title points createdAt') // TODO currently points is graphql only field, 
       .limit(5)
 
     return recentQuestions as RecentActivity[];
@@ -17,7 +17,7 @@ export default {
       answers: { $elemMatch: { author: userId } },
     })
       .sort({ createdAt: -1 })
-      .select('_id title points createdAt')
+      .select('_id title points createdAt') // TODO currently points is graphql only field, 
       .limit(5)
 
 

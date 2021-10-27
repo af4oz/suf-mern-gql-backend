@@ -44,7 +44,7 @@ export class AnsCommentResolver {
 
       return populatedAns.comments as Comment[];
     } catch (err) {
-      throw new UserInputError(errorHandler(err))
+      throw new Error(errorHandler(err))
     }
   }
   @Mutation(returns => ID)
@@ -82,7 +82,7 @@ export class AnsCommentResolver {
 
       return commentId;
     } catch (err) {
-      throw new UserInputError(errorHandler(err))
+      throw new Error(errorHandler(err))
     }
   }
   @Mutation(returns => [Comment])
@@ -130,7 +130,7 @@ export class AnsCommentResolver {
 
       return populatedAns.comments as Comment[];
     } catch (err) {
-      throw new UserInputError(errorHandler(err))
+      throw new Error(errorHandler(err))
     }
   }
 }

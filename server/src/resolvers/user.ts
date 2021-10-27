@@ -30,10 +30,8 @@ export class UserResolver {
         return null;
       }
     } catch (err) {
-      throw new UserInputError(errorHandler(err))
+      throw new Error(errorHandler(err))
     }
-
-
   }
 
   @Query(() => User)

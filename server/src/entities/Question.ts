@@ -46,10 +46,10 @@ export class Question {
 
   @Field(type => [Answer], { nullable: 'items' })
   @prop({
-    ref: () => Answer,
+    ref: () => 'Answer',
     foreignField: 'quesId',
     localField: '_id',
-    justOne: false
+    justOne: false,
   })
   answers?: Ref<Answer>[];
 
@@ -64,9 +64,13 @@ export class Question {
     return question.upvoteCount - question.downvoteCount;
   }
 
-  @Field(type => Int)
-  rep(@Root() question: Question): number {
-    return question.upvoteCount * 10 - question.downvoteCount * 2;
+  // @Field(type => Int)
+  // rep(@Root() question: Question): number {
+  //   return question.upvoteCount * 10 - question.downvoteCount * 2;
+  // }
+
+  get _rep() {
+    return this.upvoteCount * 10 - this.downvoteCount * 2;
   }
 
   @Field(type => Int)

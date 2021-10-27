@@ -11,7 +11,7 @@ import { UserModel } from '../entities/User'
 import { TContext } from '../types'
 import authChecker from '../utils/authChecker'
 import errorHandler from '../utils/errorHandler'
-import { downvoteIt, paginateResults, quesRep, upvoteIt } from '../utils/helperFuncs'
+import { paginateResults } from '../utils/helperFuncs'
 import { questionValidator } from '../utils/validators'
 
 let popQuestion: PopulateOptions[] = [{
@@ -121,7 +121,7 @@ export class QuestionResolver {
 
       return paginatedQues
     } catch (err) {
-      throw new UserInputError(errorHandler(err))
+      throw new Error(errorHandler(err))
     }
   }
   @Query(returns => Question)
@@ -141,7 +141,7 @@ export class QuestionResolver {
 
       return populatedQues;
     } catch (err) {
-      throw new UserInputError(errorHandler(err))
+      throw new Error(errorHandler(err))
     }
   }
   @Mutation(returns => Question)
@@ -173,12 +173,7 @@ export class QuestionResolver {
 
       return populatedQues
     } catch (err) {
-      if (err instanceof Error) {
-        throw new UserInputError(errorHandler(err))
-      }
-      else {
-        throw new UserInputError(JSON.stringify(err))
-      }
+      throw new Error(errorHandler(err))
     }
   }
 
@@ -209,7 +204,7 @@ export class QuestionResolver {
 
       return quesId;
     } catch (err) {
-      throw new UserInputError(errorHandler(err))
+      throw new Error(errorHandler(err))
     }
   }
   @Mutation(returns => Question)
@@ -284,23 +279,25 @@ export class QuestionResolver {
         vote: voteType
       })
 
-      const author = await UserModel.findById(question.author)
-      if (!author) {
+      const quesAuthor = await UserModel.findById(question.author)
+      if (!quesAuthor) {
         throw new UserInputError(
           `User with ID: ${question.author} does not exist!`
         )
       }
-      // TODO 
-      // how to update author rep,if question rep updated
-      // same applies to voteAnswer
-      const questionRep = question.populate('rep')
-      const addedRepAuthor = quesRep(question, author)
-      await addedRepAuthor.save()
 
-      const populatedQues = await savedQues.populate(popQuestion);
+      if (voteType === VoteType.UPVOTE) {
+        quesAuthor.rep += 10;
+      } else {
+        quesAuthor.rep -= 2;
+      }
+      await quesAuthor.save();
+
+      const populatedQues = await question.populate(popQuestion);
       return populatedQues;
+
     } catch (err) {
-      throw new UserInputError(errorHandler(err))
+      throw new Error(errorHandler(err))
     }
   }
 }
