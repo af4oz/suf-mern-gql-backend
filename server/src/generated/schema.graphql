@@ -5,14 +5,14 @@
 
 type Answer {
   _id: ID!
-  author: User!
+  author: Author!
   body: String!
   comments: [Comment]!
-  createdAt: Float!
-  downvotedBy: [User]!
+  createdAt: DateTime!
+  downvotedBy: [ID]!
   points: Float!
-  updatedAt: Float!
-  upvotedBy: [User]!
+  updatedAt: DateTime!
+  upvotedBy: [ID]!
 }
 
 type AnswerRep {
@@ -21,43 +21,48 @@ type AnswerRep {
 }
 
 type Author {
-  id: ID!
+  _id: ID!
   username: String!
 }
 
 type Comment {
   _id: ID!
-  author: User!
+  author: Author!
   body: String!
-  createdAt: Float!
-  updatedAt: Float!
+  createdAt: DateTime!
+  updatedAt: DateTime!
 }
 
+"""
+A date-time string at UTC, such as 2007-12-03T10:15:30Z, compliant with the `date-time` format outlined in section 5.6 of the RFC 3339 profile of the ISO 8601 standard for representation of dates and times using the Gregorian calendar.
+"""
+scalar DateTime
+
 type LoggedUser {
-  id: ID!
+  _id: ID!
   role: String!
   token: String!
   username: String!
 }
 
 type Mutation {
-  acceptAnswer(ansId: String!, quesId: String!): Question!
-  addAnsComment(ansId: String!, body: String!): [Comment!]!
-  addQuesComment(body: String!, quesId: String!): [Comment!]!
-  deleteAnsComment(ansId: String!, commentId: String!): ID!
-  deleteAnswer(ansId: String!, quesId: String!): ID!
-  deleteQuesComment(commentId: String!, quesId: String!): ID!
+  acceptAnswer(ansId: ID!, quesId: ID!): Question!
+  addAnsComment(ansId: ID!, body: String!): [Comment!]!
+  addQuesComment(body: String!, quesId: ID!): [Comment!]!
+  deleteAnsComment(ansId: ID!, commentId: ID!): ID!
+  deleteAnswer(ansId: ID!, quesId: ID!): ID!
+  deleteQuesComment(commentId: ID!, quesId: ID!): ID!
   deleteQuestion(quesId: ID!): ID!
-  editAnsComment(ansId: String!, body: String!, commentId: String!): [Comment!]!
-  editAnswer(ansId: String!, body: String!, quesId: String!): [Answer!]!
-  editQuesComment(body: String!, commentId: String!, quesId: String!): [Comment!]!
+  editAnsComment(ansId: ID!, body: String!, commentId: ID!): [Comment!]!
+  editAnswer(ansId: ID!, body: String!, quesId: ID!): [Answer!]!
+  editQuesComment(body: String!, commentId: ID!, quesId: ID!): [Comment!]!
   editQuestion(body: String!, quesId: ID!, tags: [String!]!, title: String!): Question!
   login(password: String!, username: String!): LoggedUser!
   postAnswer(body: String!, quesId: ID!): [Answer!]!
   postQuestion(body: String!, tags: [String!]!, title: String!): Question!
   register(password: String!, username: String!): LoggedUser!
-  voteAnswer(ansId: String!, quesId: String!, voteType: Float!): Answer!
-  voteQuestion(quesId: ID!, voteType: Float!): Question!
+  voteAnswer(ansId: ID!, quesId: ID!, voteType: VoteType!): Answer!
+  voteQuestion(quesId: ID!, voteType: VoteType!): Question!
 }
 
 type NextPrevPage {
@@ -76,27 +81,27 @@ type Query {
   getAllUsers: [User!]!
   getQuestions(filterBySearch: String, filterByTag: String, limit: Int!, page: Int!, sortBy: SortByType!): PaginatedQuesList!
   getUser(username: String!): User!
-  hello: String!
   viewQuestion(quesId: ID!): Question!
+  whoami: User!
 }
 
 type Question {
   _id: ID!
-  acceptedAnswer: Answer!
+  acceptedAnswer: ID
   answerCount: Int!
   answers: [Answer]!
-  author: User!
+  author: Author!
   body: String!
   comments: [Comment]!
-  createdAt: Float!
-  downvotedBy: [User]!
+  createdAt: DateTime!
+  downvotedBy: [ID]!
   hotAlgo: Float!
-  points: Float!
+  points: Int!
   tags: [String!]!
   title: String!
-  updatedAt: Float!
-  upvotedBy: [User]!
-  views: Float!
+  updatedAt: DateTime!
+  upvotedBy: [ID]!
+  views: Int!
 }
 
 type QuestionRep {
@@ -106,8 +111,8 @@ type QuestionRep {
 
 type RecentActivity {
   _id: ID!
-  createdAt: Float!
-  points: Float!
+  createdAt: DateTime!
+  points: Int!
   title: String!
 }
 
@@ -132,8 +137,7 @@ type Tag {
 type User {
   _id: ID!
   answers: [AnswerRep]!
-  createdAt: Float!
-  id: ID!
+  createdAt: DateTime!
   questions: [QuestionRep]!
   recentAnswers: [RecentActivity]!
   recentQuestions: [RecentActivity]!
@@ -142,4 +146,9 @@ type User {
   totalAnswers: Int!
   totalQuestions: Int!
   username: String!
+}
+
+enum VoteType {
+  DOWNVOTE
+  UPVOTE
 }

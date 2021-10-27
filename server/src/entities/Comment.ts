@@ -1,7 +1,7 @@
 import { getModelForClass, modelOptions, prop, Severity } from '@typegoose/typegoose'
 import { ObjectId } from 'mongodb'
 import { Schema } from 'mongoose'
-import { Field, ID, ObjectType, Root } from 'type-graphql'
+import { Field, ID, ObjectType } from 'type-graphql'
 import { Author } from './'
 import { Ref } from '../types'
 import schemaCleaner from '../utils/schemaCleaner'
