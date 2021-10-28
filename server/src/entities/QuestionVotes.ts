@@ -1,7 +1,7 @@
 import { getModelForClass, modelOptions, prop, Severity } from '@typegoose/typegoose'
 import { ObjectId } from 'mongodb'
 import { Types } from 'mongoose'
-import { ObjectType } from 'type-graphql'
+import { Field, ID, ObjectType } from 'type-graphql'
 import schemaCleaner from '../utils/schemaCleaner'
 import { VoteType } from './'
 
@@ -18,15 +18,17 @@ export class QuestionVotes {
 
   readonly _id: ObjectId;
 
+  @Field(type => ID)
   @prop({ required: true })
   userId: Types.ObjectId;
 
+  @Field(type => ID)
   @prop({ required: true })
   quesId: Types.ObjectId;
 
+  @Field(type => VoteType)
   @prop({ required: true })
   vote: VoteType;
-
 }
 
 

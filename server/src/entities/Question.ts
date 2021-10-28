@@ -1,8 +1,8 @@
 import { DocumentType, getModelForClass, modelOptions, prop } from '@typegoose/typegoose';
 import { ObjectId } from 'mongodb';
 import { Schema } from 'mongoose';
-import { Field, Float, ID, Int, ObjectType, Root } from 'type-graphql';
-import { Author } from '.';
+import { Field, Float, ID, Int, ObjectType } from 'type-graphql';
+import { Author, VoteType } from '.';
 import { Ref } from '../types';
 import schemaCleaner from '../utils/schemaCleaner';
 import { Answer } from './Answer';
@@ -11,7 +11,10 @@ import { User } from './User';
 
 @modelOptions({
   schemaOptions: {
-    toJSON: schemaCleaner
+    toJSON: schemaCleaner,
+    toObject: {
+      virtuals: true
+    },
   }
 })
 @ObjectType()
@@ -40,45 +43,58 @@ export class Question {
     ref: () => (doc: DocumentType<Question>) => doc.from!,
     foreignField: () => 'parentId',
     localField: (doc: DocumentType<Question>) => doc.local,
-    justOne: false
+    justOne: false,
+    default: []
   })
   comments?: Ref<Comment>[];
 
   @Field(type => [Answer], { nullable: 'items' })
   @prop({
     ref: () => 'Answer',
-    foreignField: 'quesId',
+    foreignField: 'question',
     localField: '_id',
     justOne: false,
+    default: []
   })
   answers?: Ref<Answer>[];
 
   @Field(type => Int)
-  answerCount(@Root() question: Question): number {
-    if (!question.answers) return 0;
-    return question.answers.length;
-  }
-
-  @Field(type => Int)
-  points(@Root() question: Question): number {
-    return question.upvoteCount - question.downvoteCount;
-  }
-
-  // @Field(type => Int)
-  // rep(@Root() question: Question): number {
-  //   return question.upvoteCount * 10 - question.downvoteCount * 2;
-  // }
-
-  get _rep() {
-    return this.upvoteCount * 10 - this.downvoteCount * 2;
-  }
+  @prop({
+    ref: () => 'Answer',
+    foreignField: 'question',
+    localField: '_id',
+    justOne: false,
+    count: true,
+    default: 0
+  })
+  answerCount: number;
 
   @Field(type => Int)
   @prop({ default: 0 })
+  points: number;
+
+  @prop({
+    ref: () => 'QuestionVotes',
+    foreignField: 'quesId',
+    localField: '_id',
+    justOne: false,
+    count: true,
+    match: {
+      vote: { $eq: VoteType.UPVOTE }
+    }
+  })
   upvoteCount: number;
 
-  @Field(type => Int)
-  @prop({ default: 0 })
+  @prop({
+    ref: () => 'QuestionVotes',
+    foreignField: 'quesId',
+    localField: '_id',
+    justOne: false,
+    count: true,
+    match: {
+      vote: { $eq: VoteType.DOWNVOTE }
+    }
+  })
   downvoteCount: number;
 
   @Field(type => Int)
@@ -86,11 +102,7 @@ export class Question {
   views: number;
 
   @Field(type => Float)
-  hotAlgo(@Root() question: Question): number {
-    return Math.log(Math.max(Math.abs(question.upvoteCount - question.downvoteCount), 1)) +
-      Math.log(Math.max(question.views * 2, 1)) +
-      question.createdAt.getTime() / 4500;
-  }
+  hotAlgo: number
 
   @Field(type => ID, { nullable: true })
   @prop({ ref: () => "Answer", type: Schema.Types.ObjectId })

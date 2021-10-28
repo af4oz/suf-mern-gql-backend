@@ -1,16 +1,20 @@
 import { DocumentType, getModelForClass, modelOptions, prop, Severity } from '@typegoose/typegoose';
 import { ObjectId } from 'mongodb';
-import { Schema, Types } from 'mongoose';
+import { Schema } from 'mongoose';
 import { Field, ID, Int, ObjectType } from 'type-graphql';
-import { Author } from './';
 import { Ref } from '../types';
 import schemaCleaner from '../utils/schemaCleaner';
+import { Author, VoteType } from './';
 import { Comment } from './Comment';
+import { Question } from './Question';
 import { User } from './User';
 
 @modelOptions({
   schemaOptions: {
-    toJSON: schemaCleaner
+    toJSON: schemaCleaner,
+    toObject: {
+      virtuals: true
+    }
   },
   options: {
     allowMixed: Severity.ALLOW
@@ -34,20 +38,37 @@ export class Answer {
     ref: () => (doc: DocumentType<Answer>) => doc.from!,
     foreignField: () => 'parentId',
     localField: (doc: DocumentType<Answer>) => doc.local,
-    justOne: false
+    justOne: false,
+    default: []
   })
   comments?: Ref<Comment>[];
 
-  @Field()
-  @prop({ default: 0 })
-  points?: number;
-
   @Field(type => Int)
   @prop({ default: 0 })
+  points: number;
+
+  @prop({
+    ref: () => 'AnswerVotes',
+    foreignField: 'ansId',
+    localField: '_id',
+    justOne: false,
+    count: true,
+    match: {
+      vote: { $eq: VoteType.UPVOTE }
+    }
+  })
   upvoteCount: number;
 
-  @Field(type => Int)
-  @prop({ default: 0 })
+  @prop({
+    ref: () => 'AnswerVotes',
+    foreignField: 'ansId',
+    localField: '_id',
+    justOne: false,
+    count: true,
+    match: {
+      vote: { $eq: VoteType.DOWNVOTE }
+    }
+  })
   downvoteCount: number;
 
   @Field(type => Date)
@@ -58,8 +79,8 @@ export class Answer {
   @prop({ default: Date })
   updatedAt?: Date;
 
-  @prop({ required: true })
-  parentId: Types.ObjectId;
+  @prop({ required: true, ref: () => 'Question' })
+  question: Ref<Question>;
 
   @prop({ default: '_id' })
   local?: string;

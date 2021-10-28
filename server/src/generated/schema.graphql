@@ -9,15 +9,14 @@ type Answer {
   body: String!
   comments: [Comment]!
   createdAt: DateTime!
-  downvotedBy: [ID]!
-  points: Float!
+  points: Int!
   updatedAt: DateTime!
-  upvotedBy: [ID]!
 }
 
-type AnswerRep {
-  ansId: Answer!
-  rep: Float!
+type AnswerVotes {
+  ansId: ID!
+  userId: ID!
+  vote: VoteType!
 }
 
 type Author {
@@ -94,19 +93,18 @@ type Question {
   body: String!
   comments: [Comment]!
   createdAt: DateTime!
-  downvotedBy: [ID]!
   hotAlgo: Float!
   points: Int!
   tags: [String!]!
   title: String!
   updatedAt: DateTime!
-  upvotedBy: [ID]!
   views: Int!
 }
 
-type QuestionRep {
-  quesId: Question!
-  rep: Float!
+type QuestionVotes {
+  quesId: ID!
+  userId: ID!
+  vote: VoteType!
 }
 
 type RecentActivity {
@@ -136,12 +134,12 @@ type Tag {
 
 type User {
   _id: ID!
-  answers: [AnswerRep]!
+  answers: [Answer]!
   createdAt: DateTime!
-  questions: [QuestionRep]!
+  questions: [Question]!
   recentAnswers: [RecentActivity]!
   recentQuestions: [RecentActivity]!
-  reputation: Int!
+  rep: Int!
   role: RoleType!
   totalAnswers: Int!
   totalQuestions: Int!

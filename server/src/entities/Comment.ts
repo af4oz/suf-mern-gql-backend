@@ -2,9 +2,9 @@ import { getModelForClass, modelOptions, prop, Severity } from '@typegoose/typeg
 import { ObjectId } from 'mongodb'
 import { Schema, Types } from 'mongoose'
 import { Field, ID, ObjectType } from 'type-graphql'
-import { Author } from './'
 import { Ref } from '../types'
 import schemaCleaner from '../utils/schemaCleaner'
+import { Author } from './'
 import { User } from "./User"
 
 @modelOptions({

@@ -10,7 +10,7 @@
     "start": "node -r dotenv/config build/index.js dotenv_config_path=./.env.prod",
     "start:ts": "ts-node -r dotenv/config src/index.ts dotenv_config_path=./.env.dev",
     "start:test": "ts-node -r dotenv/config src/index.ts dotenv_config_path=./.env.test",
-    "test": "jest --runInBand --watch"
+    "test": "jest --runInBand"
   },
   "author": "Amandeep",
   "license": "ISC",

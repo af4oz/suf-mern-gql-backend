@@ -1,12 +1,12 @@
-import { prop, plugin, modelOptions, getModelForClass, Severity } from '@typegoose/typegoose';
-import uniqueValidator from 'mongoose-unique-validator'
-import schemaCleaner from '../utils/schemaCleaner'
-import { Field, ID, Int, ObjectType, Root } from 'type-graphql';
+import { getModelForClass, modelOptions, plugin, prop, Severity } from '@typegoose/typegoose';
+import { ObjectId } from 'mongodb';
+import uniqueValidator from 'mongoose-unique-validator';
+import { Field, ID, Int, ObjectType } from 'type-graphql';
+import { Ref } from '../types';
+import schemaCleaner from '../utils/schemaCleaner';
+import { RoleType } from './';
 import { Answer } from './Answer';
 import { Question } from './Question';
-import { ObjectId } from 'mongodb';
-import { Ref } from '../types';
-import { RoleType } from './'
 
 @ObjectType()
 export class RecentActivity {
@@ -26,7 +26,8 @@ export class RecentActivity {
 @ObjectType()
 @modelOptions({
   schemaOptions: {
-    toJSON: schemaCleaner
+    toJSON: schemaCleaner,
+    toObject: schemaCleaner
   },
   options: {
     allowMixed: Severity.ALLOW
@@ -79,14 +80,10 @@ export class User {
   recentAnswers: RecentActivity[];
 
   @Field(() => Int)
-  totalQuestions(@Root() user: User): number {
-    return user.questions.length;
-  }
+  totalQuestions: number;
 
   @Field(() => Int)
-  totalAnswers(@Root() user: User): number {
-    return user.answers.length;
-  }
+  totalAnswers: number;
 }
 
 export const UserModel = getModelForClass(User)
