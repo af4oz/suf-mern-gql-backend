@@ -1,5 +1,4 @@
 import { AuthenticationError, UserInputError } from 'apollo-server';
-import { ObjectId } from 'mongodb';
 import { Arg, Ctx, ID, Mutation, Resolver } from 'type-graphql';
 import { Comment, CommentModel } from '../entities/Comment';
 import { QuestionModel } from '../entities/Question';
@@ -31,6 +30,7 @@ export class QuesCommentResolver {
       await CommentModel.create({
         body,
         author: loggedUser.id,
+        parentId: question._id
       });
 
       const populatedQues = await question

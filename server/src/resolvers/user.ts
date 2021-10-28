@@ -1,14 +1,15 @@
 import { UserInputError } from 'apollo-server'
 import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken'
-import { Arg, Ctx, FieldResolver, Mutation, Query, Resolver, Root } from 'type-graphql'
+import { Arg, Ctx, FieldResolver, Int, Mutation, Query, Resolver, Root } from 'type-graphql'
 import { LoggedUser } from '../entities'
 import { RecentActivity, User, UserModel } from '../entities/User'
+import AnswerService from '../services/AnswerService'
 import QuestionService from '../services/QuestionService'
 import { TContext } from '../types'
 import authChecker from '../utils/authChecker'
-import errorHandler from '../utils/errorHandler'
 import { SECRET } from '../utils/config'
+import errorHandler from '../utils/errorHandler'
 import { loginValidator, registerValidator } from '../utils/validators'
 
 
@@ -61,9 +62,17 @@ export class UserResolver {
     return await QuestionService.getRecentQuestions(user._id);
   }
 
+  @FieldResolver(returns => Int)
+  async totalQuestions(@Root() user: User): Promise<number> {
+    return await QuestionService.getTotalQuestions(user._id);
+  }
+  @FieldResolver(returns => Int)
+  async totalAnswers(@Root() user: User): Promise<number> {
+    return await AnswerService.getTotalAnswers(user._id);
+  }
   @FieldResolver(returns => [RecentActivity])
   async recentAnswers(@Root() user: User): Promise<RecentActivity[]> {
-    return await QuestionService.getRecentAnswers(user._id);
+    return await AnswerService.getRecentAnswers(user._id);
   }
 
   @Mutation(() => LoggedUser)

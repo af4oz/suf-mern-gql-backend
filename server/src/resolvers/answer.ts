@@ -1,4 +1,3 @@
-import { DocumentType } from '@typegoose/typegoose'
 import { AuthenticationError, UserInputError } from 'apollo-server'
 import { Arg, Ctx, ID, Mutation, Resolver } from 'type-graphql'
 import { VoteType } from '../entities'
@@ -38,7 +37,8 @@ export class AnswerResolver {
       }
       const answer = new AnswerModel({
         body,
-        author: user._id
+        author: user._id,
+        question: question._id
       })
       await answer.save();
 
@@ -152,6 +152,7 @@ export class AnswerResolver {
   async voteAnswer(@Arg('quesId', type => ID) quesId: string, @Arg('ansId', type => ID) ansId: string, @Arg('voteType', type => VoteType) voteType: VoteType, @Ctx() context: TContext): Promise<Answer> {
     const loggedUser = authChecker(context);
 
+    // TODO : use transactions
     try {
       const user = await UserModel.findById(loggedUser.id)
       if (!user) {
@@ -165,7 +166,7 @@ export class AnswerResolver {
           `Question with ID: ${quesId} does not exist in DB.`
         )
       }
-      const answer = await AnswerModel.findById(ansId)
+      const answer = await AnswerModel.findById(ansId);
       if (!answer) {
         throw new UserInputError(
           `Answer with ID: ${ansId} does not exist in DB.`
@@ -182,18 +183,56 @@ export class AnswerResolver {
           `User with ID: ${answer.author} does not exist in DB.`
         )
       }
-      await AnswerVotesModel.create({
-        userId: user._id,
-        ansId: answer._id,
-        vote: voteType
+      const answerVote = await AnswerVotesModel.findOne({
+        userId: user._id as any, // TODO
+        ansId: answer._id as any // TODO
       })
-
-      if (voteType === VoteType.UPVOTE) {
-        ansAuthor.rep += 10;
-      } else {
-        ansAuthor.rep -= 2;
+      if (answerVote) {
+        // Already voted, update now
+        if (answerVote.vote === voteType) {
+          await answerVote.delete()
+          if (voteType === VoteType.DOWNVOTE) {
+            // remove existing downvote
+            ansAuthor.rep += 2; // +2 to remove downvote affect
+            answer.points += 1;
+          } else {
+            // remove existing upvote
+            ansAuthor.rep -= 10; // -10 to remove upvote affect
+            answer.points -= 1;
+          }
+        }
+        else {
+          await answerVote.update({
+            vote: voteType
+          })
+          if (voteType === VoteType.UPVOTE) {
+            // change downvote to upvote
+            ansAuthor.rep += 12; // +2 to remove downvote affect
+            answer.points += 2; // extra +1 to add upvote affect
+          } else {
+            // change upvote to downvote
+            ansAuthor.rep -= 12; // -10 to remove upvote affect
+            answer.points -= 2; // extra -1 to add downvote affect
+          }
+        }
+      }
+      else {
+        // New vote
+        await AnswerVotesModel.create({
+          userId: user._id,
+          ansId: answer._id,
+          vote: voteType
+        })
+        if (voteType === VoteType.UPVOTE) {
+          ansAuthor.rep += 10;
+          answer.points += 1;
+        } else {
+          ansAuthor.rep -= 2;
+          answer.points -= 1;
+        }
       }
       await ansAuthor.save();
+      await answer.save();
 
       const populatedAns = await answer.populate([{
         path: 'author',
