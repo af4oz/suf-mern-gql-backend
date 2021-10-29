@@ -6,10 +6,14 @@
 
 **Update 3:** Migrated Client codebase to **Typescript** using `graphql`, `@graphql-codegen` 💚 ,`definitelyTyped` libs.
 
+**Update 4: (27/10/2021)** Automated Graphql Testing using `jest`, `ts-jest`, `isomorphic-fetch`.
+
+**Update 5: (29/10/2021)** Replaced constant growing arrays with mongoose virtuals.
+
 ## Future
-1. Automate Graphql Testing 
-2. Replace constant growing arrays in schema as mongoose document sizelimit is **16MB**.
-3. Use transactions in mutation resolvers which involves multiple db operations.
+1. <strike>Automate Graphql Testing</strike>  ✔️
+2. <strike>Replace constant growing arrays in schema as mongoose document sizelimit is **16MB** </strike>. ✔️
+3. Use transactions in mutation resolvers which involves multiple mutating db requests.
 4. Add Dark Mode.
 
 ## Usage
@@ -88,7 +92,7 @@ Fullstack [Stack Overflow](https://stackoverflow.com/) clone (QnA site) made wit
 - Toast notifications for actions: adding questions, deleting comments etc.
 - Loading spinners for relevant fetching processes
 - Formatted dates for adding/updating questions/answers/comments
-- Dark mode toggle w/ local storage save
+- <strike>Dark mode toggle w/ local storage save</strike>
 - Proper responsive UI for all screens
 
 ## Screenshots
