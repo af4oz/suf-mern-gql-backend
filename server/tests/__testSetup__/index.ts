@@ -21,21 +21,6 @@ const closeDbConnection = async () => {
 }
 
 
-// let server: ApolloServer;
-// createSchema().then((schema) => {
-//   const server = new ApolloServer({ schema, context: ({ req }) => ({ req }) })
-//   return new Promise<ApolloServer>((resolve, reject) => {
-//     if (server) {
-//       resolve(server);
-//     }
-//     else {
-//       reject('Something went wrong!')
-//     }
-//   })
-// }).then((res) => {
-//   server = res;
-// })
-
 export {
   connectToDb,
   dropTestDb,
