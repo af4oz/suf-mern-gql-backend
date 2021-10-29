@@ -1,5 +1,5 @@
 import { AuthenticationError, UserInputError } from 'apollo-server'
-import { Arg, Ctx, ID, Mutation, Resolver } from 'type-graphql'
+import { Arg, Ctx, FieldResolver, ID, Mutation, Resolver, Root } from 'type-graphql'
 import { VoteType } from '../entities'
 import { Answer, AnswerModel } from '../entities/Answer'
 import { AnswerVotesModel } from '../entities/AnswerVotes'
@@ -9,9 +9,25 @@ import { UserModel } from '../entities/User'
 import { TContext } from '../types'
 import authChecker from '../utils/authChecker'
 import errorHandler from '../utils/errorHandler'
+import getUser from '../utils/getUser'
 
 @Resolver(of => Answer)
 export class AnswerResolver {
+
+  @FieldResolver(returns => VoteType, { nullable: true })
+  async voted(@Root() answer: Answer, @Ctx() context: TContext): Promise<VoteType | null> {
+    const loggedUser = getUser(context);
+    if (!loggedUser) {
+      return null;
+    }
+    const voted = await AnswerVotesModel.findOne({ userId: loggedUser.id as any, ansId: answer._id as any });
+    if (voted) {
+      return voted.vote;
+    } else {
+      return null;
+    }
+  }
+
   @Mutation(returns => [Answer])
   async postAnswer(@Arg('quesId', type => ID) quesId: string, @Arg('body') body: string, @Ctx() context: TContext): Promise<Answer[]> {
 

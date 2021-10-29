@@ -10,6 +10,7 @@ import { UserModel } from '../entities/User'
 import QuestionService from '../services/QuestionService'
 import { TContext } from '../types'
 import authChecker from '../utils/authChecker'
+import getUser from '../utils/getUser'
 import errorHandler from '../utils/errorHandler'
 import { paginateResults } from '../utils/helperFuncs'
 import { questionValidator } from '../utils/validators'
@@ -73,6 +74,19 @@ export class QuestionResolver {
     return Math.log(Math.max(Math.abs(upvoteCount - downvoteCount), 1)) +
       Math.log(Math.max(question.views * 2, 1)) +
       question.createdAt.getTime() / 4500;
+  }
+  @FieldResolver(returns => VoteType, { nullable: true })
+  async voted(@Root() question: Question, @Ctx() context: TContext): Promise<VoteType | null> {
+    const loggedUser = getUser(context)
+    if (!loggedUser) {
+      return null;
+    }
+    const voted = await QuestionVotesModel.findOne({ userId: loggedUser.id as any, quesId: question._id as any });
+    if (voted) {
+      return voted.vote;
+    } else {
+      return null;
+    }
   }
 
   @Query(() => PaginatedQuesList)

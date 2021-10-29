@@ -2,7 +2,7 @@ import { DocumentType, getModelForClass, modelOptions, prop } from '@typegoose/t
 import { ObjectId } from 'mongodb';
 import { Schema } from 'mongoose';
 import { Field, Float, ID, Int, ObjectType } from 'type-graphql';
-import { Author, VoteType } from '.';
+import { Author, VoteType } from './';
 import { Ref } from '../types';
 import schemaCleaner from '../utils/schemaCleaner';
 import { Answer } from './Answer';
@@ -80,7 +80,7 @@ export class Question {
     justOne: false,
     count: true,
     match: {
-      vote: { $eq: VoteType.UPVOTE }
+      vote: { $eq: "up" }
     }
   })
   upvoteCount: number;
@@ -92,7 +92,7 @@ export class Question {
     justOne: false,
     count: true,
     match: {
-      vote: { $eq: VoteType.DOWNVOTE }
+      vote: { $eq: "down" }
     }
   })
   downvoteCount: number;
@@ -107,6 +107,10 @@ export class Question {
   @Field(type => ID, { nullable: true })
   @prop({ ref: () => "Answer", type: Schema.Types.ObjectId })
   acceptedAnswer?: Ref<Answer>
+
+  @Field(type => VoteType, { nullable: true })
+  @prop({ default: null })
+  voted?: VoteType;
 
   @Field(type => Date)
   @prop({ default: Date })

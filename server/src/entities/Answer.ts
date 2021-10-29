@@ -71,6 +71,10 @@ export class Answer {
   })
   downvoteCount: number;
 
+  @Field(type => VoteType, { nullable: true })
+  @prop({ default: null })
+  voted?: VoteType;
+
   @Field(type => Date)
   @prop({ default: Date })
   createdAt?: Date;
