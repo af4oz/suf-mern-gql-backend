@@ -5,12 +5,14 @@ import { RecentActivity } from "../entities/User";
 
 export default {
   async getRecentAnswers(userId: ObjectId) {
-    const recentAnswerIds = await AnswerModel.find({ author: userId })
-      .select('question')
+    const recentAnsweredQuestionIds = await AnswerModel.find({ author: userId })
+      .select('question -_id')
       .limit(5) as any;
+    const Ids = recentAnsweredQuestionIds.map((obj: any) => obj.question)
+
     const recentAnsweredQuestions = await QuestionModel.find({
       _id: {
-        $in: recentAnswerIds.length !== 0 ? recentAnswerIds : []
+        $in: Ids.length !== 0 ? Ids : []
       }
     })
       .select('_id title points createdAt')

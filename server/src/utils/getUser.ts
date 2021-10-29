@@ -13,9 +13,8 @@ const getUser = (context: TContext) => {
   try {
     const decodedUser = jwt.verify(token, SECRET)
     return decodedUser as JwtPayload;
-  } catch (err) {
-    console.error(err);
-    throw new Error('something went wrong!')
+  } catch (_) {
+    return null;
   }
 }
 export default getUser;

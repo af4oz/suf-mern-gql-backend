@@ -142,6 +142,7 @@ export class QuestionResolver {
         .limit(_limit)
         .skip(paginated.startIndex)
         .populate('author', 'username')
+        .populate('answerCount');
 
       const paginatedQues = {
         previous: paginated.results.previous,
@@ -329,7 +330,7 @@ export class QuestionResolver {
           }
         }
         else {
-          await questionVote.update({
+          await questionVote.updateOne({
             vote: voteType
           })
           if (voteType === VoteType.UPVOTE) {

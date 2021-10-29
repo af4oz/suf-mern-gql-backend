@@ -61,10 +61,13 @@ export class AnswerResolver {
       const populatedQues = await question.populate({
         path: 'answers',
         model: AnswerModel,
-        populate: {
+        populate: [{
           path: 'author',
           model: UserModel
-        }
+        }, {
+          path: 'comments',
+          model: CommentModel
+        }]
       })
 
       return populatedQues.answers as Answer[];
@@ -218,7 +221,7 @@ export class AnswerResolver {
           }
         }
         else {
-          await answerVote.update({
+          await answerVote.updateOne({
             vote: voteType
           })
           if (voteType === VoteType.UPVOTE) {

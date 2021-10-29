@@ -8,6 +8,7 @@
     "watch:js": "nodemon -r dotenv/config build/index.js dotenv_config_path=./.env.dev",
     "build": "tsc",
     "start": "node -r dotenv/config build/index.js dotenv_config_path=./.env.prod",
+    "start:dev": "node -r dotenv/config build/index.js dotenv_config_path=./.env.dev",
     "start:ts": "ts-node -r dotenv/config src/index.ts dotenv_config_path=./.env.dev",
     "start:test": "ts-node -r dotenv/config src/index.ts dotenv_config_path=./.env.test",
     "test": "jest --runInBand"
