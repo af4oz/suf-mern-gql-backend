@@ -54,7 +54,7 @@ const UserPage = () => {
     _id,
     username: userName,
     createdAt,
-    reputation,
+    rep,
     totalQuestions,
     totalAnswers,
     recentQuestions,
@@ -74,7 +74,7 @@ const UserPage = () => {
           />
         </RouterLink>
         <p tw="text-purple-900 text-xl my-2">
-          {reputation} <span tw="text-sm">REPUTATION</span>
+          {rep} <span tw="text-sm">REPUTATION</span>
         </p>
       </UserAvatar>
       <div tw="text-purple-900 flex-1 mt-2 md:ml-2">

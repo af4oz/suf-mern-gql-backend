@@ -1,4 +1,3 @@
-import { UserInputError } from 'apollo-server'
 import { Query, Resolver } from 'type-graphql'
 import { Tag } from '../entities'
 import { QuestionModel } from '../entities/Question'
@@ -25,7 +24,7 @@ export class TagResolver {
 
       return result.sort((a, b) => b.count - a.count);
     } catch (err) {
-      throw new UserInputError(errorHandler(err))
+      throw new Error(errorHandler(err))
     }
   }
 }

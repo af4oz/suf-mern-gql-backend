@@ -10,8 +10,8 @@ registerEnumType(RoleType, {
 })
 
 export enum VoteType {
-  DOWNVOTE,
-  UPVOTE
+  DOWNVOTE = 'down',
+  UPVOTE = 'up'
 }
 registerEnumType(VoteType, {
   name: 'VoteType'

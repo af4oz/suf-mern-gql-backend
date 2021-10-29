@@ -57,8 +57,7 @@ query fetchQuestions(
       ...CommentDetails
     }
     acceptedAnswer
-    upvotedBy
-    downvotedBy
+    voted
   }
 } 
 query fetchUser($username: String!) {
@@ -67,7 +66,7 @@ query fetchUser($username: String!) {
     username
     role
     createdAt
-    reputation
+    rep
     totalQuestions
     totalAnswers
     recentQuestions {

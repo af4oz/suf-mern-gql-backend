@@ -1,16 +1,18 @@
-import { DocumentType } from '@typegoose/typegoose'
 import { AuthenticationError, UserInputError } from 'apollo-server'
 import { PopulateOptions } from 'mongoose'
-import { Arg, Args, ArgsType, Ctx, Field, ID, Int, Mutation, Query, Resolver } from 'type-graphql'
+import { Arg, Args, ArgsType, Ctx, Field, FieldResolver, Float, ID, Int, Mutation, Query, Resolver, Root } from 'type-graphql'
 import { PaginatedQuesList, SortByType, VoteType } from '../entities'
 import { AnswerModel } from '../entities/Answer'
 import { CommentModel } from '../entities/Comment'
 import { Question, QuestionModel } from '../entities/Question'
+import { QuestionVotesModel } from '../entities/QuestionVotes'
 import { UserModel } from '../entities/User'
+import QuestionService from '../services/QuestionService'
 import { TContext } from '../types'
 import authChecker from '../utils/authChecker'
+import getUser from '../utils/getUser'
 import errorHandler from '../utils/errorHandler'
-import { downvoteIt, paginateResults, quesRep, upvoteIt } from '../utils/helperFuncs'
+import { paginateResults } from '../utils/helperFuncs'
 import { questionValidator } from '../utils/validators'
 
 let popQuestion: PopulateOptions[] = [{
@@ -30,11 +32,19 @@ let popQuestion: PopulateOptions[] = [{
 {
   path: 'answers',
   model: AnswerModel,
-  populate: {
+  populate: [{
     path: 'author',
     select: 'username',
     model: UserModel
-  }
+  }, {
+    path: 'comments',
+    model: CommentModel,
+    populate: {
+      path: 'author',
+      select: 'username',
+      model: UserModel
+    }
+  }]
 }];
 
 @ArgsType()
@@ -57,6 +67,27 @@ class GetQuestionsArgs {
 
 @Resolver(of => Question)
 export class QuestionResolver {
+
+  @FieldResolver(returns => Float)
+  async hotAlgo(@Root() question: Question): Promise<number> {
+    const { upvoteCount = 0, downvoteCount = 0 } = await QuestionService.getVotes(question._id);
+    return Math.log(Math.max(Math.abs(upvoteCount - downvoteCount), 1)) +
+      Math.log(Math.max(question.views * 2, 1)) +
+      question.createdAt.getTime() / 4500;
+  }
+  @FieldResolver(returns => VoteType, { nullable: true })
+  async voted(@Root() question: Question, @Ctx() context: TContext): Promise<VoteType | null> {
+    const loggedUser = getUser(context)
+    if (!loggedUser) {
+      return null;
+    }
+    const voted = await QuestionVotesModel.findOne({ userId: loggedUser.id as any, quesId: question._id as any });
+    if (voted) {
+      return voted.vote;
+    } else {
+      return null;
+    }
+  }
 
   @Query(() => PaginatedQuesList)
   async getQuestions(@Args() { sortBy, page, limit, filterByTag, filterBySearch }: GetQuestionsArgs): Promise<PaginatedQuesList> {
@@ -111,6 +142,7 @@ export class QuestionResolver {
         .limit(_limit)
         .skip(paginated.startIndex)
         .populate('author', 'username')
+        .populate('answerCount');
 
       const paginatedQues = {
         previous: paginated.results.previous,
@@ -120,7 +152,7 @@ export class QuestionResolver {
 
       return paginatedQues
     } catch (err) {
-      throw new UserInputError(errorHandler(err))
+      throw new Error(errorHandler(err))
     }
   }
   @Query(returns => Question)
@@ -129,7 +161,7 @@ export class QuestionResolver {
     try {
       const question = await QuestionModel.findById(quesId);
       if (!question) {
-        throw new Error(`Question with ID: ${quesId} does not exist in DB.`);
+        throw new Error(`Question with ID: ${quesId} does not exist!`);
       }
 
       question.views++;
@@ -137,10 +169,9 @@ export class QuestionResolver {
 
       const populatedQues = await savedQues.populate(popQuestion);
 
-
       return populatedQues;
     } catch (err) {
-      throw new UserInputError(errorHandler(err))
+      throw new Error(errorHandler(err))
     }
   }
   @Mutation(returns => Question)
@@ -153,14 +184,11 @@ export class QuestionResolver {
     }
 
     try {
-      if (typeof loggedUser === 'string') {
-        throw new Error('expected jwt payload, instead got string!')
-      }
       const author = await UserModel.findById(loggedUser.id)
 
       if (!author) {
         throw new UserInputError(
-          `User with ID: ${loggedUser.id} does not exist in DB.`
+          `User with ID: ${loggedUser.id} does not exist!`
         )
       }
       const newQuestion = new QuestionModel({
@@ -173,17 +201,9 @@ export class QuestionResolver {
       const populatedQues = await savedQues
         .populate('author', 'username');
 
-      author.questions.push({ quesId: savedQues._id, rep: 0 })
-      await author.save()
-
       return populatedQues
     } catch (err) {
-      if (err instanceof Error) {
-        throw new UserInputError(errorHandler(err))
-      }
-      else {
-        throw new UserInputError(JSON.stringify(err))
-      }
+      throw new Error(errorHandler(err))
     }
   }
 
@@ -192,32 +212,29 @@ export class QuestionResolver {
     const loggedUser = authChecker(context)
 
     try {
-      if (typeof loggedUser === 'string') {
-        throw new Error('expected jwt payload, instead got string!')
-      }
       const user = await UserModel.findById(loggedUser.id)
       if (!user) {
         throw new UserInputError(
-          `User with ID: ${loggedUser.id} does not exist in DB.`
+          `User with ID: ${loggedUser.id} does not exist!`
         )
       }
       const question = await QuestionModel.findById(quesId)
       if (!question) {
         throw new UserInputError(
-          `Question with ID: ${quesId} does not exist in DB.`
+          `Question with ID: ${quesId} does not exist!`
         )
       }
       if (
-        question.author.toString() !== user._id.toString() &&
-        user.role !== 'admin'
+        question.author.toString() !== user._id.toString()
       ) {
         throw new AuthenticationError('Access is denied.')
       }
 
-      await QuestionModel.findByIdAndDelete(quesId)
-      return question._id.toString();
+      await question.delete();
+
+      return quesId;
     } catch (err) {
-      throw new UserInputError(errorHandler(err))
+      throw new Error(errorHandler(err))
     }
   }
   @Mutation(returns => Question)
@@ -240,7 +257,7 @@ export class QuestionResolver {
       const question = await QuestionModel.findById(quesId)
       if (!question) {
         throw new UserInputError(
-          `Question with ID: ${quesId} does not exist in DB.`
+          `Question with ID: ${quesId} does not exist!`
         )
       }
       if (question.author.toString() !== loggedUser.id.toString()) {
@@ -254,35 +271,32 @@ export class QuestionResolver {
       )
         .populate(popQuestion)
       if (!updatedQues) {
-        throw new UserInputError(
-          `Question with ID: ${quesId} does not exist in DB.`
+        throw new Error(
+          `something went wrong!`
         )
       }
-
       return updatedQues
     } catch (err) {
-      throw new UserInputError(errorHandler(err))
+      throw new Error(errorHandler(err))
     }
   }
   @Mutation(returns => Question)
   async voteQuestion(@Arg('quesId', type => ID) quesId: string, @Arg('voteType', type => VoteType) voteType: VoteType, @Ctx() context: TContext): Promise<Question> {
     const loggedUser = authChecker(context)
 
+    // TODO : use transactions
     try {
-      if (typeof loggedUser === 'string') {
-        throw new Error('expected jwt payload, instead got string!')
-      }
       const user = await UserModel.findById(loggedUser.id)
 
       if (!user) {
         throw new UserInputError(
-          `User with ID: ${loggedUser.id} does not exist in DB.`
+          `User with ID: ${loggedUser.id} does not exist!`
         )
       }
-      const question = await QuestionModel.findById(quesId)
+      const question = await QuestionModel.findById(quesId);
       if (!question) {
         throw new UserInputError(
-          `Question with ID: ${quesId} does not exist in DB.`
+          `Question with ID: ${quesId} does not exist!`
         )
       }
 
@@ -290,32 +304,71 @@ export class QuestionResolver {
         throw new UserInputError("You can't vote for your own post.")
       }
 
-      let votedQues;
-      if (voteType === VoteType.UPVOTE) {
-        votedQues = upvoteIt(question, user) as DocumentType<Question>;
-      } else {
-        votedQues = downvoteIt(question, user) as DocumentType<Question>;
-      }
-
-      votedQues.hotAlgo =
-        Math.log(Math.max(Math.abs(votedQues.points), 1)) +
-        Math.log(Math.max(votedQues.views * 2, 1)) +
-        votedQues.createdAt.getTime() / 4500;
-
-      const savedQues = await votedQues.save()
-      const author = await UserModel.findById(question.author)
-      if (!author) {
+      const quesAuthor = await UserModel.findById(question.author)
+      if (!quesAuthor) {
         throw new UserInputError(
-          `User with ID: ${question.author} does not exist in DB.`
+          `User with ID: ${question.author} does not exist!`
         )
       }
-      const addedRepAuthor = quesRep(question, author)
-      await addedRepAuthor.save()
 
-      const populatedQues = await savedQues.populate(popQuestion);
+      const questionVote = await QuestionVotesModel.findOne({
+        userId: user._id as any, // TODO
+        quesId: question._id as any // TODO
+      })
+      if (questionVote) {
+        // Already voted, change vote type
+        if (questionVote.vote === voteType) {
+          await questionVote.delete()
+          if (voteType === VoteType.DOWNVOTE) {
+            // remove existing downvote
+            quesAuthor.rep += 2; // +2 to remove downvote affect
+            question.points += 1;
+          } else {
+            // remove existing upvote
+            quesAuthor.rep -= 10; // -10 to remove upvote affect
+            question.points -= 1;
+          }
+        }
+        else {
+          await questionVote.updateOne({
+            vote: voteType
+          })
+          if (voteType === VoteType.UPVOTE) {
+            // change downvote to upvote
+            quesAuthor.rep += 12; // +2 to remove downvote affect
+            question.points += 2; // extra +1 to add upvote affect
+          } else {
+            // change upvote to downvote
+            quesAuthor.rep -= 12; // -10 to remove upvote affect
+            question.points -= 2; // extra -1 to add downvote affect
+          }
+        }
+      }
+      else {
+        // New vote
+        await QuestionVotesModel.create({
+          userId: user._id,
+          quesId: question._id,
+          vote: voteType
+        })
+        if (voteType === VoteType.UPVOTE) {
+          quesAuthor.rep += 10;
+          question.points += 1;
+        } else {
+          quesAuthor.rep -= 2;
+          question.points -= 1;
+        }
+      }
+
+      await quesAuthor.save();
+      await question.save();
+
+      const populatedQues = await question.populate(popQuestion);
+
       return populatedQues;
+
     } catch (err) {
-      throw new UserInputError(errorHandler(err))
+      throw new Error(errorHandler(err))
     }
   }
 }

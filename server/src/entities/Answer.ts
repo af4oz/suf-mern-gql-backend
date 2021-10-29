@@ -1,16 +1,20 @@
-import { getModelForClass, modelOptions, prop, Severity } from '@typegoose/typegoose';
+import { DocumentType, getModelForClass, modelOptions, prop, Severity } from '@typegoose/typegoose';
 import { ObjectId } from 'mongodb';
 import { Schema } from 'mongoose';
-import { Field, ID, ObjectType } from 'type-graphql';
-import { Author } from './';
+import { Field, ID, Int, ObjectType } from 'type-graphql';
 import { Ref } from '../types';
 import schemaCleaner from '../utils/schemaCleaner';
+import { Author, VoteType } from './';
 import { Comment } from './Comment';
+import { Question } from './Question';
 import { User } from './User';
 
 @modelOptions({
   schemaOptions: {
-    toJSON: schemaCleaner
+    toJSON: schemaCleaner,
+    toObject: {
+      virtuals: true
+    }
   },
   options: {
     allowMixed: Severity.ALLOW
@@ -30,20 +34,46 @@ export class Answer {
   body: string
 
   @Field(type => [Comment], { nullable: 'items' })
-  @prop({ ref: () => 'Comment', default: [] })
-  comments?: Ref<Comment>[]
+  @prop({
+    ref: () => (doc: DocumentType<Answer>) => doc.from!,
+    foreignField: () => 'parentId',
+    localField: (doc: DocumentType<Answer>) => doc.local,
+    justOne: false,
+    default: []
+  })
+  comments?: Ref<Comment>[];
 
-  @Field()
+  @Field(type => Int)
   @prop({ default: 0 })
-  points?: number;
+  points: number;
 
-  @Field(type => [ID], { nullable: 'items' })
-  @prop({ ref: () => 'User', default: [] })
-  upvotedBy: Ref<User>[]
+  @prop({
+    ref: () => 'AnswerVotes',
+    foreignField: 'ansId',
+    localField: '_id',
+    justOne: false,
+    count: true,
+    match: {
+      vote: { $eq: VoteType.UPVOTE }
+    }
+  })
+  upvoteCount: number;
 
-  @Field(type => [ID], { nullable: 'items' })
-  @prop({ ref: () => 'User', default: [] })
-  downvotedBy: Ref<User>[]
+  @prop({
+    ref: () => 'AnswerVotes',
+    foreignField: 'ansId',
+    localField: '_id',
+    justOne: false,
+    count: true,
+    match: {
+      vote: { $eq: VoteType.DOWNVOTE }
+    }
+  })
+  downvoteCount: number;
+
+  @Field(type => VoteType, { nullable: true })
+  @prop({ default: null })
+  voted?: VoteType;
 
   @Field(type => Date)
   @prop({ default: Date })
@@ -52,6 +82,15 @@ export class Answer {
   @Field(type => Date)
   @prop({ default: Date })
   updatedAt?: Date;
+
+  @prop({ required: true, ref: () => 'Question' })
+  question: Ref<Question>;
+
+  @prop({ default: '_id' })
+  local?: string;
+
+  @prop({ default: 'Comment' })
+  from?: string;
 }
 
 export const AnswerModel = getModelForClass(Answer);

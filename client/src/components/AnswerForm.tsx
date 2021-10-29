@@ -1,5 +1,4 @@
 import { useForm } from 'react-hook-form'
-import { VIEW_QUESTION } from '../graphql/queries'
 import { useAuthContext } from '../context/auth'
 import { useAppContext } from '../context/state'
 import AuthFormModal from './AuthFormModal'
@@ -53,7 +52,7 @@ const AnswerForm = ({ quesId, tags }: Props) => {
         }
 
         proxy.writeQuery({
-          query: VIEW_QUESTION,
+          query: FetchQuestionDocument,
           variables: { quesId },
           data: { viewQuestion: updatedData },
         })
