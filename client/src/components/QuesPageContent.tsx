@@ -1,12 +1,9 @@
 import { ComponentProps } from 'react';
 import { useHistory } from 'react-router-dom';
 import 'twin.macro'; //eslint-disable-line no-unused-vars 
-import { useAuthContext } from '../context/auth';
 import { useAppContext } from '../context/state';
-import { FetchQuestionQuery, Question, usePostQuesCommentMutation, useRemoveQuesCommentMutation, useRemoveQuestionMutation, useSubmitQuesVoteMutation, useUpdateQuesCommentMutation, VoteType } from '../generated/graphql';
-import { VIEW_QUESTION } from '../graphql/queries';
+import { FetchQuestionDocument, FetchQuestionQuery, Question, usePostQuesCommentMutation, useRemoveQuesCommentMutation, useRemoveQuestionMutation, useSubmitQuesVoteMutation, useUpdateQuesCommentMutation, VoteType } from '../generated/graphql';
 import { getErrorMsg } from '../utils/helperFuncs';
-import { downvote, upvote } from '../utils/voteQuesAns';
 import AnswerForm from './AnswerForm';
 import AnswerList from './AnswerList';
 import QuesAnsDetails from './QuesAnsDetails';
@@ -21,15 +18,12 @@ const QuesPageContent = ({ question, ...rest }: QuesPageContentProps) => {
     _id: quesId,
     answers,
     acceptedAnswer,
-    upvotedBy,
-    downvotedBy,
     title,
     body,
     tags,
     author,
   } = question
 
-  const { user } = useAuthContext()
   const { setEditValues, notify } = useAppContext();
   const history = useHistory()
 
@@ -63,45 +57,16 @@ const QuesPageContent = ({ question, ...rest }: QuesPageContentProps) => {
     },
   })
 
-  const upvoteQues = () => {
-    const { updatedUpvotedArr, updatedDownvotedArr, updatedPoints } = upvote(
-      upvotedBy,
-      downvotedBy,
-      user
-    )
-
+  const voteQues = (voteType: VoteType, points: number) => {
     submitVote({
-      variables: { quesId, voteType: VoteType.Upvote },
+      variables: { quesId, voteType },
       optimisticResponse: {
         __typename: 'Mutation',
         voteQuestion: {
           __typename: 'Question',
           _id: quesId,
-          upvotedBy: updatedUpvotedArr,
-          downvotedBy: updatedDownvotedArr,
-          points: updatedPoints,
-        },
-      },
-    })
-  }
-
-  const downvoteQues = () => {
-    const { updatedUpvotedArr, updatedDownvotedArr, updatedPoints } = downvote(
-      upvotedBy,
-      downvotedBy,
-      user
-    )
-
-    submitVote({
-      variables: { quesId, voteType: VoteType.Downvote },
-      optimisticResponse: {
-        __typename: 'Mutation',
-        voteQuestion: {
-          __typename: 'Question',
-          _id: quesId,
-          upvotedBy: updatedUpvotedArr,
-          downvotedBy: updatedDownvotedArr,
-          points: updatedPoints,
+          points: voteType === VoteType.Upvote ? points + 1 : points - 1,
+          voted: voteType
         },
       },
     })
@@ -127,7 +92,7 @@ const QuesPageContent = ({ question, ...rest }: QuesPageContentProps) => {
       variables: { quesId, body: commentBody },
       update: (proxy, { data }) => {
         const dataInCache = proxy.readQuery<FetchQuestionQuery>({
-          query: VIEW_QUESTION,
+          query: FetchQuestionDocument,
           variables: { quesId },
         })
 
@@ -137,7 +102,7 @@ const QuesPageContent = ({ question, ...rest }: QuesPageContentProps) => {
         }
 
         proxy.writeQuery({
-          query: VIEW_QUESTION,
+          query: FetchQuestionDocument,
           variables: { quesId },
           data: { viewQuestion: updatedData },
         })
@@ -161,7 +126,7 @@ const QuesPageContent = ({ question, ...rest }: QuesPageContentProps) => {
       variables: { quesId, commentId },
       update: (proxy, { data }) => {
         const dataInCache = proxy.readQuery<FetchQuestionQuery>({
-          query: VIEW_QUESTION,
+          query: FetchQuestionDocument,
           variables: { quesId },
         })
 
@@ -175,7 +140,7 @@ const QuesPageContent = ({ question, ...rest }: QuesPageContentProps) => {
         }
 
         proxy.writeQuery({
-          query: VIEW_QUESTION,
+          query: FetchQuestionDocument,
           variables: { quesId },
           data: { viewQuestion: updatedData },
         })
@@ -189,8 +154,7 @@ const QuesPageContent = ({ question, ...rest }: QuesPageContentProps) => {
     <div tw="border-top[1px solid lightgray]" {...rest}>
       <QuesAnsDetails
         quesAns={question}
-        upvoteQuesAns={upvoteQues}
-        downvoteQuesAns={downvoteQues}
+        voteQuesAns={(voteType: VoteType) => voteQues(voteType, question.points)}
         editQuesAns={editQues}
         deleteQuesAns={deleteQues}
         addComment={addQuesComment}

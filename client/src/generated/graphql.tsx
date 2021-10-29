@@ -23,16 +23,16 @@ export type Answer = {
   body: Scalars['String'];
   comments: Array<Maybe<Comment>>;
   createdAt: Scalars['DateTime'];
-  downvotedBy: Array<Maybe<Scalars['ID']>>;
-  points: Scalars['Float'];
+  points: Scalars['Int'];
   updatedAt: Scalars['DateTime'];
-  upvotedBy: Array<Maybe<Scalars['ID']>>;
+  voted?: Maybe<VoteType>;
 };
 
-export type AnswerRep = {
-  __typename?: 'AnswerRep';
-  ansId: Answer;
-  rep: Scalars['Float'];
+export type AnswerVotes = {
+  __typename?: 'AnswerVotes';
+  ansId: Scalars['ID'];
+  userId: Scalars['ID'];
+  vote: VoteType;
 };
 
 export type Author = {
@@ -239,20 +239,20 @@ export type Question = {
   body: Scalars['String'];
   comments: Array<Maybe<Comment>>;
   createdAt: Scalars['DateTime'];
-  downvotedBy: Array<Maybe<Scalars['ID']>>;
   hotAlgo: Scalars['Float'];
   points: Scalars['Int'];
   tags: Array<Scalars['String']>;
   title: Scalars['String'];
   updatedAt: Scalars['DateTime'];
-  upvotedBy: Array<Maybe<Scalars['ID']>>;
   views: Scalars['Int'];
+  voted?: Maybe<VoteType>;
 };
 
-export type QuestionRep = {
-  __typename?: 'QuestionRep';
-  quesId: Question;
-  rep: Scalars['Float'];
+export type QuestionVotes = {
+  __typename?: 'QuestionVotes';
+  quesId: Scalars['ID'];
+  userId: Scalars['ID'];
+  vote: VoteType;
 };
 
 export type RecentActivity = {
@@ -285,12 +285,12 @@ export type Tag = {
 export type User = {
   __typename?: 'User';
   _id: Scalars['ID'];
-  answers: Array<Maybe<AnswerRep>>;
+  answers: Array<Maybe<Answer>>;
   createdAt: Scalars['DateTime'];
-  questions: Array<Maybe<QuestionRep>>;
+  questions: Array<Maybe<Question>>;
   recentAnswers: Array<Maybe<RecentActivity>>;
   recentQuestions: Array<Maybe<RecentActivity>>;
-  reputation: Scalars['Int'];
+  rep: Scalars['Int'];
   role: RoleType;
   totalAnswers: Scalars['Int'];
   totalQuestions: Scalars['Int'];
@@ -304,9 +304,11 @@ export enum VoteType {
 
 export type AuthorDetailsFragment = { __typename?: 'Author', _id: string, username: string };
 
-export type AnswerDetailsFragment = { __typename?: 'Answer', _id: string, body: string, points: number, upvotedBy: Array<string | null | undefined>, downvotedBy: Array<string | null | undefined>, createdAt: any, updatedAt: any, author: { __typename?: 'Author', _id: string, username: string }, comments: Array<{ __typename?: 'Comment', _id: string, body: string, createdAt: any, updatedAt: any, author: { __typename?: 'Author', _id: string, username: string } } | null | undefined> };
+export type AnswerDetailsFragment = { __typename?: 'Answer', _id: string, body: string, points: number, voted?: VoteType | null | undefined, createdAt: any, updatedAt: any, author: { __typename?: 'Author', _id: string, username: string }, comments: Array<{ __typename?: 'Comment', _id: string, body: string, createdAt: any, updatedAt: any, author: { __typename?: 'Author', _id: string, username: string } } | null | undefined> };
 
-export type QuestionDetailsFragment = { __typename?: 'Question', _id: string, title: string, body: string, tags: Array<string>, points: number, views: number, acceptedAnswer?: string | null | undefined, upvotedBy: Array<string | null | undefined>, downvotedBy: Array<string | null | undefined>, createdAt: any, updatedAt: any, author: { __typename?: 'Author', _id: string, username: string }, comments: Array<{ __typename?: 'Comment', _id: string, body: string, createdAt: any, updatedAt: any, author: { __typename?: 'Author', _id: string, username: string } } | null | undefined>, answers: Array<{ __typename?: 'Answer', _id: string, body: string, points: number, upvotedBy: Array<string | null | undefined>, downvotedBy: Array<string | null | undefined>, createdAt: any, updatedAt: any, author: { __typename?: 'Author', _id: string, username: string }, comments: Array<{ __typename?: 'Comment', _id: string, body: string, createdAt: any, updatedAt: any, author: { __typename?: 'Author', _id: string, username: string } } | null | undefined> } | null | undefined> };
+export type QuestionDetailsFragment = { __typename?: 'Question', _id: string, title: string, body: string, tags: Array<string>, points: number, views: number, acceptedAnswer?: string | null | undefined, voted?: VoteType | null | undefined, createdAt: any, updatedAt: any, author: { __typename?: 'Author', _id: string, username: string }, comments: Array<{ __typename?: 'Comment', _id: string, body: string, createdAt: any, updatedAt: any, author: { __typename?: 'Author', _id: string, username: string } } | null | undefined>, answers: Array<{ __typename?: 'Answer', _id: string, body: string, points: number, voted?: VoteType | null | undefined, createdAt: any, updatedAt: any, author: { __typename?: 'Author', _id: string, username: string }, comments: Array<{ __typename?: 'Comment', _id: string, body: string, createdAt: any, updatedAt: any, author: { __typename?: 'Author', _id: string, username: string } } | null | undefined> } | null | undefined> };
+
+export type PostQuestionDetailsFragment = { __typename?: 'Question', _id: string, title: string, body: string, tags: Array<string>, points: number, views: number, voted?: VoteType | null | undefined, createdAt: any, updatedAt: any, author: { __typename?: 'Author', _id: string, username: string } };
 
 export type LoggedUserDetailsFragment = { __typename?: 'LoggedUser', _id: string, username: string, role: string, token: string };
 
@@ -335,7 +337,7 @@ export type AddQuestionMutationVariables = Exact<{
 }>;
 
 
-export type AddQuestionMutation = { __typename?: 'Mutation', postQuestion: { __typename?: 'Question', _id: string, title: string, body: string, tags: Array<string>, points: number, views: number, acceptedAnswer?: string | null | undefined, upvotedBy: Array<string | null | undefined>, downvotedBy: Array<string | null | undefined>, createdAt: any, updatedAt: any, author: { __typename?: 'Author', _id: string, username: string }, comments: Array<{ __typename?: 'Comment', _id: string, body: string, createdAt: any, updatedAt: any, author: { __typename?: 'Author', _id: string, username: string } } | null | undefined>, answers: Array<{ __typename?: 'Answer', _id: string, body: string, points: number, upvotedBy: Array<string | null | undefined>, downvotedBy: Array<string | null | undefined>, createdAt: any, updatedAt: any, author: { __typename?: 'Author', _id: string, username: string }, comments: Array<{ __typename?: 'Comment', _id: string, body: string, createdAt: any, updatedAt: any, author: { __typename?: 'Author', _id: string, username: string } } | null | undefined> } | null | undefined> } };
+export type AddQuestionMutation = { __typename?: 'Mutation', postQuestion: { __typename?: 'Question', _id: string, title: string, body: string, tags: Array<string>, points: number, views: number, voted?: VoteType | null | undefined, createdAt: any, updatedAt: any, author: { __typename?: 'Author', _id: string, username: string } } };
 
 export type UpdateQuestionMutationVariables = Exact<{
   quesId: Scalars['ID'];
@@ -345,7 +347,7 @@ export type UpdateQuestionMutationVariables = Exact<{
 }>;
 
 
-export type UpdateQuestionMutation = { __typename?: 'Mutation', editQuestion: { __typename?: 'Question', _id: string, title: string, body: string, tags: Array<string>, points: number, views: number, acceptedAnswer?: string | null | undefined, upvotedBy: Array<string | null | undefined>, downvotedBy: Array<string | null | undefined>, createdAt: any, updatedAt: any, author: { __typename?: 'Author', _id: string, username: string }, comments: Array<{ __typename?: 'Comment', _id: string, body: string, createdAt: any, updatedAt: any, author: { __typename?: 'Author', _id: string, username: string } } | null | undefined>, answers: Array<{ __typename?: 'Answer', _id: string, body: string, points: number, upvotedBy: Array<string | null | undefined>, downvotedBy: Array<string | null | undefined>, createdAt: any, updatedAt: any, author: { __typename?: 'Author', _id: string, username: string }, comments: Array<{ __typename?: 'Comment', _id: string, body: string, createdAt: any, updatedAt: any, author: { __typename?: 'Author', _id: string, username: string } } | null | undefined> } | null | undefined> } };
+export type UpdateQuestionMutation = { __typename?: 'Mutation', editQuestion: { __typename?: 'Question', _id: string, title: string, body: string, tags: Array<string>, points: number, views: number, acceptedAnswer?: string | null | undefined, voted?: VoteType | null | undefined, createdAt: any, updatedAt: any, author: { __typename?: 'Author', _id: string, username: string }, comments: Array<{ __typename?: 'Comment', _id: string, body: string, createdAt: any, updatedAt: any, author: { __typename?: 'Author', _id: string, username: string } } | null | undefined>, answers: Array<{ __typename?: 'Answer', _id: string, body: string, points: number, voted?: VoteType | null | undefined, createdAt: any, updatedAt: any, author: { __typename?: 'Author', _id: string, username: string }, comments: Array<{ __typename?: 'Comment', _id: string, body: string, createdAt: any, updatedAt: any, author: { __typename?: 'Author', _id: string, username: string } } | null | undefined> } | null | undefined> } };
 
 export type RemoveQuestionMutationVariables = Exact<{
   quesId: Scalars['ID'];
@@ -360,7 +362,7 @@ export type SubmitQuesVoteMutationVariables = Exact<{
 }>;
 
 
-export type SubmitQuesVoteMutation = { __typename?: 'Mutation', voteQuestion: { __typename?: 'Question', _id: string, upvotedBy: Array<string | null | undefined>, downvotedBy: Array<string | null | undefined>, points: number } };
+export type SubmitQuesVoteMutation = { __typename?: 'Mutation', voteQuestion: { __typename?: 'Question', _id: string, voted?: VoteType | null | undefined, points: number } };
 
 export type PostQuesCommentMutationVariables = Exact<{
   quesId: Scalars['ID'];
@@ -393,7 +395,7 @@ export type AddAnswerMutationVariables = Exact<{
 }>;
 
 
-export type AddAnswerMutation = { __typename?: 'Mutation', postAnswer: Array<{ __typename?: 'Answer', _id: string, body: string, points: number, upvotedBy: Array<string | null | undefined>, downvotedBy: Array<string | null | undefined>, createdAt: any, updatedAt: any, author: { __typename?: 'Author', _id: string, username: string }, comments: Array<{ __typename?: 'Comment', _id: string, body: string, createdAt: any, updatedAt: any, author: { __typename?: 'Author', _id: string, username: string } } | null | undefined> }> };
+export type AddAnswerMutation = { __typename?: 'Mutation', postAnswer: Array<{ __typename?: 'Answer', _id: string, body: string, points: number, voted?: VoteType | null | undefined, createdAt: any, updatedAt: any, author: { __typename?: 'Author', _id: string, username: string }, comments: Array<{ __typename?: 'Comment', _id: string, body: string, createdAt: any, updatedAt: any, author: { __typename?: 'Author', _id: string, username: string } } | null | undefined> }> };
 
 export type UpdateAnswerMutationVariables = Exact<{
   quesId: Scalars['ID'];
@@ -402,7 +404,7 @@ export type UpdateAnswerMutationVariables = Exact<{
 }>;
 
 
-export type UpdateAnswerMutation = { __typename?: 'Mutation', editAnswer: Array<{ __typename?: 'Answer', _id: string, body: string, points: number, upvotedBy: Array<string | null | undefined>, downvotedBy: Array<string | null | undefined>, createdAt: any, updatedAt: any, author: { __typename?: 'Author', _id: string, username: string }, comments: Array<{ __typename?: 'Comment', _id: string, body: string, createdAt: any, updatedAt: any, author: { __typename?: 'Author', _id: string, username: string } } | null | undefined> }> };
+export type UpdateAnswerMutation = { __typename?: 'Mutation', editAnswer: Array<{ __typename?: 'Answer', _id: string, body: string, points: number, voted?: VoteType | null | undefined, createdAt: any, updatedAt: any, author: { __typename?: 'Author', _id: string, username: string }, comments: Array<{ __typename?: 'Comment', _id: string, body: string, createdAt: any, updatedAt: any, author: { __typename?: 'Author', _id: string, username: string } } | null | undefined> }> };
 
 export type RemoveAnswerMutationVariables = Exact<{
   quesId: Scalars['ID'];
@@ -419,7 +421,7 @@ export type SubmitAnsVoteMutationVariables = Exact<{
 }>;
 
 
-export type SubmitAnsVoteMutation = { __typename?: 'Mutation', voteAnswer: { __typename?: 'Answer', _id: string, upvotedBy: Array<string | null | undefined>, downvotedBy: Array<string | null | undefined>, points: number } };
+export type SubmitAnsVoteMutation = { __typename?: 'Mutation', voteAnswer: { __typename?: 'Answer', _id: string, voted?: VoteType | null | undefined, points: number } };
 
 export type SubmitAcceptAnsMutationVariables = Exact<{
   quesId: Scalars['ID'];
@@ -470,14 +472,14 @@ export type FetchQuestionQueryVariables = Exact<{
 }>;
 
 
-export type FetchQuestionQuery = { __typename?: 'Query', viewQuestion: { __typename?: 'Question', _id: string, title: string, body: string, tags: Array<string>, points: number, views: number, createdAt: any, updatedAt: any, acceptedAnswer?: string | null | undefined, upvotedBy: Array<string | null | undefined>, downvotedBy: Array<string | null | undefined>, author: { __typename?: 'Author', _id: string, username: string }, answers: Array<{ __typename?: 'Answer', _id: string, body: string, points: number, upvotedBy: Array<string | null | undefined>, downvotedBy: Array<string | null | undefined>, createdAt: any, updatedAt: any, author: { __typename?: 'Author', _id: string, username: string }, comments: Array<{ __typename?: 'Comment', _id: string, body: string, createdAt: any, updatedAt: any, author: { __typename?: 'Author', _id: string, username: string } } | null | undefined> } | null | undefined>, comments: Array<{ __typename?: 'Comment', _id: string, body: string, createdAt: any, updatedAt: any, author: { __typename?: 'Author', _id: string, username: string } } | null | undefined> } };
+export type FetchQuestionQuery = { __typename?: 'Query', viewQuestion: { __typename?: 'Question', _id: string, title: string, body: string, tags: Array<string>, points: number, views: number, createdAt: any, updatedAt: any, acceptedAnswer?: string | null | undefined, voted?: VoteType | null | undefined, author: { __typename?: 'Author', _id: string, username: string }, answers: Array<{ __typename?: 'Answer', _id: string, body: string, points: number, voted?: VoteType | null | undefined, createdAt: any, updatedAt: any, author: { __typename?: 'Author', _id: string, username: string }, comments: Array<{ __typename?: 'Comment', _id: string, body: string, createdAt: any, updatedAt: any, author: { __typename?: 'Author', _id: string, username: string } } | null | undefined> } | null | undefined>, comments: Array<{ __typename?: 'Comment', _id: string, body: string, createdAt: any, updatedAt: any, author: { __typename?: 'Author', _id: string, username: string } } | null | undefined> } };
 
 export type FetchUserQueryVariables = Exact<{
   username: Scalars['String'];
 }>;
 
 
-export type FetchUserQuery = { __typename?: 'Query', getUser: { __typename?: 'User', _id: string, username: string, role: RoleType, createdAt: any, reputation: number, totalQuestions: number, totalAnswers: number, recentQuestions: Array<{ __typename?: 'RecentActivity', _id: string, title: string, points: number, createdAt: any } | null | undefined>, recentAnswers: Array<{ __typename?: 'RecentActivity', _id: string, title: string, points: number, createdAt: any } | null | undefined> } };
+export type FetchUserQuery = { __typename?: 'Query', getUser: { __typename?: 'User', _id: string, username: string, role: RoleType, createdAt: any, rep: number, totalQuestions: number, totalAnswers: number, recentQuestions: Array<{ __typename?: 'RecentActivity', _id: string, title: string, points: number, createdAt: any } | null | undefined>, recentAnswers: Array<{ __typename?: 'RecentActivity', _id: string, title: string, points: number, createdAt: any } | null | undefined> } };
 
 export type FetchAllTagsQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -517,8 +519,7 @@ export const AnswerDetailsFragmentDoc = gql`
     ...CommentDetails
   }
   points
-  upvotedBy
-  downvotedBy
+  voted
   createdAt
   updatedAt
 }
@@ -542,14 +543,29 @@ export const QuestionDetailsFragmentDoc = gql`
   answers {
     ...AnswerDetails
   }
-  upvotedBy
-  downvotedBy
+  voted
   createdAt
   updatedAt
 }
     ${AuthorDetailsFragmentDoc}
 ${CommentDetailsFragmentDoc}
 ${AnswerDetailsFragmentDoc}`;
+export const PostQuestionDetailsFragmentDoc = gql`
+    fragment PostQuestionDetails on Question {
+  _id
+  author {
+    ...AuthorDetails
+  }
+  title
+  body
+  tags
+  points
+  views
+  voted
+  createdAt
+  updatedAt
+}
+    ${AuthorDetailsFragmentDoc}`;
 export const LoggedUserDetailsFragmentDoc = gql`
     fragment LoggedUserDetails on LoggedUser {
   _id
@@ -629,10 +645,10 @@ export type LoginUserMutationOptions = Apollo.BaseMutationOptions<LoginUserMutat
 export const AddQuestionDocument = gql`
     mutation addQuestion($title: String!, $body: String!, $tags: [String!]!) {
   postQuestion(title: $title, body: $body, tags: $tags) {
-    ...QuestionDetails
+    ...PostQuestionDetails
   }
 }
-    ${QuestionDetailsFragmentDoc}`;
+    ${PostQuestionDetailsFragmentDoc}`;
 export type AddQuestionMutationFn = Apollo.MutationFunction<AddQuestionMutation, AddQuestionMutationVariables>;
 
 /**
@@ -732,8 +748,7 @@ export const SubmitQuesVoteDocument = gql`
     mutation submitQuesVote($quesId: ID!, $voteType: VoteType!) {
   voteQuestion(quesId: $quesId, voteType: $voteType) {
     _id
-    upvotedBy
-    downvotedBy
+    voted
     points
   }
 }
@@ -971,8 +986,7 @@ export const SubmitAnsVoteDocument = gql`
     mutation submitAnsVote($quesId: ID!, $ansId: ID!, $voteType: VoteType!) {
   voteAnswer(quesId: $quesId, ansId: $ansId, voteType: $voteType) {
     _id
-    upvotedBy
-    downvotedBy
+    voted
     points
   }
 }
@@ -1229,8 +1243,7 @@ export const FetchQuestionDocument = gql`
       ...CommentDetails
     }
     acceptedAnswer
-    upvotedBy
-    downvotedBy
+    voted
   }
 }
     ${AuthorDetailsFragmentDoc}
@@ -1271,7 +1284,7 @@ export const FetchUserDocument = gql`
     username
     role
     createdAt
-    reputation
+    rep
     totalQuestions
     totalAnswers
     recentQuestions {

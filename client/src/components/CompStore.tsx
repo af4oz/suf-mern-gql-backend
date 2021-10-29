@@ -340,9 +340,6 @@ const Menu = ({ open, anchorEl, anchorOrigin, transformOrigin, onClose, children
       return pos;
     }
   }
-  const anchorXY = anchorPos && {
-    right: `calc(${anchorPos.right}px - 10px)`
-  }
   const menu = (
     <MenuContainer role="presentation" open={open}>
       {
@@ -352,7 +349,7 @@ const Menu = ({ open, anchorEl, anchorOrigin, transformOrigin, onClose, children
         )
       }
       <div tabIndex={0}></div>
-      <MenuChildrenContainer ref={ref} tabIndex={-1} {...rest} css={anchorXY && { ...getAnchorOriginPos(), transformOrigin: `${transformOrigin.horizontal || '0px'} ${transformOrigin.vertical || '0px'}` }} open={open}>
+      <MenuChildrenContainer ref={ref} tabIndex={-1} {...rest} css={anchorPos && { ...getAnchorOriginPos(), transformOrigin: `${transformOrigin.horizontal || '0px'} ${transformOrigin.vertical || '0px'}` }} open={open}>
         {
           children
         }

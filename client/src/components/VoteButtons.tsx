@@ -3,10 +3,11 @@ import { ReactComponent as DownvoteIcon } from '../svg/downvote.svg'
 
 import { Checkbox, SvgIcon } from './CompStore'
 import 'twin.macro'; // eslint-disable-line no-unused-vars
+import { VoteType } from '../generated/graphql';
 
 interface UpVoteButtonProps {
   checked: boolean;
-  handleUpvote: () => void;
+  handleUpvote: (...args: any) => void;
 }
 export const UpvoteButton = ({ checked, handleUpvote }: UpVoteButtonProps) => {
 
@@ -23,14 +24,14 @@ export const UpvoteButton = ({ checked, handleUpvote }: UpVoteButtonProps) => {
           <UpvoteIcon />
         </SvgIcon>
       }
-      onChange={handleUpvote}
+      onClick={() => handleUpvote(VoteType.Upvote)}
     />
   )
 }
 
 interface DownVoteButtonProps {
   checked: boolean;
-  handleDownvote: () => void;
+  handleDownvote: (...args: any) => void;
 }
 
 export const DownvoteButton = ({ checked, handleDownvote }: DownVoteButtonProps) => {
@@ -48,7 +49,7 @@ export const DownvoteButton = ({ checked, handleDownvote }: DownVoteButtonProps)
           <DownvoteIcon />
         </SvgIcon>
       }
-      onChange={handleDownvote}
+      onClick={() => handleDownvote(VoteType.Downvote)}
     />
   )
 }

@@ -74,7 +74,7 @@ const Comment = ({ comment, user, quesAnsId, editComment, deleteComment }: Comme
             value={editedCommentBody}
             required
             fullWidth
-            placeholder="Enter at least 5 characters"
+            placeholder="Enter at least 15 characters"
             rows={2}
             onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setEditedCommentBody(e.target.value)}
           />

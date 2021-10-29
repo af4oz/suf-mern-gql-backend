@@ -12,7 +12,7 @@ import * as yup from 'yup'
 
 import tw from 'twin.macro' // eslint-disable-line no-unused-vars
 import { LightButton, TextField, Tag } from './CompStore'
-import { Answer, Author, Question } from '../generated/graphql'
+import { Answer, Author, Question, VoteType } from '../generated/graphql'
 
 const validationSchema = yup.object({
   editedAnswerBody: yup.string().min(30, 'Must be at least 30 characters'),
@@ -21,8 +21,7 @@ const validationSchema = yup.object({
 
 interface QuesAnsDetailsProps {
   quesAns: (Question | Answer) & { tags?: Question['tags'] };
-  upvoteQuesAns: () => void;
-  downvoteQuesAns: () => void;
+  voteQuesAns: (...args: any) => void;
   editQuesAns(...args: any): void;
   deleteQuesAns: () => void;
   addComment: (...args: any) => void;
@@ -36,8 +35,7 @@ interface QuesAnsDetailsProps {
 
 function QuesAnsDetails({
   quesAns,
-  upvoteQuesAns,
-  downvoteQuesAns,
+  voteQuesAns,
   editQuesAns,
   deleteQuesAns,
   addComment,
@@ -55,8 +53,7 @@ function QuesAnsDetails({
     tags,
     comments,
     points,
-    upvotedBy,
-    downvotedBy,
+    voted,
     createdAt,
     updatedAt,
   } = quesAns;
@@ -95,8 +92,8 @@ function QuesAnsDetails({
       <div tw="flex flex-col items-center">
         {user ? (
           <UpvoteButton
-            checked={user ? upvotedBy.includes(user._id) : false}
-            handleUpvote={upvoteQuesAns}
+            checked={voted === VoteType.Upvote}
+            handleUpvote={voteQuesAns}
           />
         ) : (
           <AuthFormModal buttonType="upvote" />
@@ -104,8 +101,8 @@ function QuesAnsDetails({
         <span tw="">{points}</span>
         {user ? (
           <DownvoteButton
-            checked={user ? downvotedBy.includes(user._id) : false}
-            handleDownvote={downvoteQuesAns}
+            checked={voted === VoteType.Downvote}
+            handleDownvote={voteQuesAns}
           />
         ) : (
           <AuthFormModal buttonType="downvote" />

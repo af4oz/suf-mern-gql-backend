@@ -1,13 +1,10 @@
 import { useState } from 'react'
 import 'twin.macro' // eslint-disable-line no-unused-vars
-import { useAuthContext } from '../context/auth'
 import { useAppContext } from '../context/state'
-import { FetchQuestionQuery, Question, usePostAnsCommentMutation, useRemoveAnsCommentMutation, useRemoveAnswerMutation, useSubmitAcceptAnsMutation, useSubmitAnsVoteMutation, useUpdateAnsCommentMutation, useUpdateAnswerMutation, VoteType } from '../generated/graphql'
-import { VIEW_QUESTION } from '../graphql/queries'
+import { FetchQuestionDocument, FetchQuestionQuery, Question, usePostAnsCommentMutation, useRemoveAnsCommentMutation, useRemoveAnswerMutation, useSubmitAcceptAnsMutation, useSubmitAnsVoteMutation, useUpdateAnsCommentMutation, useUpdateAnswerMutation, VoteType } from '../generated/graphql'
 import { AnsSortBy } from '../types'
 import { getErrorMsg } from '../utils/helperFuncs'
 import sortAnswers from '../utils/sortAnswers'
-import { downvote, upvote } from '../utils/voteQuesAns'
 import QuesAnsDetails from './QuesAnsDetails'
 import SortAnsBar from './SortAnsBar'
 
@@ -20,7 +17,6 @@ interface AnswerListProps {
 }
 
 const AnswerList = ({ quesId, answers, acceptedAnswer, quesAuthor }: AnswerListProps) => {
-  const { user } = useAuthContext()
   const { notify } = useAppContext()
   const [sortBy, setSortBy] = useState<AnsSortBy>('VOTES')
 
@@ -66,45 +62,16 @@ const AnswerList = ({ quesId, answers, acceptedAnswer, quesAuthor }: AnswerListP
     },
   })
 
-  const upvoteAns = (ansId: string, upvotedBy: Question['upvotedBy'], downvotedBy: Question['downvotedBy']) => {
-    const { updatedUpvotedArr, updatedDownvotedArr, updatedPoints } = upvote(
-      upvotedBy,
-      downvotedBy,
-      user
-    )
-
+  const voteAns = (ansId: string, voteType: VoteType, points: number) => {
     submitVote({
-      variables: { quesId, ansId, voteType: VoteType.Upvote },
+      variables: { quesId, ansId, voteType },
       optimisticResponse: {
         __typename: 'Mutation',
         voteAnswer: {
           __typename: 'Answer',
           _id: ansId,
-          upvotedBy: updatedUpvotedArr,
-          downvotedBy: updatedDownvotedArr,
-          points: updatedPoints,
-        },
-      },
-    })
-  }
-
-  const downvoteAns = (ansId: string, upvotedBy: Question['upvotedBy'], downvotedBy: Question['downvotedBy']) => {
-    const { updatedUpvotedArr, updatedDownvotedArr, updatedPoints } = downvote(
-      upvotedBy,
-      downvotedBy,
-      user
-    )
-
-    submitVote({
-      variables: { quesId, ansId, voteType: VoteType.Downvote },
-      optimisticResponse: {
-        __typename: 'Mutation',
-        voteAnswer: {
-          __typename: 'Answer',
-          _id: ansId,
-          upvotedBy: updatedUpvotedArr,
-          downvotedBy: updatedDownvotedArr,
-          points: updatedPoints,
+          voted: voteType,
+          points: voteType === VoteType.Upvote ? points + 1 : points - 1
         },
       },
     })
@@ -124,7 +91,7 @@ const AnswerList = ({ quesId, answers, acceptedAnswer, quesAuthor }: AnswerListP
       variables: { quesId, ansId },
       update: (proxy, { data }) => {
         const dataInCache = proxy.readQuery<FetchQuestionQuery>({
-          query: VIEW_QUESTION,
+          query: FetchQuestionDocument,
           variables: { quesId },
         })
 
@@ -138,7 +105,7 @@ const AnswerList = ({ quesId, answers, acceptedAnswer, quesAuthor }: AnswerListP
         }
 
         proxy.writeQuery({
-          query: VIEW_QUESTION,
+          query: FetchQuestionDocument,
           variables: { quesId },
           data: { viewQuestion: updatedData },
         })
@@ -173,7 +140,7 @@ const AnswerList = ({ quesId, answers, acceptedAnswer, quesAuthor }: AnswerListP
       variables: { ansId, body: commentBody },
       update: (proxy, { data }) => {
         const dataInCache = proxy.readQuery<FetchQuestionQuery>({
-          query: VIEW_QUESTION,
+          query: FetchQuestionDocument,
           variables: { quesId },
         })
 
@@ -187,7 +154,7 @@ const AnswerList = ({ quesId, answers, acceptedAnswer, quesAuthor }: AnswerListP
         }
 
         proxy.writeQuery({
-          query: VIEW_QUESTION,
+          query: FetchQuestionDocument,
           variables: { quesId },
           data: { viewQuestion: updatedData },
         })
@@ -211,7 +178,7 @@ const AnswerList = ({ quesId, answers, acceptedAnswer, quesAuthor }: AnswerListP
       variables: { ansId, commentId },
       update: (proxy, { data }) => {
         const dataInCache = proxy.readQuery<FetchQuestionQuery>({
-          query: VIEW_QUESTION,
+          query: FetchQuestionDocument,
           variables: { quesId },
         })
 
@@ -232,7 +199,7 @@ const AnswerList = ({ quesId, answers, acceptedAnswer, quesAuthor }: AnswerListP
         }
 
         proxy.writeQuery({
-          query: VIEW_QUESTION,
+          query: FetchQuestionDocument,
           variables: { quesId },
           data: { viewQuestion: updatedData },
         })
@@ -262,10 +229,7 @@ const AnswerList = ({ quesId, answers, acceptedAnswer, quesAuthor }: AnswerListP
           <div key={a!._id} tw="mb-3">
             <QuesAnsDetails
               quesAns={a!}
-              upvoteQuesAns={() => upvoteAns(a!._id, a!.upvotedBy, a!.downvotedBy)}
-              downvoteQuesAns={() =>
-                downvoteAns(a!._id, a!.upvotedBy, a!.downvotedBy)
-              }
+              voteQuesAns={(voteType: VoteType) => voteAns(a!._id, voteType, a!.points)}
               editQuesAns={editAns}
               deleteQuesAns={() => deleteAns(a!._id)}
               acceptAnswer={() => acceptAns(a!._id)}

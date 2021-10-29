@@ -9,7 +9,7 @@ import 'twin.macro';
 import { Author, Question } from '../generated/graphql'
 
 const validationSchema = yup.object({
-  commentBody: yup.string().min(5, 'Must be at least 5 characters'),
+  commentBody: yup.string().min(15, 'Must be at least 15 characters'),
 })
 
 interface CommentSectionProps {
@@ -86,7 +86,7 @@ const CommentSection = ({
             ref={register}
             name="commentBody"
             required
-            placeholder="Enter at least 5 characters"
+            placeholder="Enter at least 15 characters"
             rows={3}
             fullWidth
             error={'commentBody' in errors}

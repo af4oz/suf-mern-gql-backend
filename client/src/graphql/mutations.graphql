@@ -12,7 +12,7 @@ mutation loginUser($username: String!, $password: String!) {
 
 mutation addQuestion($title: String!, $body: String!, $tags: [String!]!) {
   postQuestion(title: $title, body: $body, tags: $tags) {
-    ...QuestionDetails
+    ...PostQuestionDetails
   }
 }
 
@@ -34,8 +34,7 @@ mutation removeQuestion($quesId: ID!) {
 mutation submitQuesVote($quesId: ID!, $voteType: VoteType!) {
   voteQuestion(quesId: $quesId, voteType: $voteType) {
     _id
-    upvotedBy
-    downvotedBy
+    voted
     points
   }
 }
@@ -72,8 +71,7 @@ mutation removeAnswer($quesId: ID!, $ansId: ID!) {
 mutation submitAnsVote($quesId: ID!, $ansId: ID!, $voteType: VoteType!) {
   voteAnswer(quesId: $quesId, ansId: $ansId, voteType: $voteType) {
     _id
-    upvotedBy
-    downvotedBy
+    voted
     points
   }
 }

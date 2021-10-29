@@ -13,8 +13,7 @@ fragment AnswerDetails on Answer {
     ...CommentDetails
   }
   points
-  upvotedBy
-  downvotedBy
+  voted
   createdAt
   updatedAt
 }
@@ -36,12 +35,24 @@ fragment QuestionDetails on Question {
   answers {
     ...AnswerDetails
   }
-  upvotedBy
-  downvotedBy
+  voted
   createdAt
   updatedAt
 }
-
+fragment PostQuestionDetails on Question {
+  _id
+  author {
+    ...AuthorDetails
+  }
+  title
+  body
+  tags
+  points
+  views
+  voted
+  createdAt
+  updatedAt
+}
 fragment LoggedUserDetails on LoggedUser {
   _id
   username
