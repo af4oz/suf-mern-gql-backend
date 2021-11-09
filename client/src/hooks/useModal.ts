@@ -31,7 +31,8 @@ const useModal = <RefType extends HTMLElement>({ focusFirst, onClose, focusAfter
 
   let _focusFirst = focusFirst ? getDOMRef(focusFirst) : null;
   let _focusAfterClosed = focusAfterClosed ? getDOMRef(focusAfterClosed) : null;
-
+  
+  // attach necessary click and key event handlers 
   useEffect(() => {
     function handleOutsideClick(e: MouseEvent) {
       if (!ref.current) {
@@ -57,7 +58,8 @@ const useModal = <RefType extends HTMLElement>({ focusFirst, onClose, focusAfter
       document.body.removeEventListener('keyup', handleKeyPress)
     }
   }, [onClose, _focusAfterClosed])
-
+  
+  // attach focus event handlers to handle tabbing and what to focus on open/close modal
   useEffect(() => {
     const isFocusable = (element: HTMLElement): element is HTMLElement => {
       return typeof element.focus === "function";
