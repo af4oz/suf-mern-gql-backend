@@ -1,5 +1,4 @@
-// This code has been developed using below ref:
-//https://www.w3.org/TR/wai-aria-practices-1.1/examples/dialog-modal/js/dialog.js
+// ref: https://www.w3.org/TR/wai-aria-practices-1.1/examples/dialog-modal/js/dialog.js
 import { HTMLAttributes, ReactNode, RefObject, useEffect, useState } from "react";
 import ReactDOM from "react-dom";
 import { IconButton } from './CompStore'
