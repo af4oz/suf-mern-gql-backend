@@ -38,9 +38,6 @@ export const Dialog = (
     }
   }, [isMounted])
 
-  useEffect(() => {
-  })
-
   const { ref, modalRoot } = useModal<HTMLDivElement>({ autoFocus, focusFirst, focusAfterClosed, onClose, overlayModal: true });
 
   const modal = (
