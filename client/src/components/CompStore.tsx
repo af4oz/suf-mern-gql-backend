@@ -1,3 +1,6 @@
+/** 
+  Mostly copied from Material UI 
+*/
 import React, { ComponentProps, HTMLProps, ReactNode, RefObject, SyntheticEvent, useEffect, useState } from 'react';
 import ReactDOM from "react-dom";
 import { AiOutlineWarning as WarningIcon } from 'react-icons/ai';
