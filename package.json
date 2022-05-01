@@ -1,11 +1,12 @@
 {
-  "name": "stack-underflow-mern-gql",
+  "name": "suf",
   "version": "1.0.0",
   "description": "Fullstack [Stack Overflow](https://stackoverflow.com/) clone (QnA site) made with MERN + GraphQL",
+  "private": "true",
   "scripts": {
     "format": "prettier --write \"**/*.{js,jsx,json,md,ts,tsx}\"",
-    "client": "npm run start --prefix client",
-    "server": "npm run dev --prefix server",
+    "app": "pnpm -F ./packages/app --",
+    "server": "pnpm -F ./packages/server --",
     "dev": "concurrently \"npm run server\" \"npm run client\""
   },
   "repository": {
@@ -14,7 +15,7 @@
   },
   "keywords": [],
   "author": "",
-  "license": "ISC",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/afroz1198/stack-underflow-mern-gql/issues"
   },
