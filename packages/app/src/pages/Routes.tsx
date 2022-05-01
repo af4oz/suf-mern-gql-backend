@@ -1,29 +1,29 @@
-import { Switch, Route, Redirect } from 'react-router-dom'
-import NavMenuDesktop from '../components/NavMenuDesktop'
-import RightSidePanel from '../components/RightSidePanel'
-import QuesListPage from './QuesListPage'
-import AllTagsPage from './AllTagsPage'
-import AllUsersPage from './AllUsersPage'
-import QuestionPage from './QuestionPage'
-import AskQuestionPage from './AskQuestionPage'
-import UserPage from './UserPage'
-import NotFoundPage from './NotFoundPage'
-import { useAuthContext } from '../context/auth'
+import { Routes, Route, Navigate } from 'react-router-dom';
+import NavMenuDesktop from '../components/NavMenuDesktop';
+import RightSidePanel from '../components/RightSidePanel';
+import QuesListPage from './QuesListPage';
+import AllTagsPage from './AllTagsPage';
+import AllUsersPage from './AllUsersPage';
+import QuestionPage from './QuestionPage';
+import AskQuestionPage from './AskQuestionPage';
+import UserPage from './UserPage';
+import NotFoundPage from './NotFoundPage';
+import { useAuthContext } from '../context/auth';
 
 import 'twin.macro';
 
-const Routes = () => {
-  const { user } = useAuthContext()
+const AppRoutes = () => {
+  const { user } = useAuthContext();
 
   return (
     <div tw="max-width[1264px] w-full mx-auto flex flex-row flex-nowrap relative">
-      <Switch>
-        <Route exact path="/">
+      <Routes>
+        <Route path="/">
           <NavMenuDesktop />
           <QuesListPage />
           <RightSidePanel />
         </Route>
-        <Route exact path="/ask">
+        <Route path="/ask">
           {user ? (
             <>
               <NavMenuDesktop />
@@ -31,32 +31,32 @@ const Routes = () => {
               <RightSidePanel />
             </>
           ) : (
-            <Redirect to="/" />
+            <Navigate to="/" />
           )}
         </Route>
-        <Route exact path="/tags">
+        <Route path="/tags">
           <NavMenuDesktop />
           <AllTagsPage />
         </Route>
-        <Route exact path="/users">
+        <Route path="/users">
           <NavMenuDesktop />
           <AllUsersPage />
         </Route>
-        <Route exact path="/user/:username">
+        <Route path="/user/:username">
           <NavMenuDesktop />
           <UserPage />
         </Route>
-        <Route exact path="/questions/:quesId">
+        <Route path="/questions/:quesId">
           <NavMenuDesktop />
           <QuestionPage />
           <RightSidePanel />
         </Route>
-        <Route exact path="/tags/:tagName">
+        <Route path="/tags/:tagName">
           <NavMenuDesktop />
           <QuesListPage tagFilterActive={true} />
           <RightSidePanel />
         </Route>
-        <Route exact path="/search/:query">
+        <Route path="/search/:query">
           <NavMenuDesktop />
           <QuesListPage searchFilterActive={true} />
           <RightSidePanel />
@@ -66,9 +66,9 @@ const Routes = () => {
           <NotFoundPage />
           <RightSidePanel />
         </Route>
-      </Switch>
+      </Routes>
     </div>
-  )
-}
+  );
+};
 
-export default Routes
+export default AppRoutes;

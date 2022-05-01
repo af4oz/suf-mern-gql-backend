@@ -1,23 +1,22 @@
-import { useForm } from 'react-hook-form'
-import { yupResolver } from '@hookform/resolvers/yup'
-import { useState, useEffect, ChangeEvent } from 'react'
-import { UpvoteButton, DownvoteButton } from './VoteButtons'
-import { useAuthContext } from '../context/auth'
-import PostedByUser from './PostedByUser'
-import CommentSection from './CommentSection'
-import AcceptAnswerButton from './AcceptAnswerButton'
-import DeleteDialog from './DeleteDialog'
-import AuthFormModal from './AuthFormModal'
-import * as yup from 'yup'
+import { useForm } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
+import { useState, useEffect, ChangeEvent } from 'react';
+import { UpvoteButton, DownvoteButton } from './VoteButtons';
+import { useAuthContext } from '../context/auth';
+import PostedByUser from './PostedByUser';
+import CommentSection from './CommentSection';
+import AcceptAnswerButton from './AcceptAnswerButton';
+import DeleteDialog from './DeleteDialog';
+import AuthFormModal from './AuthFormModal';
+import * as yup from 'yup';
 
-import tw from 'twin.macro' // eslint-disable-line no-unused-vars
-import { LightButton, TextField, Tag } from './CompStore'
-import { Answer, Author, Question, VoteType } from '../generated/graphql'
+import tw from 'twin.macro'; // eslint-disable-line no-unused-vars
+import { LightButton, TextField, Tag } from './CompStore';
+import { Answer, Author, Question, VoteType } from '../generated/graphql';
 
 const validationSchema = yup.object({
   editedAnswerBody: yup.string().min(30, 'Must be at least 30 characters'),
-})
-
+});
 
 interface QuesAnsDetailsProps {
   quesAns: (Question | Answer) & { tags?: Question['tags'] };
@@ -58,34 +57,41 @@ function QuesAnsDetails({
     updatedAt,
   } = quesAns;
 
-  const { user } = useAuthContext()
-  const [editAnsOpen, setEditAnsOpen] = useState(false)
-  const [editedAnswerBody, setEditedAnswerBody] = useState(body)
+  const { user } = useAuthContext();
+  const [editAnsOpen, setEditAnsOpen] = useState(false);
+  const [editedAnswerBody, setEditedAnswerBody] = useState(body);
 
-  const { register, handleSubmit, reset, errors } = useForm({
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = useForm<{
+    editedAnswerBody: string;
+  }>({
     mode: 'onChange',
     resolver: yupResolver(validationSchema),
-  })
+  });
   useEffect(() => {
     if (isAnswer) {
-      setEditedAnswerBody(body)
+      setEditedAnswerBody(body);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [body, isAnswer])
+  }, [body, isAnswer]);
 
   const openEditInput = () => {
-    setEditAnsOpen(true)
-  }
+    setEditAnsOpen(true);
+  };
 
   const closeEditInput = () => {
-    setEditAnsOpen(false)
-  }
+    setEditAnsOpen(false);
+  };
 
   const handleAnswerEdit = () => {
-    reset()
-    editQuesAns(editedAnswerBody, id)
-    closeEditInput()
-  }
+    reset();
+    editQuesAns(editedAnswerBody, id);
+    closeEditInput();
+  };
 
   return (
     <div tw="flex flex-row flex-nowrap w-full">
@@ -121,18 +127,19 @@ function QuesAnsDetails({
           <form onSubmit={handleSubmit(handleAnswerEdit)}>
             <TextField
               tag="textarea"
-              name="editedAnswerBody"
               value={editedAnswerBody}
               fullWidth
-              ref={register}
+              {...register('editedAnswerBody')}
               error={'editedAnswerBody' in errors}
               helperText={
                 'editedAnswerBody' in errors
-                  ? errors.editedAnswerBody.message
+                  ? errors.editedAnswerBody?.message
                   : ''
               }
               required
-              onChange={(e: ChangeEvent<HTMLTextAreaElement>) => setEditedAnswerBody(e.target.value)}
+              onChange={(e: ChangeEvent<HTMLTextAreaElement>) =>
+                setEditedAnswerBody(e.target.value)
+              }
               placeholder="Enter at least 30 characters"
               rows={4}
             />
@@ -149,7 +156,13 @@ function QuesAnsDetails({
         {tags && (
           <div tw="flex flex-wrap">
             {tags.map((t) => (
-              <Tag tag="a" key={t} label={t} href={`/tags/${t}`} styles={{ link: tw`margin[0 .25em .25em]` }} />
+              <Tag
+                tag="a"
+                key={t}
+                label={t}
+                href={`/tags/${t}`}
+                styles={{ link: tw`margin[0 .25em .25em]` }}
+              />
             ))}
           </div>
         )}
@@ -191,7 +204,7 @@ function QuesAnsDetails({
         />
       </div>
     </div>
-  )
+  );
 }
 
-export default QuesAnsDetails
+export default QuesAnsDetails;

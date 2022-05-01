@@ -1,20 +1,23 @@
-import { useForm } from 'react-hook-form'
-import { useAuthContext } from '../context/auth'
-import { useAppContext } from '../context/state'
-import AuthFormModal from './AuthFormModal'
-import * as yup from 'yup'
-import { yupResolver } from '@hookform/resolvers/yup'
-import { getErrorMsg } from '../utils/helperFuncs'
+import { useForm } from 'react-hook-form';
+import { useAuthContext } from '../context/auth';
+import { useAppContext } from '../context/state';
+import AuthFormModal from './AuthFormModal';
+import * as yup from 'yup';
+import { yupResolver } from '@hookform/resolvers/yup';
+import { getErrorMsg } from '../utils/helperFuncs';
 
-import 'twin.macro'
-import { TextField, Button, Link } from './CompStore'
-import Tag from './Tag'
-import { FetchQuestionDocument, FetchQuestionQuery, useAddAnswerMutation } from '../generated/graphql'
-
+import 'twin.macro';
+import { TextField, Button, Link } from './CompStore';
+import Tag from './Tag';
+import {
+  FetchQuestionDocument,
+  FetchQuestionQuery,
+  useAddAnswerMutation,
+} from '../generated/graphql';
 
 const validationSchema = yup.object({
   answerBody: yup.string().min(30, 'Must be at least 30 characters'),
-})
+});
 
 interface Props {
   quesId: string;
@@ -22,45 +25,50 @@ interface Props {
 }
 const AnswerForm = ({ quesId, tags }: Props) => {
   const { user } = useAuthContext();
-  const { notify, clearEdit } = useAppContext()
-  const { register, handleSubmit, reset, errors } = useForm({
+  const { notify, clearEdit } = useAppContext();
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = useForm<{ answerBody: string }>({
     mode: 'onChange',
     resolver: yupResolver(validationSchema),
-  })
+  });
 
   const [addAnswer, { loading }] = useAddAnswerMutation({
     onError: (err) => {
-      notify(getErrorMsg(err), 'error')
+      notify(getErrorMsg(err), 'error');
     },
-  })
+  });
 
   const postAnswer = ({ answerBody }: { answerBody: string }) => {
     addAnswer({
       variables: { quesId, body: answerBody },
       update: (proxy, { data }) => {
         // reset form state
-        reset()
+        reset();
 
         const dataInCache = proxy.readQuery<FetchQuestionQuery>({
           query: FetchQuestionDocument,
           variables: { quesId },
-        })
+        });
 
         const updatedData = {
           ...dataInCache?.viewQuestion,
           answers: data?.postAnswer,
-        }
+        };
 
         proxy.writeQuery({
           query: FetchQuestionDocument,
           variables: { quesId },
           data: { viewQuestion: updatedData },
-        })
+        });
 
-        notify('Answer submitted!')
+        notify('Answer submitted!');
       },
-    })
-  }
+    });
+  };
 
   return (
     <div>
@@ -69,14 +77,16 @@ const AnswerForm = ({ quesId, tags }: Props) => {
         <form onSubmit={handleSubmit(postAnswer)}>
           <TextField
             tag="textarea"
-            ref={register}
+            {...register('answerBody')}
             name="answerBody"
             required
             rows={5}
             fullWidth
             placeholder="Enter atleast 30 characters"
             error={'answerBody' in errors}
-            helperText={'answerBody' in errors ? errors.answerBody.message : ''}
+            helperText={
+              'answerBody' in errors ? errors?.answerBody?.message : ''
+            }
           />
           <div>
             <Button
@@ -91,13 +101,8 @@ const AnswerForm = ({ quesId, tags }: Props) => {
       )}
       <div tw="mt-4 text-sm sm:text-base">
         Browse other questions tagged &nbsp;
-        {tags.map(t => (
-          <Tag
-            key={t}
-            label={t}
-            to={`/tags/${t}`}
-            tw="mr-1"
-          />
+        {tags.map((t) => (
+          <Tag key={t} label={t} to={`/tags/${t}`} tw="mr-1" />
         ))}
         &nbsp; or &nbsp;
         {user ? (
@@ -111,7 +116,7 @@ const AnswerForm = ({ quesId, tags }: Props) => {
         )}
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default AnswerForm
+export default AnswerForm;

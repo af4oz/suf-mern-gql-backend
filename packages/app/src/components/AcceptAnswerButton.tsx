@@ -1,4 +1,4 @@
-import { ReactComponent as AcceptedIcon } from '../svg/accepted.svg'
+import AcceptedIcon from '../svg/accepted.svg';
 
 import { Checkbox, SvgIcon } from './CompStore';
 import 'twin.macro';
@@ -9,7 +9,6 @@ interface Props {
 }
 
 const AcceptAnswerButton = ({ checked, handleAcceptAns }: Props) => {
-
   return (
     <Checkbox
       checked={checked}
@@ -25,7 +24,7 @@ const AcceptAnswerButton = ({ checked, handleAcceptAns }: Props) => {
       }
       onClick={handleAcceptAns}
     />
-  )
-}
+  );
+};
 
-export default AcceptAnswerButton
+export default AcceptAnswerButton;

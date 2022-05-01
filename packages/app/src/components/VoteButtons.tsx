@@ -1,7 +1,7 @@
-import { ReactComponent as UpvoteIcon } from '../svg/upvote.svg'
-import { ReactComponent as DownvoteIcon } from '../svg/downvote.svg'
+import UpvoteIcon from '../svg/upvote.svg';
+import DownvoteIcon from '../svg/downvote.svg';
 
-import { Checkbox, SvgIcon } from './CompStore'
+import { Checkbox, SvgIcon } from './CompStore';
 import 'twin.macro'; // eslint-disable-line no-unused-vars
 import { VoteType } from '../generated/graphql';
 
@@ -10,7 +10,6 @@ interface UpVoteButtonProps {
   handleUpvote: (...args: any) => void;
 }
 export const UpvoteButton = ({ checked, handleUpvote }: UpVoteButtonProps) => {
-
   return (
     <Checkbox
       checked={checked}
@@ -26,16 +25,18 @@ export const UpvoteButton = ({ checked, handleUpvote }: UpVoteButtonProps) => {
       }
       onClick={() => handleUpvote(VoteType.Upvote)}
     />
-  )
-}
+  );
+};
 
 interface DownVoteButtonProps {
   checked: boolean;
   handleDownvote: (...args: any) => void;
 }
 
-export const DownvoteButton = ({ checked, handleDownvote }: DownVoteButtonProps) => {
-
+export const DownvoteButton = ({
+  checked,
+  handleDownvote,
+}: DownVoteButtonProps) => {
   return (
     <Checkbox
       checked={checked}
@@ -51,5 +52,5 @@ export const DownvoteButton = ({ checked, handleDownvote }: DownVoteButtonProps)
       }
       onClick={() => handleDownvote(VoteType.Downvote)}
     />
-  )
-}
+  );
+};

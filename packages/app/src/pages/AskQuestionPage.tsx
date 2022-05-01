@@ -1,15 +1,23 @@
-import { useState } from 'react'
-import { useHistory } from 'react-router-dom'
-import { useForm } from 'react-hook-form'
-import { useAppContext } from '../context/state'
-import ErrorMessage from '../components/ErrorMessage'
-import * as yup from 'yup'
-import { yupResolver } from '@hookform/resolvers/yup'
-import { getErrorMsg } from '../utils/helperFuncs'
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useForm } from 'react-hook-form';
+import { useAppContext } from '../context/state';
+import ErrorMessage from '../components/ErrorMessage';
+import * as yup from 'yup';
+import { yupResolver } from '@hookform/resolvers/yup';
+import { getErrorMsg } from '../utils/helperFuncs';
 
 import 'twin.macro';
-import { TextField, Button, ChipWithClose, Autocomplete } from '../components/CompStore'
-import { useAddQuestionMutation, useUpdateQuestionMutation } from '../generated/graphql'
+import {
+  TextField,
+  Button,
+  ChipWithClose,
+  Autocomplete,
+} from '../components/CompStore';
+import {
+  useAddQuestionMutation,
+  useUpdateQuestionMutation,
+} from '../generated/graphql';
 
 interface BaseQuestionArgs {
   title: string;
@@ -24,64 +32,66 @@ const validationSchema = yup.object({
     .string()
     .required('Required')
     .min(30, 'Must be at least 30 characters'),
-})
+});
 
 const AskQuestionPage = () => {
-  const history = useHistory()
-  const { editValues, clearEdit, notify } = useAppContext()
-  const [tagInput, setTagInput] = useState('')
-  const [tags, setTags] = useState(editValues ? editValues.tags : [])
-  const [errorMsg, setErrorMsg] = useState('')
-  const { register, handleSubmit, reset, errors } = useForm({
+  const navigate = useNavigate();
+  const { editValues, clearEdit, notify } = useAppContext();
+  const [tagInput, setTagInput] = useState('');
+  const [tags, setTags] = useState(editValues ? editValues.tags : []);
+  const [errorMsg, setErrorMsg] = useState('');
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = useForm({
     defaultValues: {
       title: editValues ? editValues.title : '',
       body: editValues ? editValues.body : '',
     },
     mode: 'onChange',
     resolver: yupResolver(validationSchema),
-  })
+  });
 
-  const [addQuestion, { loading: addQuesLoading }] = useAddQuestionMutation(
-    {
-      onError: err => {
-        setErrorMsg(getErrorMsg(err))
-      },
-    }
-  )
+  const [addQuestion, { loading: addQuesLoading }] = useAddQuestionMutation({
+    onError: (err) => {
+      setErrorMsg(getErrorMsg(err));
+    },
+  });
 
-  const [updateQuestion, { loading: editQuesLoading }] = useUpdateQuestionMutation(
-    {
-      onError: err => {
-        setErrorMsg(getErrorMsg(err))
+  const [updateQuestion, { loading: editQuesLoading }] =
+    useUpdateQuestionMutation({
+      onError: (err) => {
+        setErrorMsg(getErrorMsg(err));
       },
-    }
-  )
+    });
 
   const postQuestion = ({ title, body }: BaseQuestionArgs) => {
-    if (tags.length === 0) return setErrorMsg('Atleast one tag must be added.')
+    if (tags.length === 0) return setErrorMsg('Atleast one tag must be added.');
 
     addQuestion({
       variables: { title, body, tags },
       update: (_, { data }) => {
-        history.push(`/questions/${data?.postQuestion._id}`)
-        reset()
-        notify('Question posted!')
+        navigate(`/questions/${data?.postQuestion._id}`);
+        reset();
+        notify('Question posted!');
       },
-    })
-  }
+    });
+  };
 
   const editQuestion = ({ title, body }: BaseQuestionArgs) => {
-    if (tags.length === 0) return setErrorMsg('Atleast one tag must be added.')
+    if (tags.length === 0) return setErrorMsg('Atleast one tag must be added.');
 
     updateQuestion({
       variables: { quesId: editValues.quesId, title, body, tags },
       update: (_, { data }) => {
-        history.push(`/questions/${data?.editQuestion._id}`)
-        clearEdit()
-        notify('Question edited!')
+        navigate(`/questions/${data?.editQuestion._id}`);
+        clearEdit();
+        notify('Question edited!');
       },
-    })
-  }
+    });
+  };
   const handleInputChange = (value: string) => {
     const newInputValue = value.toLowerCase().trim();
 
@@ -92,12 +102,11 @@ const AskQuestionPage = () => {
       return setErrorMsg("A single tag can't have more than 15 characters.");
     }
 
-    setTagInput(newInputValue)
-  }
+    setTagInput(newInputValue);
+  };
   const handleChange = (value: string) => {
-
     if (tags.length >= 5) {
-      setTagInput('')
+      setTagInput('');
       return setErrorMsg('Max 5 tags can be added! Not more than that.');
     }
     if (tags.includes(value)) {
@@ -105,8 +114,8 @@ const AskQuestionPage = () => {
         "Duplicate tag found! You can't add the same tag twice."
       );
     }
-    setTags(value)
-  }
+    setTags(value);
+  };
   return (
     <div tw="w-full my-6 mx-3">
       <h1 tw="text-purple-900 text-xl">
@@ -126,8 +135,7 @@ const AskQuestionPage = () => {
             tag="input"
             required
             fullWidth
-            ref={register}
-            name="title"
+            {...register('title')}
             placeholder="Enter atleast 15 characters"
             type="text"
             label="Title"
@@ -145,8 +153,7 @@ const AskQuestionPage = () => {
             required
             rows={5}
             fullWidth
-            ref={register}
-            name="body"
+            {...register('body')}
             placeholder="Enter atleast 30 characters"
             label="Body"
             error={'body' in errors}
@@ -161,12 +168,12 @@ const AskQuestionPage = () => {
             value={tags}
             inputValue={tagInput}
             onInputChange={(_, value) => {
-              handleInputChange(value)
+              handleInputChange(value);
             }}
             onChange={(_, value) => {
-              handleChange(value)
+              handleChange(value);
             }}
-            renderInput={params => (
+            renderInput={(params) => (
               <TextField
                 {...params}
                 label="Tags"
@@ -199,7 +206,7 @@ const AskQuestionPage = () => {
         />
       </form>
     </div>
-  )
-}
+  );
+};
 
-export default AskQuestionPage
+export default AskQuestionPage;
