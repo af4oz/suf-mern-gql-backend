@@ -1,13 +1,13 @@
 import { useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { useState, useEffect, ChangeEvent } from 'react'
-import { UpvoteButton, DownvoteButton } from './VoteButtons'
+import { UpvoteButton, DownvoteButton } from './Buttons/Vote'
 import { useAuthContext } from '../context/auth'
 import PostedByUser from './PostedByUser'
-import CommentSection from './CommentSection'
-import AcceptAnswerButton from './AcceptAnswerButton'
-import DeleteDialog from './DeleteDialog'
-import AuthFormModal from './AuthFormModal'
+import CommentSection from './Comment/Comments'
+import AcceptAnswerButton from './Buttons/AcceptAnswer'
+import DeleteDialog from './Dialogs/DeleteDialog'
+import AuthFormOnButton from './Auth/AuthFormOnButton'
 import * as yup from 'yup'
 
 import tw from 'twin.macro' // eslint-disable-line no-unused-vars
@@ -102,7 +102,7 @@ function QuesAnsDetails({
             handleUpvote={voteQuesAns}
           />
         ) : (
-          <AuthFormModal buttonType="upvote" />
+          <AuthFormOnButton buttonType="upvote" />
         )}
         <span tw="">{points}</span>
         {user ? (
@@ -111,7 +111,7 @@ function QuesAnsDetails({
             handleDownvote={voteQuesAns}
           />
         ) : (
-          <AuthFormModal buttonType="downvote" />
+          <AuthFormOnButton buttonType="downvote" />
         )}
         {isAnswer && user && user._id === quesAuthor?._id && (
           <AcceptAnswerButton

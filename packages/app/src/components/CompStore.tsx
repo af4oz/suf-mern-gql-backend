@@ -1,5 +1,5 @@
 /** 
-  Mostly copied from Material UI 
+  Most Design copied from Material UI 
 */
 import React, {
   ComponentProps,
@@ -23,9 +23,9 @@ import { Link as RouterLink } from 'react-router-dom'
 import tw, { css, styled } from 'twin.macro' // eslint-disable-line no-unused-vars
 import useModal from '../hooks/useModal'
 
-const SvgIcon = tw.svg`fill-current width[1em] height[1em] inline-block transition-colors flex-shrink-0 user-select[none] font-size[1.5em]`
+export const SvgIcon = tw.svg`fill-current width[1em] height[1em] inline-block transition-colors flex-shrink-0 user-select[none] font-size[1.5em]`
 
-const LightButton = (props: ComponentProps<'button'>) => (
+export const LightButton = (props: ComponentProps<'button'>) => (
   <button
     css={[
       tw`cursor-pointer text-gray-600 bg-transparent border-0 rounded-sm text-xs hover:text-gray-800 outline-color[darkorange]`,
@@ -36,9 +36,9 @@ const LightButton = (props: ComponentProps<'button'>) => (
   />
 )
 
-const Button = tw.button`font[inherit] no-underline padding[.4em .8em] bg-blue-600  hover:bg-blue-700 text-white rounded-sm leading-none whitespace-nowrap inline-block border-0 cursor-pointer transition-colors align-middle outline-color[salmon]`
+export const Button = tw.button`font[inherit] no-underline padding[.4em .8em] bg-blue-600  hover:bg-blue-700 text-white rounded-sm leading-none whitespace-nowrap inline-block border-0 cursor-pointer transition-colors align-middle outline-color[salmon]`
 
-const VButton = styled(Button)(
+export const VButton = styled(Button)(
   ({ variant }: { variant: 'contained' | 'outlined' }) => [
     tw`rounded-none  padding[.5em .6em]`,
     variant === 'contained'
@@ -47,7 +47,7 @@ const VButton = styled(Button)(
   ]
 )
 
-const VButtonGroup = styled.div(() => [
+export const VButtonGroup = styled.div(() => [
   css`
     border-width: 1px;
     ${tw`rounded-sm border-solid border-gray-600 sm:flex-none flex flex-auto`}
@@ -67,7 +67,7 @@ interface CheckboxProps extends ComponentProps<'button'> {
   checked: boolean
   icon: ReactNode
 }
-const Checkbox = ({
+export const Checkbox = ({
   checkedIcon,
   checked,
   icon,
@@ -103,7 +103,7 @@ declare function IconButtonFn<Tag extends 'a' | 'button'>(
   props: IconButtonProps<Tag>
 ): JSX.Element
 
-const IconButton = React.forwardRef<HTMLElement, IconButtonProps<any>>(
+export const IconButton = React.forwardRef<HTMLElement, IconButtonProps<any>>(
   function IconButton(props, ref) {
     const { tag, styles, href, children, ...rest } = props
     let iconButton
@@ -134,32 +134,6 @@ const IconButton = React.forwardRef<HTMLElement, IconButtonProps<any>>(
   }
 ) as typeof IconButtonFn
 
-interface TextAreaProps extends ComponentProps<'textarea'> {
-  size: 'small' | 'large'
-  fullWidth?: boolean
-  error?: boolean
-  helperText?: string
-}
-
-const TextArea = React.forwardRef<HTMLTextAreaElement, TextAreaProps>(
-  (props, ref) => {
-    const { helperText, size, error, fullWidth, ...otherProps } = props
-
-    const styles = [
-      tw`font[inherit] p-1 resize-none border[1px solid] border-gray-300 rounded-sm`,
-      fullWidth && tw`w-full`,
-      size === 'small' ? tw`text-sm` : tw`text-lg`,
-      error && tw` border-red-500 focus:(border-red-500 border-2 outline-none)`,
-    ]
-    return (
-      <div>
-        <textarea ref={ref} {...otherProps} css={styles}></textarea>
-        {error && <p tw="text-xs text-red-500 my-0 mx-1">{helperText}</p>}
-      </div>
-    )
-  }
-)
-
 const inputBorderStyles = [
   tw` text-left absolute inset-0 m-0 py-0 px-2 pointer-events-none overflow-hidden min-w-0 rounded-sm border-width[1px] border-gray-400 border-solid`,
 ]
@@ -186,17 +160,18 @@ const inputLabelActiveStyles = css`
   ${tw`translate-y-[-.4em] scale-75 color[inherit]`}
 `
 
-const InputAdornment = React.forwardRef<HTMLDivElement, ComponentProps<'div'>>(
-  function InputAdornment(props, ref) {
-    return (
-      <div
-        css={[tw`inline-flex justify-center items-center px-1 font[inherit]`]}
-        {...props}
-        ref={ref}
-      ></div>
-    )
-  }
-)
+export const InputAdornment = React.forwardRef<
+  HTMLDivElement,
+  ComponentProps<'div'>
+>(function InputAdornment(props, ref) {
+  return (
+    <div
+      css={[tw`inline-flex justify-center items-center px-1 font[inherit]`]}
+      {...props}
+      ref={ref}
+    ></div>
+  )
+})
 
 interface OwnTextFieldProps<T> {
   InputProps?: {
@@ -217,7 +192,7 @@ declare function TextFieldFn<T extends 'input' | 'textarea'>(
   props: TextFieldProps<T>
 ): JSX.Element
 
-const TextField = React.forwardRef<HTMLElement, TextFieldProps<any>>(
+export const TextField = React.forwardRef<HTMLElement, TextFieldProps<any>>(
   function TextField(props, ref) {
     const {
       InputProps = {},
@@ -302,7 +277,7 @@ interface AvatarProps extends ComponentProps<typeof RouterLink> {
     img?: any
   }
 }
-const Avatar = (props: AvatarProps) => {
+export const Avatar = (props: AvatarProps) => {
   const { src, alt, to, styles, ...rest } = props
   return (
     <RouterLink
@@ -321,19 +296,19 @@ const Avatar = (props: AvatarProps) => {
     </RouterLink>
   )
 }
-const Link = styled(RouterLink)`
+export const Link = styled(RouterLink)`
   text-decoration: none;
   ${tw`text-blue-600 hover:text-blue-800`}
 `
 
-const EmptyLink = styled.button`
+export const EmptyLink = styled.button`
   text-decoration: none;
   ${tw`bg-transparent border-0 text-blue-600 hover:text-blue-800`}
 `
 type DividerProps = {
   orientation?: 'vertical' | 'horizontal'
 }
-const Divider = styled.hr(({ orientation }: DividerProps) => [
+export const Divider = styled.hr(({ orientation }: DividerProps) => [
   tw`my-0 border-width[1px] h-auto`,
   orientation === 'vertical'
     ? tw`border-l-0 border-right-color[lightgray]`
@@ -360,7 +335,7 @@ const MenuItemStyled = styled.div(({ selected }: MenuItemStyledProps) => [
   `,
 ])
 
-const MenuItem = React.forwardRef<HTMLElement, MenuItemProps<any>>(
+export const MenuItem = React.forwardRef<HTMLElement, MenuItemProps<any>>(
   function MenuItem(props, ref) {
     const { tag, href, selected, children, ...rest } = props
     if (tag === 'a') {
@@ -408,7 +383,7 @@ interface MenuProps {
   onClose: () => void
   children?: ReactNode
 }
-const Menu = ({
+export const Menu = ({
   open,
   anchorEl,
   anchorOrigin,
@@ -477,7 +452,7 @@ interface ChipWithCloseProps extends ComponentProps<'span'> {
 }
 const chipStyles = tw`bg-purple-200 text-purple-900 hover:(bg-purple-900 text-white) outline-color[darkorange] text-xs opacity-75 border-solid border-width[1px] border-purple-800 rounded-sm padding[.1rem .5rem] no-underline
 `
-const ChipWithClose = (props: ChipWithCloseProps) => {
+export const ChipWithClose = (props: ChipWithCloseProps) => {
   const { label, onDelete, ...rest } = props
   return (
     <span
@@ -525,172 +500,173 @@ interface AutoCompleteProps {
   fullWidth?: boolean
   ChipProps?: any
 }
-const Autocomplete = React.forwardRef<HTMLInputElement, AutoCompleteProps>(
-  function Autocomplete(
-    {
-      disabled,
-      value: valueProp,
-      inputValue: inputValueProp,
-      onInputChange,
-      onChange,
-      renderInput,
-      renderTags,
-      fullWidth,
-      ChipProps,
-      ...rest
-    },
-    ref
-  ) {
-    const hasClearIcon = !disabled && (inputValueProp || valueProp.length > 0)
-    const [value, setValue] = useState(valueProp)
-    const [inputValue, setInputValue] = useState(inputValueProp || '')
+export const Autocomplete = React.forwardRef<
+  HTMLInputElement,
+  AutoCompleteProps
+>(function Autocomplete(
+  {
+    disabled,
+    value: valueProp,
+    inputValue: inputValueProp,
+    onInputChange,
+    onChange,
+    renderInput,
+    renderTags,
+    fullWidth,
+    ChipProps,
+    ...rest
+  },
+  ref
+) {
+  const hasClearIcon = !disabled && (inputValueProp || valueProp.length > 0)
+  const [value, setValue] = useState(valueProp)
+  const [inputValue, setInputValue] = useState(inputValueProp || '')
 
-    const handleValue = (
-      event: SyntheticEvent,
-      newValue: any,
-      reason: string,
-      details?: any
-    ) => {
-      if (value === newValue) return
+  const handleValue = (
+    event: SyntheticEvent,
+    newValue: any,
+    reason: string,
+    details?: any
+  ) => {
+    if (value === newValue) return
 
-      if (onChange) {
-        onChange(event, newValue, reason, details)
-      }
-      setValue(newValue)
+    if (onChange) {
+      onChange(event, newValue, reason, details)
     }
-    const handleTagDelete = (index: number) => (event: SyntheticEvent) => {
-      const newValue = value.slice()
-      newValue.splice(index, 1)
-      handleValue(event, newValue, 'removeOption', {
-        option: value[index],
-      })
+    setValue(newValue)
+  }
+  const handleTagDelete = (index: number) => (event: SyntheticEvent) => {
+    const newValue = value.slice()
+    newValue.splice(index, 1)
+    handleValue(event, newValue, 'removeOption', {
+      option: value[index],
+    })
+  }
+  const handleClear = (e: React.SyntheticEvent) => {
+    setInputValue('')
+
+    if (onInputChange) {
+      onInputChange(e, '', 'clear')
     }
-    const handleClear = (e: React.SyntheticEvent) => {
-      setInputValue('')
+
+    handleValue(e, [], 'clear')
+  }
+  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const newValue = event.target.value
+
+    if (inputValue !== newValue) {
+      setInputValue(newValue)
 
       if (onInputChange) {
-        onInputChange(e, '', 'clear')
-      }
-
-      handleValue(e, [], 'clear')
-    }
-    const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-      const newValue = event.target.value
-
-      if (inputValue !== newValue) {
-        setInputValue(newValue)
-
-        if (onInputChange) {
-          onInputChange(event, newValue, 'input')
-        }
+        onInputChange(event, newValue, 'input')
       }
     }
-    const resetInputValue = React.useCallback(
-      (event: any, newValue: any) => {
-        let newInputValue
-        if (!newValue) {
-          newInputValue = ''
-        } else {
-          newInputValue = newValue
-        }
-
-        setInputValue(newInputValue)
-
-        if (onInputChange) onInputChange(event, newValue, 'reset')
-      },
-      [setInputValue, onInputChange]
-    )
-
-    const selectNewValue = (
-      event: SyntheticEvent,
-      option: any,
-      reason = 'selectOption'
-    ) => {
-      let newValue = Array.isArray(value) ? value.slice() : []
-
-      const itemIndex = value.findIndex((val: any) => val === option)
-
-      if (itemIndex === -1) {
-        newValue.push(option)
-        handleValue(event, newValue, reason, { option })
-      }
-      resetInputValue(event, '')
-    }
-    const handleKeyDown = (event: React.KeyboardEvent) => {
-      switch (event.key) {
-        case 'Enter':
-          // Avoid early form validation
-          event.preventDefault()
-
-          if (disabled) return
-
-          if (!inputValue) return
-
-          selectNewValue(event, inputValue, 'selectOption')
-          break
-        default:
-          return
-      }
-    }
-
-    const getTagProps = ({ index }: { index: number }) => ({
-      key: index,
-      'data-tag-index': index,
-      tabIndex: -1,
-      onDelete: handleTagDelete(index),
-    })
-    const getClearProps = () => ({
-      tabIndex: -1,
-      onClick: handleClear,
-    })
-
-    let startAdornment
-    if (value.length > 0) {
-      if (renderTags) {
-        startAdornment = renderTags(value, getTagProps)
-      } else {
-        startAdornment = value.map((option: string, index: number) => (
-          <ChipWithClose
-            label={option}
-            {...getTagProps({ index })}
-            {...ChipProps}
-          />
-        ))
-      }
-    }
-    return (
-      <>
-        <div onKeyDown={handleKeyDown}>
-          {renderInput({
-            tag: 'input',
-            disabled,
-            fullWidth: true,
-            ref,
-            value: inputValue,
-            onChange: handleInputChange,
-            // tw: "flex-grow[1]",
-            InputProps: {
-              startAdornment,
-              endAdornment: hasClearIcon ? (
-                <InputAdornment
-                  {...getClearProps()}
-                  tw="cursor-pointer font-size[1.5em]"
-                >
-                  <ClearIcon></ClearIcon>
-                </InputAdornment>
-              ) : null,
-            },
-            styles: {
-              input: tw`flex-grow-default w-0 min-w-[8em] `,
-              inputRoot: tw`flex-wrap`,
-            },
-            ...rest,
-          })}
-        </div>
-      </>
-    )
   }
-)
+  const resetInputValue = React.useCallback(
+    (event: any, newValue: any) => {
+      let newInputValue
+      if (!newValue) {
+        newInputValue = ''
+      } else {
+        newInputValue = newValue
+      }
+
+      setInputValue(newInputValue)
+
+      if (onInputChange) onInputChange(event, newValue, 'reset')
+    },
+    [setInputValue, onInputChange]
+  )
+
+  const selectNewValue = (
+    event: SyntheticEvent,
+    option: any,
+    reason = 'selectOption'
+  ) => {
+    let newValue = Array.isArray(value) ? value.slice() : []
+
+    const itemIndex = value.findIndex((val: any) => val === option)
+
+    if (itemIndex === -1) {
+      newValue.push(option)
+      handleValue(event, newValue, reason, { option })
+    }
+    resetInputValue(event, '')
+  }
+  const handleKeyDown = (event: React.KeyboardEvent) => {
+    switch (event.key) {
+      case 'Enter':
+        // Avoid early form validation
+        event.preventDefault()
+
+        if (disabled) return
+
+        if (!inputValue) return
+
+        selectNewValue(event, inputValue, 'selectOption')
+        break
+      default:
+        return
+    }
+  }
+
+  const getTagProps = ({ index }: { index: number }) => ({
+    key: index,
+    'data-tag-index': index,
+    tabIndex: -1,
+    onDelete: handleTagDelete(index),
+  })
+  const getClearProps = () => ({
+    tabIndex: -1,
+    onClick: handleClear,
+  })
+
+  let startAdornment
+  if (value.length > 0) {
+    if (renderTags) {
+      startAdornment = renderTags(value, getTagProps)
+    } else {
+      startAdornment = value.map((option: string, index: number) => (
+        <ChipWithClose
+          label={option}
+          {...getTagProps({ index })}
+          {...ChipProps}
+        />
+      ))
+    }
+  }
+  return (
+    <>
+      <div onKeyDown={handleKeyDown}>
+        {renderInput({
+          tag: 'input',
+          disabled,
+          fullWidth: true,
+          ref,
+          value: inputValue,
+          onChange: handleInputChange,
+          // tw: "flex-grow[1]",
+          InputProps: {
+            startAdornment,
+            endAdornment: hasClearIcon ? (
+              <InputAdornment
+                {...getClearProps()}
+                tw="cursor-pointer font-size[1.5em]"
+              >
+                <ClearIcon></ClearIcon>
+              </InputAdornment>
+            ) : null,
+          },
+          styles: {
+            input: tw`flex-grow-default w-0 min-w-[8em] `,
+            inputRoot: tw`flex-wrap`,
+          },
+          ...rest,
+        })}
+      </div>
+    </>
+  )
+})
 
 interface AlertProps extends ComponentProps<'div'> {
   severity?: 'error' | 'info' | 'warning' | 'success'
@@ -705,71 +681,72 @@ interface AlertProps extends ComponentProps<'div'> {
     alertEndIcon: any
   }
 }
-const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
-  props,
-  ref
-) {
-  const { severity, onClose, title, children, styles, ...rest } = props
-  let icon, bgStyles
-  if (severity === 'error') {
-    icon = <ErrorIcon />
-    bgStyles = tw`bg-red-600`
-  } else if (severity === 'info') {
-    icon = <InfoIcon />
-    bgStyles = tw`bg-blue-600`
-  } else if (severity === 'warning') {
-    icon = <WarningIcon />
-    bgStyles = tw`bg-orange-600`
-  } else {
-    icon = <SuccessIcon />
-    bgStyles = tw`bg-green-600`
-  }
-  return (
-    <div
-      css={[
-        tw`text-xs sm:text-sm flex items-center justify-between min-width[240px] p-1 md:p-2 text-white bg-gray-900 bg-opacity-75 shadow-sm rounded-sm  font-bold leading-5 tracking-wide `,
-        bgStyles && bgStyles,
-        styles && styles.alertRoot,
-      ]}
-    >
-      <div>
-        {title ? (
-          <div css={[tw`font-bold`, styles && styles.alertTitle]}>{title}</div>
-        ) : null}
-        <div
-          css={[
-            tw`flex items-center font[inherit]`,
-            styles && styles.alertBody,
-          ]}
-          ref={ref}
-          {...rest}
-        >
+export const Alert = React.forwardRef<HTMLDivElement, AlertProps>(
+  function Alert(props, ref) {
+    const { severity, onClose, title, children, styles, ...rest } = props
+    let icon, bgStyles
+    if (severity === 'error') {
+      icon = <ErrorIcon />
+      bgStyles = tw`bg-red-600`
+    } else if (severity === 'info') {
+      icon = <InfoIcon />
+      bgStyles = tw`bg-blue-600`
+    } else if (severity === 'warning') {
+      icon = <WarningIcon />
+      bgStyles = tw`bg-orange-600`
+    } else {
+      icon = <SuccessIcon />
+      bgStyles = tw`bg-green-600`
+    }
+    return (
+      <div
+        css={[
+          tw`text-xs sm:text-sm flex items-center justify-between min-width[240px] p-1 md:p-2 text-white bg-gray-900 bg-opacity-75 shadow-sm rounded-sm  font-bold leading-5 tracking-wide `,
+          bgStyles && bgStyles,
+          styles && styles.alertRoot,
+        ]}
+      >
+        <div>
+          {title ? (
+            <div css={[tw`font-bold`, styles && styles.alertTitle]}>
+              {title}
+            </div>
+          ) : null}
           <div
             css={[
-              tw`flex mr-2 py-1 color[inherit] font-size[1.2em]`,
-              styles && styles.alertStartIcon,
+              tw`flex items-center font[inherit]`,
+              styles && styles.alertBody,
             ]}
+            ref={ref}
+            {...rest}
           >
-            {icon}
+            <div
+              css={[
+                tw`flex mr-2 py-1 color[inherit] font-size[1.2em]`,
+                styles && styles.alertStartIcon,
+              ]}
+            >
+              {icon}
+            </div>
+            <div css={[tw`py-1`]}>{children}</div>
           </div>
-          <div css={[tw`py-1`]}>{children}</div>
         </div>
+        {onClose ? (
+          <IconButton
+            tag="button"
+            css={[
+              tw`font-size[1.2em] color[inherit]`,
+              styles && styles.alertEndIcon,
+            ]}
+            onClick={onClose}
+          >
+            <ClearIcon />
+          </IconButton>
+        ) : null}
       </div>
-      {onClose ? (
-        <IconButton
-          tag="button"
-          css={[
-            tw`font-size[1.2em] color[inherit]`,
-            styles && styles.alertEndIcon,
-          ]}
-          onClick={onClose}
-        >
-          <ClearIcon />
-        </IconButton>
-      ) : null}
-    </div>
-  )
-})
+    )
+  }
+)
 interface SnackbarProps extends ComponentProps<'div'> {
   open: boolean
   anchorOrigin: {
@@ -778,7 +755,7 @@ interface SnackbarProps extends ComponentProps<'div'> {
   }
   children: ReactNode
 }
-const Snackbar = React.forwardRef<HTMLDivElement, SnackbarProps>(
+export const Snackbar = React.forwardRef<HTMLDivElement, SnackbarProps>(
   function SnackBar(props, ref) {
     const { open, anchorOrigin, children, ...rest } = props
     let posStyles
@@ -831,7 +808,7 @@ type TagProps<T extends 'span' | 'a'> = OwnTagProps<T> & ComponentProps<T>
 
 declare function TagFn<T extends 'span' | 'a'>(props: TagProps<T>): JSX.Element
 
-const Tag = React.forwardRef<HTMLElement, TagProps<any>>(function Tag(
+export const Tag = React.forwardRef<HTMLElement, TagProps<any>>(function Tag(
   props,
   ref
 ) {
@@ -866,48 +843,22 @@ interface PaperProps extends ComponentProps<'div'> {
     paperRoot?: any
   }
 }
-const Paper = React.forwardRef<HTMLDivElement, PaperProps>(function Paper(
-  props,
-  ref
-) {
-  const { children, elevation, styles, ...rest } = props
+export const Paper = React.forwardRef<HTMLDivElement, PaperProps>(
+  function Paper(props, ref) {
+    const { children, elevation, styles, ...rest } = props
 
-  return (
-    <div
-      css={[
-        paperStyles,
-        elevation && tw`shadow-sm`,
-        styles && styles.paperRoot,
-      ]}
-      ref={ref}
-      {...rest}
-    >
-      {children}
-    </div>
-  )
-})
-
-export {
-  MenuItem,
-  IconButton,
-  SvgIcon,
-  LightButton,
-  Button,
-  Checkbox,
-  TextArea,
-  TextField,
-  Avatar,
-  Link,
-  Divider,
-  EmptyLink,
-  VButton,
-  VButtonGroup,
-  Menu,
-  Autocomplete,
-  ChipWithClose,
-  InputAdornment,
-  Alert,
-  Snackbar,
-  Tag,
-  Paper,
-}
+    return (
+      <div
+        css={[
+          paperStyles,
+          elevation && tw`shadow-sm`,
+          styles && styles.paperRoot,
+        ]}
+        ref={ref}
+        {...rest}
+      >
+        {children}
+      </div>
+    )
+  }
+)

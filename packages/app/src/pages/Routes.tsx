@@ -1,72 +1,82 @@
 import { Routes, Route, Navigate } from 'react-router-dom'
-import NavMenuDesktop from '../components/NavMenuDesktop'
-import RightSidePanel from '../components/RightSidePanel'
-import QuesListPage from './QuesListPage'
-import AllTagsPage from './AllTagsPage'
-import AllUsersPage from './AllUsersPage'
-import QuestionPage from './QuestionPage'
-import AskQuestionPage from './AskQuestionPage'
-import UserPage from './UserPage'
-import NotFoundPage from './NotFoundPage'
 import { useAuthContext } from '../context/auth'
 
 import 'twin.macro'
+import { lazy, Suspense } from 'react'
+
+const QuesList = lazy(() => import('./QuesList'))
+const AllTags = lazy(() => import('./AllTags'))
+const AllUsers = lazy(() => import('./AllUsers'))
+const User = lazy(() => import('./User'))
+const Question = lazy(() => import('./Question'))
+const AskQuestion = lazy(() => import('./AskQuestion'))
+const RightSidePanel = lazy(() => import('../components/Layout/RightSidePanel'))
+const NavMenuDesktop = lazy(() => import('../components/Navs/NavMenuDesktop'))
+const NotFound = lazy(() => import('./NotFound'))
 
 const AppRoutes = () => {
   const { user } = useAuthContext()
 
   return (
     <div tw="max-width[1264px] w-full mx-auto flex flex-row flex-nowrap relative">
-      <Routes>
-        <Route path="/">
-          <NavMenuDesktop />
-          <QuesListPage />
-          <RightSidePanel />
-        </Route>
-        <Route path="/ask">
-          {user ? (
-            <>
-              <NavMenuDesktop />
-              <AskQuestionPage />
-              <RightSidePanel />
-            </>
-          ) : (
-            <Navigate to="/" />
-          )}
-        </Route>
-        <Route path="/tags">
-          <NavMenuDesktop />
-          <AllTagsPage />
-        </Route>
-        <Route path="/users">
-          <NavMenuDesktop />
-          <AllUsersPage />
-        </Route>
-        <Route path="/user/:username">
-          <NavMenuDesktop />
-          <UserPage />
-        </Route>
-        <Route path="/questions/:quesId">
-          <NavMenuDesktop />
-          <QuestionPage />
-          <RightSidePanel />
-        </Route>
-        <Route path="/tags/:tagName">
-          <NavMenuDesktop />
-          <QuesListPage tagFilterActive={true} />
-          <RightSidePanel />
-        </Route>
-        <Route path="/search/:query">
-          <NavMenuDesktop />
-          <QuesListPage searchFilterActive={true} />
-          <RightSidePanel />
-        </Route>
-        <Route>
-          <NavMenuDesktop />
-          <NotFoundPage />
-          <RightSidePanel />
-        </Route>
-      </Routes>
+      <Suspense fallback={<div>loading...</div>}>
+        <Routes>
+          <Route
+            path="/"
+            element={
+              <>
+                <NavMenuDesktop />
+                <QuesList />
+                <RightSidePanel />
+              </>
+            }
+          ></Route>
+          <Route path="/ask">
+            {user ? (
+              <>
+                <NavMenuDesktop />
+                <AskQuestion />
+                <RightSidePanel />
+              </>
+            ) : (
+              <Navigate to="/" />
+            )}
+          </Route>
+
+          <Route path="/tags">
+            <NavMenuDesktop />
+            <AllTags />
+          </Route>
+          <Route path="/users">
+            <NavMenuDesktop />
+            <AllUsers />
+          </Route>
+          <Route path="/user/:username">
+            <NavMenuDesktop />
+            <User />
+          </Route>
+          <Route path="/questions/:quesId">
+            <NavMenuDesktop />
+            <Question />
+            <RightSidePanel />
+          </Route>
+          <Route path="/tags/:tagName">
+            <NavMenuDesktop />
+            <QuesList tagFilterActive={true} />
+            <RightSidePanel />
+          </Route>
+          <Route path="/search/:query">
+            <NavMenuDesktop />
+            <QuesList searchFilterActive={true} />
+            <RightSidePanel />
+          </Route>
+          <Route>
+            <NavMenuDesktop />
+            <NotFound />
+            <RightSidePanel />
+          </Route>
+        </Routes>
+      </Suspense>
     </div>
   )
 }

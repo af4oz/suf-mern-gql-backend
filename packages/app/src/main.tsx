@@ -21,6 +21,5 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
         </AuthProvider>
       </Router>
     </ApolloProvider>
-    ,
   </React.StrictMode>
 )

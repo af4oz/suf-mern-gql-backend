@@ -1,4 +1,4 @@
-import NavBar from './components/NavBar'
+import NavBar from './components/Navs/NavBar'
 import ToastNotification from './components/ToastNotification'
 import Routes from './pages/Routes'
 
