@@ -6,7 +6,7 @@ import {
   Severity,
 } from '@typegoose/typegoose'
 import { ObjectId } from 'mongodb'
-import uniqueValidator from 'mongoose-unique-validator'
+// import uniqueValidator from 'mongoose-unique-validator'
 import { Field, ID, Int, ObjectType } from 'type-graphql'
 import { Ref } from '../types'
 import schemaCleaner from '../utils/schemaCleaner'
@@ -39,7 +39,7 @@ export class RecentActivity {
     allowMixed: Severity.ALLOW,
   },
 })
-@plugin(uniqueValidator)
+// @plugin(uniqueValidator)
 export class User {
   @Field(() => ID)
   readonly _id: ObjectId

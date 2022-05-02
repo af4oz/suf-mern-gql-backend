@@ -11,6 +11,7 @@ type Answer {
   createdAt: DateTime!
   points: Int!
   updatedAt: DateTime!
+  voted: VoteType
 }
 
 type AnswerVotes {
@@ -99,6 +100,7 @@ type Question {
   title: String!
   updatedAt: DateTime!
   views: Int!
+  voted: VoteType
 }
 
 type QuestionVotes {
