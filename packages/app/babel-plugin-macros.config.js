@@ -10,4 +10,5 @@ module.exports = {
       from: 'styled-components',
     },
   },
+  autoCssProp: false,
 }

@@ -18,7 +18,7 @@ import { AnsSortBy } from '../../types'
 import { getErrorMsg } from '../../utils/helperFuncs'
 import sortAnswers from '../../utils/sortAnswers'
 import QuesAnsDetails from '../QuesAnsDetails'
-import SortAnsBar from './SortAnsBar'
+import SortAnsBar from '../Buttons/SortAnsButtonGroup'
 
 interface AnswerListProps {
   quesId: string

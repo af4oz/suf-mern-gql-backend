@@ -4,6 +4,7 @@ import { useAuthContext } from '../context/auth'
 import 'twin.macro'
 import { lazy, Suspense } from 'react'
 import MainLayout from '~~/components/Layout/MainLayout'
+import LoadingSpinner from '~~/components/LoadingSpinner'
 
 const QuesList = lazy(() => import('./QuesList'))
 const AllTags = lazy(() => import('./AllTags'))
@@ -19,7 +20,7 @@ const AppRoutes = () => {
 
   return (
     <MainLayout>
-      <Suspense fallback={<div>loading...</div>}>
+      <Suspense fallback={<LoadingSpinner />}>
         <Routes>
           <Route
             path="/"

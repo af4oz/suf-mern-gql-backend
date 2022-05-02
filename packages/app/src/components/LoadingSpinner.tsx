@@ -24,7 +24,9 @@ const LoadingSpinner = ({ size, styles, ...rest }: LoadingSpinnerProps) => {
     sizeStyles = tw`w-10 h-10`
   }
   return (
-    <div css={[tw`flex justify-center`, styles && styles.loaderRoot]}>
+    <div
+      css={[tw`flex justify-center w-full h-full`, styles && styles.loaderRoot]}
+    >
       <span
         css={[loaderStyles, sizeStyles, styles && styles.loaderIconWrapper]}
         {...rest}

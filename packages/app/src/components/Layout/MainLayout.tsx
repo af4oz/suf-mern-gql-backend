@@ -1,3 +1,4 @@
+import 'twin.macro'
 import React, { ReactNode } from 'react'
 import NavMenuDesktop from '../Navs/NavMenuDesktop'
 
