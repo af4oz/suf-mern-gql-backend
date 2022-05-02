@@ -1,19 +1,18 @@
-import { AnsSortBy } from '../types';
+import { AnsSortBy } from '../types'
 import { VButton as Button, VButtonGroup as ButtonGroup } from './CompStore'
 
 interface SortAnsBarProps {
-  sortBy: AnsSortBy;
-  setSortBy: (...args: any) => void;
+  sortBy: AnsSortBy
+  setSortBy: (...args: any) => void
 }
 
 const SortAnsBar = ({ sortBy, setSortBy }: SortAnsBarProps) => {
   const handleSortChange = (e: React.MouseEvent) => {
-    setSortBy((e.target as HTMLButtonElement).innerText.toUpperCase());
+    setSortBy((e.target as HTMLButtonElement).innerText.toUpperCase())
   }
 
   return (
-    <ButtonGroup
-    >
+    <ButtonGroup>
       <Button
         variant={sortBy === 'VOTES' ? 'contained' : 'outlined'}
         onClick={handleSortChange}

@@ -1,4 +1,4 @@
-import { IError } from "../types"
+import { IError } from '../types'
 
 export const registerValidator = (username: string, password: string) => {
   const errors: IError = {}
@@ -38,7 +38,11 @@ export const loginValidator = (username: string, password: string) => {
   }
 }
 
-export const questionValidator = (title: string, body: string, tags: string[]) => {
+export const questionValidator = (
+  title: string,
+  body: string,
+  tags: string[]
+) => {
   const errors: IError = {}
 
   if (title.trim() === '' || title.length < 15) {
@@ -53,7 +57,7 @@ export const questionValidator = (title: string, body: string, tags: string[]) =
     errors.tags = '1-5 tags must be added.'
   }
 
-  if (tags.some(t => !/^[a-zA-Z0-9-]*$/.test(t))) {
+  if (tags.some((t) => !/^[a-zA-Z0-9-]*$/.test(t))) {
     errors.tags = 'Tags must have alphanumeric characters only.'
   }
 
@@ -61,7 +65,7 @@ export const questionValidator = (title: string, body: string, tags: string[]) =
     errors.tags = 'Duplicate tags cannot be added.'
   }
 
-  if (tags.some(t => t.length > 15)) {
+  if (tags.some((t) => t.length > 15)) {
     errors.tags = "A single tag can't have more than 15 characters."
   }
 
@@ -70,4 +74,3 @@ export const questionValidator = (title: string, body: string, tags: string[]) =
     valid: Object.keys(errors).length < 1,
   }
 }
-

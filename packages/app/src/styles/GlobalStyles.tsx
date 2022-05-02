@@ -1,9 +1,9 @@
-import { GlobalStyles as BaseStyles } from 'twin.macro';
+import { GlobalStyles as BaseStyles } from 'twin.macro'
 
 const Styles = () => (
   <>
     <BaseStyles />
   </>
-);
+)
 
-export default Styles;
+export default Styles

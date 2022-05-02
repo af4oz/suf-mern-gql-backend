@@ -1,24 +1,24 @@
-import { useState } from 'react';
-import { useForm } from 'react-hook-form';
-import Comment from './Comment';
-import * as yup from 'yup';
-import { yupResolver } from '@hookform/resolvers/yup';
+import { useState } from 'react'
+import { useForm } from 'react-hook-form'
+import Comment from './Comment'
+import * as yup from 'yup'
+import { yupResolver } from '@hookform/resolvers/yup'
 
-import { LightButton, TextField } from './CompStore';
-import 'twin.macro';
-import { Author, Question } from '../generated/graphql';
+import { LightButton, TextField } from './CompStore'
+import 'twin.macro'
+import { Author, Question } from '../generated/graphql'
 
 const validationSchema = yup.object({
   commentBody: yup.string().min(15, 'Must be at least 15 characters'),
-});
+})
 
 interface CommentSectionProps {
-  quesAnsId: string;
-  user: Author;
-  comments: Question['comments'];
-  addComment: (...args: any) => void;
-  editComment: (...args: any) => void;
-  deleteComment: (...args: any) => void;
+  quesAnsId: string
+  user: Author
+  comments: Question['comments']
+  addComment: (...args: any) => void
+  editComment: (...args: any) => void
+  deleteComment: (...args: any) => void
 }
 
 const CommentSection = ({
@@ -29,8 +29,8 @@ const CommentSection = ({
   deleteComment,
   quesAnsId,
 }: CommentSectionProps) => {
-  const [isCollapsed, setIsCollapsed] = useState(true);
-  const [inputOpen, setInputOpen] = useState(false);
+  const [isCollapsed, setIsCollapsed] = useState(true)
+  const [inputOpen, setInputOpen] = useState(false)
   const {
     register,
     handleSubmit,
@@ -39,24 +39,24 @@ const CommentSection = ({
   } = useForm<{ commentBody: string }>({
     mode: 'onChange',
     resolver: yupResolver(validationSchema),
-  });
+  })
 
   const closeInput = () => {
-    setInputOpen(false);
-  };
+    setInputOpen(false)
+  }
 
   const showComments = () => {
-    setIsCollapsed(false);
-  };
+    setIsCollapsed(false)
+  }
 
   const handleCommentAdd = ({ commentBody }: { commentBody: string }) => {
-    addComment(commentBody, quesAnsId);
-    showComments();
-    closeInput();
-    reset();
-  };
+    addComment(commentBody, quesAnsId)
+    showComments()
+    closeInput()
+    reset()
+  }
 
-  const visibleComments = isCollapsed ? comments.slice(0, 3) : comments;
+  const visibleComments = isCollapsed ? comments.slice(0, 3) : comments
 
   return (
     <div>
@@ -109,7 +109,7 @@ const CommentSection = ({
         </form>
       )}
     </div>
-  );
-};
+  )
+}
 
-export default CommentSection;
+export default CommentSection

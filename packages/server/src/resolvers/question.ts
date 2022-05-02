@@ -1,6 +1,20 @@
 import { AuthenticationError, UserInputError } from 'apollo-server'
 import { PopulateOptions } from 'mongoose'
-import { Arg, Args, ArgsType, Ctx, Field, FieldResolver, Float, ID, Int, Mutation, Query, Resolver, Root } from 'type-graphql'
+import {
+  Arg,
+  Args,
+  ArgsType,
+  Ctx,
+  Field,
+  FieldResolver,
+  Float,
+  ID,
+  Int,
+  Mutation,
+  Query,
+  Resolver,
+  Root,
+} from 'type-graphql'
 import { PaginatedQuesList, SortByType, VoteType } from '../entities'
 import { AnswerModel } from '../entities/Answer'
 import { CommentModel } from '../entities/Comment'
@@ -15,47 +29,52 @@ import errorHandler from '../utils/errorHandler'
 import { paginateResults } from '../utils/helperFuncs'
 import { questionValidator } from '../utils/validators'
 
-let popQuestion: PopulateOptions[] = [{
-  path: 'author',
-  select: 'username',
-  model: UserModel
-},
-{
-  path: 'comments',
-  model: CommentModel,
-  populate: {
+let popQuestion: PopulateOptions[] = [
+  {
     path: 'author',
     select: 'username',
-    model: UserModel
-  }
-},
-{
-  path: 'answers',
-  model: AnswerModel,
-  populate: [{
-    path: 'author',
-    select: 'username',
-    model: UserModel
-  }, {
+    model: UserModel,
+  },
+  {
     path: 'comments',
     model: CommentModel,
     populate: {
       path: 'author',
       select: 'username',
-      model: UserModel
-    }
-  }]
-}];
+      model: UserModel,
+    },
+  },
+  {
+    path: 'answers',
+    model: AnswerModel,
+    populate: [
+      {
+        path: 'author',
+        select: 'username',
+        model: UserModel,
+      },
+      {
+        path: 'comments',
+        model: CommentModel,
+        populate: {
+          path: 'author',
+          select: 'username',
+          model: UserModel,
+        },
+      },
+    ],
+  },
+]
 
 @ArgsType()
 class GetQuestionsArgs {
-  @Field(type => SortByType)
+  @Field((type) => SortByType)
   sortBy: SortByType
 
-  @Field(type => Int)
+  @Field((type) => Int)
   page: number
 
-  @Field(type => Int)
+  @Field((type) => Int)
   limit: number
 
   @Field({ nullable: true })
@@ -65,32 +84,43 @@ class GetQuestionsArgs {
   filterBySearch?: string
 }
 
-@Resolver(of => Question)
+@Resolver((of) => Question)
 export class QuestionResolver {
-
-  @FieldResolver(returns => Float)
+  @FieldResolver((returns) => Float)
   async hotAlgo(@Root() question: Question): Promise<number> {
-    const { upvoteCount = 0, downvoteCount = 0 } = await QuestionService.getVotes(question._id);
-    return Math.log(Math.max(Math.abs(upvoteCount - downvoteCount), 1)) +
+    const { upvoteCount = 0, downvoteCount = 0 } =
+      await QuestionService.getVotes(question._id)
+    return (
+      Math.log(Math.max(Math.abs(upvoteCount - downvoteCount), 1)) +
       Math.log(Math.max(question.views * 2, 1)) +
-      question.createdAt.getTime() / 4500;
+      question.createdAt.getTime() / 4500
+    )
   }
-  @FieldResolver(returns => VoteType, { nullable: true })
-  async voted(@Root() question: Question, @Ctx() context: TContext): Promise<VoteType | null> {
+  @FieldResolver((returns) => VoteType, { nullable: true })
+  async voted(
+    @Root() question: Question,
+    @Ctx() context: TContext
+  ): Promise<VoteType | null> {
     const loggedUser = getUser(context)
     if (!loggedUser) {
-      return null;
+      return null
     }
-    const voted = await QuestionVotesModel.findOne({ userId: loggedUser.id as any, quesId: question._id as any });
+    const voted = await QuestionVotesModel.findOne({
+      userId: loggedUser.id as any,
+      quesId: question._id as any,
+    })
     if (voted) {
-      return voted.vote;
+      return voted.vote
     } else {
-      return null;
+      return null
     }
   }
 
   @Query(() => PaginatedQuesList)
-  async getQuestions(@Args() { sortBy, page, limit, filterByTag, filterBySearch }: GetQuestionsArgs): Promise<PaginatedQuesList> {
+  async getQuestions(
+    @Args()
+    { sortBy, page, limit, filterByTag, filterBySearch }: GetQuestionsArgs
+  ): Promise<PaginatedQuesList> {
     const _page = Number(page)
     const _limit = Number(limit)
 
@@ -142,7 +172,7 @@ export class QuestionResolver {
         .limit(_limit)
         .skip(paginated.startIndex)
         .populate('author', 'username')
-        .populate('answerCount');
+        .populate('answerCount')
 
       const paginatedQues = {
         previous: paginated.results.previous,
@@ -155,27 +185,33 @@ export class QuestionResolver {
       throw new Error(errorHandler(err))
     }
   }
-  @Query(returns => Question)
-  async viewQuestion(@Arg('quesId', type => ID) quesId: string): Promise<Question> {
-
+  @Query((returns) => Question)
+  async viewQuestion(
+    @Arg('quesId', (type) => ID) quesId: string
+  ): Promise<Question> {
     try {
-      const question = await QuestionModel.findById(quesId);
+      const question = await QuestionModel.findById(quesId)
       if (!question) {
-        throw new Error(`Question with ID: ${quesId} does not exist!`);
+        throw new Error(`Question with ID: ${quesId} does not exist!`)
       }
 
-      question.views++;
-      const savedQues = await question.save();
+      question.views++
+      const savedQues = await question.save()
 
-      const populatedQues = await savedQues.populate(popQuestion);
+      const populatedQues = await savedQues.populate(popQuestion)
 
-      return populatedQues;
+      return populatedQues
     } catch (err) {
       throw new Error(errorHandler(err))
     }
   }
-  @Mutation(returns => Question)
-  async postQuestion(@Arg('title') title: string, @Arg("body") body: string, @Arg('tags', type => [String]) tags: string[], @Ctx() context: TContext): Promise<Question> {
+  @Mutation((returns) => Question)
+  async postQuestion(
+    @Arg('title') title: string,
+    @Arg('body') body: string,
+    @Arg('tags', (type) => [String]) tags: string[],
+    @Ctx() context: TContext
+  ): Promise<Question> {
     const loggedUser = authChecker(context)
 
     const { errors, valid } = questionValidator(title, body, tags)
@@ -198,8 +234,7 @@ export class QuestionResolver {
         author: author._id,
       })
       const savedQues = await newQuestion.save()
-      const populatedQues = await savedQues
-        .populate('author', 'username');
+      const populatedQues = await savedQues.populate('author', 'username')
 
       return populatedQues
     } catch (err) {
@@ -207,8 +242,11 @@ export class QuestionResolver {
     }
   }
 
-  @Mutation(returns => ID)
-  async deleteQuestion(@Arg('quesId', type => ID) quesId: string, @Ctx() context: TContext): Promise<string> {
+  @Mutation((returns) => ID)
+  async deleteQuestion(
+    @Arg('quesId', (type) => ID) quesId: string,
+    @Ctx() context: TContext
+  ): Promise<string> {
     const loggedUser = authChecker(context)
 
     try {
@@ -220,25 +258,27 @@ export class QuestionResolver {
       }
       const question = await QuestionModel.findById(quesId)
       if (!question) {
-        throw new UserInputError(
-          `Question with ID: ${quesId} does not exist!`
-        )
+        throw new UserInputError(`Question with ID: ${quesId} does not exist!`)
       }
-      if (
-        question.author.toString() !== user._id.toString()
-      ) {
+      if (question.author.toString() !== user._id.toString()) {
         throw new AuthenticationError('Access is denied.')
       }
 
-      await question.delete();
+      await question.delete()
 
-      return quesId;
+      return quesId
     } catch (err) {
       throw new Error(errorHandler(err))
     }
   }
-  @Mutation(returns => Question)
-  async editQuestion(@Arg('quesId', type => ID) quesId: string, @Arg('title') title: string, @Arg("body") body: string, @Arg('tags', type => [String]) tags: string[], @Ctx() context: TContext): Promise<Question> {
+  @Mutation((returns) => Question)
+  async editQuestion(
+    @Arg('quesId', (type) => ID) quesId: string,
+    @Arg('title') title: string,
+    @Arg('body') body: string,
+    @Arg('tags', (type) => [String]) tags: string[],
+    @Ctx() context: TContext
+  ): Promise<Question> {
     const loggedUser = authChecker(context)
 
     const { errors, valid } = questionValidator(title, body, tags)
@@ -256,9 +296,7 @@ export class QuestionResolver {
     try {
       const question = await QuestionModel.findById(quesId)
       if (!question) {
-        throw new UserInputError(
-          `Question with ID: ${quesId} does not exist!`
-        )
+        throw new UserInputError(`Question with ID: ${quesId} does not exist!`)
       }
       if (question.author.toString() !== loggedUser.id.toString()) {
         throw new AuthenticationError('Access is denied.')
@@ -268,20 +306,21 @@ export class QuestionResolver {
         quesId,
         updatedQuesObj,
         { new: true }
-      )
-        .populate(popQuestion)
+      ).populate(popQuestion)
       if (!updatedQues) {
-        throw new Error(
-          `something went wrong!`
-        )
+        throw new Error(`something went wrong!`)
       }
       return updatedQues
     } catch (err) {
       throw new Error(errorHandler(err))
     }
   }
-  @Mutation(returns => Question)
-  async voteQuestion(@Arg('quesId', type => ID) quesId: string, @Arg('voteType', type => VoteType) voteType: VoteType, @Ctx() context: TContext): Promise<Question> {
+  @Mutation((returns) => Question)
+  async voteQuestion(
+    @Arg('quesId', (type) => ID) quesId: string,
+    @Arg('voteType', (type) => VoteType) voteType: VoteType,
+    @Ctx() context: TContext
+  ): Promise<Question> {
     const loggedUser = authChecker(context)
 
     // TODO : use transactions
@@ -293,11 +332,9 @@ export class QuestionResolver {
           `User with ID: ${loggedUser.id} does not exist!`
         )
       }
-      const question = await QuestionModel.findById(quesId);
+      const question = await QuestionModel.findById(quesId)
       if (!question) {
-        throw new UserInputError(
-          `Question with ID: ${quesId} does not exist!`
-        )
+        throw new UserInputError(`Question with ID: ${quesId} does not exist!`)
       }
 
       if (question.author.toString() === user._id.toString()) {
@@ -313,7 +350,7 @@ export class QuestionResolver {
 
       const questionVote = await QuestionVotesModel.findOne({
         userId: user._id as any, // TODO
-        quesId: question._id as any // TODO
+        quesId: question._id as any, // TODO
       })
       if (questionVote) {
         // Already voted, change vote type
@@ -321,55 +358,51 @@ export class QuestionResolver {
           await questionVote.delete()
           if (voteType === VoteType.DOWNVOTE) {
             // remove existing downvote
-            quesAuthor.rep += 2; // +2 to remove downvote affect
-            question.points += 1;
+            quesAuthor.rep += 2 // +2 to remove downvote affect
+            question.points += 1
           } else {
             // remove existing upvote
-            quesAuthor.rep -= 10; // -10 to remove upvote affect
-            question.points -= 1;
+            quesAuthor.rep -= 10 // -10 to remove upvote affect
+            question.points -= 1
           }
-        }
-        else {
+        } else {
           await questionVote.updateOne({
-            vote: voteType
+            vote: voteType,
           })
           if (voteType === VoteType.UPVOTE) {
             // change downvote to upvote
-            quesAuthor.rep += 12; // +2 to remove downvote affect
-            question.points += 2; // extra +1 to add upvote affect
+            quesAuthor.rep += 12 // +2 to remove downvote affect
+            question.points += 2 // extra +1 to add upvote affect
           } else {
             // change upvote to downvote
-            quesAuthor.rep -= 12; // -10 to remove upvote affect
-            question.points -= 2; // extra -1 to add downvote affect
+            quesAuthor.rep -= 12 // -10 to remove upvote affect
+            question.points -= 2 // extra -1 to add downvote affect
           }
         }
-      }
-      else {
+      } else {
         // New vote
         await QuestionVotesModel.create({
           userId: user._id,
           quesId: question._id,
-          vote: voteType
+          vote: voteType,
         })
         if (voteType === VoteType.UPVOTE) {
-          quesAuthor.rep += 10;
-          question.points += 1;
+          quesAuthor.rep += 10
+          question.points += 1
         } else {
-          quesAuthor.rep -= 2;
-          question.points -= 1;
+          quesAuthor.rep -= 2
+          question.points -= 1
         }
       }
 
-      await quesAuthor.save();
-      await question.save();
+      await quesAuthor.save()
+      await question.save()
 
-      const populatedQues = await question.populate(popQuestion);
+      const populatedQues = await question.populate(popQuestion)
 
-      return populatedQues;
-
+      return populatedQues
     } catch (err) {
       throw new Error(errorHandler(err))
     }
   }
 }
-

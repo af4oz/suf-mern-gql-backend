@@ -1,13 +1,13 @@
-import React from 'react';
-import ReactDOM from 'react-dom/client';
-import App from './App';
-import './index.css';
-import { BrowserRouter as Router } from 'react-router-dom';
-import { ApolloProvider } from '@apollo/client';
-import apolloClient from './apolloClient';
-import { AuthProvider } from './context/auth';
-import { AppProvider } from './context/state';
-import GlobalStyles from './styles/GlobalStyles';
+import React from 'react'
+import ReactDOM from 'react-dom/client'
+import App from './App'
+import './index.css'
+import { BrowserRouter as Router } from 'react-router-dom'
+import { ApolloProvider } from '@apollo/client'
+import apolloClient from './apolloClient'
+import { AuthProvider } from './context/auth'
+import { AppProvider } from './context/state'
+import GlobalStyles from './styles/GlobalStyles'
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
@@ -23,4 +23,4 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
     </ApolloProvider>
     ,
   </React.StrictMode>
-);
+)

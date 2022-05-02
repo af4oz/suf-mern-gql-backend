@@ -1,46 +1,48 @@
-import { getModelForClass, modelOptions, prop, Severity } from '@typegoose/typegoose'
+import {
+  getModelForClass,
+  modelOptions,
+  prop,
+  Severity,
+} from '@typegoose/typegoose'
 import { ObjectId } from 'mongodb'
 import { Schema, Types } from 'mongoose'
 import { Field, ID, ObjectType } from 'type-graphql'
 import { Ref } from '../types'
 import schemaCleaner from '../utils/schemaCleaner'
 import { Author } from './'
-import { User } from "./User"
+import { User } from './User'
 
 @modelOptions({
   schemaOptions: {
-    toJSON: schemaCleaner
+    toJSON: schemaCleaner,
   },
   options: {
-    allowMixed: Severity.ALLOW
-  }
-
+    allowMixed: Severity.ALLOW,
+  },
 })
 @ObjectType()
 export class Comment {
-
   @Field(() => ID)
-  readonly _id: ObjectId;
+  readonly _id: ObjectId
 
-  @Field(type => Author)
+  @Field((type) => Author)
   @prop({ required: true, type: Schema.Types.ObjectId })
-  author: Ref<User>;
+  author: Ref<User>
 
   @Field()
   @prop({ required: true, trim: true, minlength: 15 })
-  body: string;
+  body: string
 
-  @Field(type => Date, { nullable: false })
+  @Field((type) => Date, { nullable: false })
   @prop({ default: Date })
-  createdAt?: Date;
+  createdAt?: Date
 
-  @Field(type => Date, { nullable: false })
+  @Field((type) => Date, { nullable: false })
   @prop({ default: Date })
-  updatedAt?: Date;
+  updatedAt?: Date
 
   @prop({ required: true })
-  parentId: Types.ObjectId;
+  parentId: Types.ObjectId
 }
 
-
-export const CommentModel = getModelForClass(Comment);
+export const CommentModel = getModelForClass(Comment)

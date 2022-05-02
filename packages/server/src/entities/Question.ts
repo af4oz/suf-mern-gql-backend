@@ -1,77 +1,82 @@
-import { DocumentType, getModelForClass, modelOptions, prop } from '@typegoose/typegoose';
-import { ObjectId } from 'mongodb';
-import { Schema } from 'mongoose';
-import { Field, Float, ID, Int, ObjectType } from 'type-graphql';
-import { Author, VoteType } from './';
-import { Ref } from '../types';
-import schemaCleaner from '../utils/schemaCleaner';
-import { Answer } from './Answer';
-import { Comment } from './Comment';
-import { User } from './User';
+import {
+  DocumentType,
+  getModelForClass,
+  modelOptions,
+  prop,
+} from '@typegoose/typegoose'
+import { ObjectId } from 'mongodb'
+import { Schema } from 'mongoose'
+import { Field, Float, ID, Int, ObjectType } from 'type-graphql'
+import { Author, VoteType } from './'
+import { Ref } from '../types'
+import schemaCleaner from '../utils/schemaCleaner'
+import { Answer } from './Answer'
+import { Comment } from './Comment'
+import { User } from './User'
 
 @modelOptions({
   schemaOptions: {
     toJSON: schemaCleaner,
     toObject: {
-      virtuals: true
+      virtuals: true,
     },
-  }
+  },
 })
 @ObjectType()
 export class Question {
   @Field(() => ID)
-  readonly _id: ObjectId;
+  readonly _id: ObjectId
 
-  @Field(type => Author)
+  @Field((type) => Author)
   @prop({ ref: () => 'User', required: true })
-  author: Ref<User>;
+  author: Ref<User>
 
   @Field()
   @prop({ required: true, trim: true, minlength: 15 })
-  title: string;
+  title: string
 
   @Field()
   @prop({ required: true, trim: true, minlength: 30 })
-  body: string;
+  body: string
 
-  @Field(type => [String])
+  @Field((type) => [String])
   @prop({ type: () => [String], required: true, trim: true })
-  tags: [string];
+  tags: [string]
 
-  @Field(type => [Comment], { nullable: 'items' })
+  @Field((type) => [Comment], { nullable: 'items' })
   @prop({
     ref: () => (doc: DocumentType<Question>) => doc.from!,
     foreignField: () => 'parentId',
     localField: (doc: DocumentType<Question>) => doc.local,
     justOne: false,
-    default: []
+    default: [],
   })
-  comments?: Ref<Comment>[];
+  comments?: Ref<Comment>[]
 
-  @Field(type => [Answer], { nullable: 'items' })
+  @Field((type) => [Answer], { nullable: 'items' })
   @prop({
     ref: () => 'Answer',
     foreignField: 'question',
     localField: '_id',
     justOne: false,
-    default: []
+    default: [],
   })
-  answers?: Ref<Answer>[];
+  answers?: Ref<Answer>[]
 
-  @Field(type => Int)
+  @Field((type) => Int)
   @prop({
     ref: () => 'Answer',
     foreignField: 'question',
     localField: '_id',
     justOne: false,
     count: true,
-    default: 0
+    default: 0,
   })
-  answerCount: number;
+  answerCount: number
 
-  @Field(type => Int)
+  @Field((type) => Int)
   @prop({ default: 0 })
-  points: number;
+  points: number
 
   @prop({
     ref: () => 'QuestionVotes',
@@ -80,10 +85,10 @@ export class Question {
     justOne: false,
     count: true,
     match: {
-      vote: { $eq: "up" }
-    }
+      vote: { $eq: 'up' },
+    },
   })
-  upvoteCount: number;
+  upvoteCount: number
 
   @prop({
     ref: () => 'QuestionVotes',
@@ -92,39 +97,39 @@ export class Question {
     justOne: false,
     count: true,
     match: {
-      vote: { $eq: "down" }
-    }
+      vote: { $eq: 'down' },
+    },
   })
-  downvoteCount: number;
+  downvoteCount: number
 
-  @Field(type => Int)
+  @Field((type) => Int)
   @prop({ default: 0 })
-  views: number;
+  views: number
 
-  @Field(type => Float)
+  @Field((type) => Float)
   hotAlgo: number
 
-  @Field(type => ID, { nullable: true })
-  @prop({ ref: () => "Answer", type: Schema.Types.ObjectId })
+  @Field((type) => ID, { nullable: true })
+  @prop({ ref: () => 'Answer', type: Schema.Types.ObjectId })
   acceptedAnswer?: Ref<Answer>
 
-  @Field(type => VoteType, { nullable: true })
+  @Field((type) => VoteType, { nullable: true })
   @prop({ default: null })
-  voted?: VoteType;
+  voted?: VoteType
 
-  @Field(type => Date)
+  @Field((type) => Date)
   @prop({ default: Date })
-  createdAt: Date;
+  createdAt: Date
 
-  @Field(type => Date)
+  @Field((type) => Date)
   @prop({ default: Date })
-  updatedAt: Date;
+  updatedAt: Date
 
   @prop({ default: '_id' })
-  local?: string;
+  local?: string
 
   @prop({ default: 'Comment' })
-  from?: string;
+  from?: string
 }
 
 export const QuestionModel = getModelForClass(Question)

@@ -3,27 +3,19 @@
   "automergeType": "branch",
   "packageRules": [
     {
-      "extends": [
-        "packages:linters"
-      ],
-      "automerge": true,
+      "extends": ["packages:linters"],
+      "automerge": true
     },
     {
-      "extends": [
-        "packages:test"
-      ],
-      "automerge": true,
+      "extends": ["packages:test"],
+      "automerge": true
     },
     {
       "matchUpdateTypes": ["minor", "patch", "pin", "digest"],
-      "automerge": true,
+      "automerge": true
     },
     {
-      "matchPackageNames": [
-        "concurrently",
-        "typescript",
-        "ts-node"
-      ],
+      "matchPackageNames": ["concurrently", "typescript", "ts-node"],
       "matchUpdateTypes": ["major", "minor", "patch", "pin", "digest"],
       "automerge": true
     }

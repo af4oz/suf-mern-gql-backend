@@ -1,4 +1,9 @@
-import { getModelForClass, modelOptions, prop, Severity } from '@typegoose/typegoose'
+import {
+  getModelForClass,
+  modelOptions,
+  prop,
+  Severity,
+} from '@typegoose/typegoose'
 import { ObjectId } from 'mongodb'
 import { Types } from 'mongoose'
 import { Field, ID, ObjectType } from 'type-graphql'
@@ -7,29 +12,27 @@ import { VoteType } from './'
 
 @modelOptions({
   schemaOptions: {
-    toJSON: schemaCleaner
+    toJSON: schemaCleaner,
   },
   options: {
-    allowMixed: Severity.ALLOW
-  }
+    allowMixed: Severity.ALLOW,
+  },
 })
 @ObjectType()
 export class QuestionVotes {
+  readonly _id: ObjectId
 
-  readonly _id: ObjectId;
-
-  @Field(type => ID)
+  @Field((type) => ID)
   @prop({ required: true })
-  userId: Types.ObjectId;
+  userId: Types.ObjectId
 
-  @Field(type => ID)
+  @Field((type) => ID)
   @prop({ required: true })
-  quesId: Types.ObjectId;
+  quesId: Types.ObjectId
 
-  @Field(type => VoteType)
+  @Field((type) => VoteType)
   @prop({ required: true })
-  vote: VoteType;
+  vote: VoteType
 }
 
-
-export const QuestionVotesModel = getModelForClass(QuestionVotes);
+export const QuestionVotesModel = getModelForClass(QuestionVotes)

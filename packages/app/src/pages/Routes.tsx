@@ -1,19 +1,19 @@
-import { Routes, Route, Navigate } from 'react-router-dom';
-import NavMenuDesktop from '../components/NavMenuDesktop';
-import RightSidePanel from '../components/RightSidePanel';
-import QuesListPage from './QuesListPage';
-import AllTagsPage from './AllTagsPage';
-import AllUsersPage from './AllUsersPage';
-import QuestionPage from './QuestionPage';
-import AskQuestionPage from './AskQuestionPage';
-import UserPage from './UserPage';
-import NotFoundPage from './NotFoundPage';
-import { useAuthContext } from '../context/auth';
+import { Routes, Route, Navigate } from 'react-router-dom'
+import NavMenuDesktop from '../components/NavMenuDesktop'
+import RightSidePanel from '../components/RightSidePanel'
+import QuesListPage from './QuesListPage'
+import AllTagsPage from './AllTagsPage'
+import AllUsersPage from './AllUsersPage'
+import QuestionPage from './QuestionPage'
+import AskQuestionPage from './AskQuestionPage'
+import UserPage from './UserPage'
+import NotFoundPage from './NotFoundPage'
+import { useAuthContext } from '../context/auth'
 
-import 'twin.macro';
+import 'twin.macro'
 
 const AppRoutes = () => {
-  const { user } = useAuthContext();
+  const { user } = useAuthContext()
 
   return (
     <div tw="max-width[1264px] w-full mx-auto flex flex-row flex-nowrap relative">
@@ -68,7 +68,7 @@ const AppRoutes = () => {
         </Route>
       </Routes>
     </div>
-  );
-};
+  )
+}
 
-export default AppRoutes;
+export default AppRoutes

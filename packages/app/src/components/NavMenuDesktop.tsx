@@ -1,8 +1,8 @@
 import { useLocation } from 'react-router-dom'
 
 import { GoGlobe as PublicIcon } from 'react-icons/go'
-import { MdLocalOffer as LocalOfferIcon } from 'react-icons/md';
-import { MdPeopleAlt as PeopleIcon } from 'react-icons/md';
+import { MdLocalOffer as LocalOfferIcon } from 'react-icons/md'
+import { MdPeopleAlt as PeopleIcon } from 'react-icons/md'
 
 import tw, { css } from 'twin.macro' // eslint-disable-line no-unused-vars
 import { Divider, MenuItem } from './CompStore'
@@ -14,7 +14,7 @@ const DesktopNavMenu = () => {
   `
 
   return (
-    <div tw="hidden sm:block" >
+    <div tw="hidden sm:block">
       <div tw="sticky flex min-height[95vh] top[5vh]">
         <div tw="flex flex-col mt-4">
           <MenuItem
@@ -28,11 +28,7 @@ const DesktopNavMenu = () => {
             <PublicIcon css={iconStyles} />
             Stack Underflow
           </MenuItem>
-          <MenuItem
-            tag="a"
-            selected={pathname.startsWith('/tag')}
-            href="/tags"
-          >
+          <MenuItem tag="a" selected={pathname.startsWith('/tag')} href="/tags">
             <LocalOfferIcon css={iconStyles} />
             Tags
           </MenuItem>

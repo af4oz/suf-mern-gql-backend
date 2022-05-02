@@ -1,7 +1,16 @@
 import { UserInputError } from 'apollo-server'
 import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken'
-import { Arg, Ctx, FieldResolver, Int, Mutation, Query, Resolver, Root } from 'type-graphql'
+import {
+  Arg,
+  Ctx,
+  FieldResolver,
+  Int,
+  Mutation,
+  Query,
+  Resolver,
+  Root,
+} from 'type-graphql'
 import { LoggedUser } from '../entities'
 import { RecentActivity, User, UserModel } from '../entities/User'
 import AnswerService from '../services/AnswerService'
@@ -12,8 +21,7 @@ import { SECRET } from '../utils/config'
 import errorHandler from '../utils/errorHandler'
 import { loginValidator, registerValidator } from '../utils/validators'
 
-
-@Resolver(of => User)
+@Resolver((of) => User)
 export class UserResolver {
   @Query(() => User)
   async whoami(@Ctx() context: TContext): Promise<User | null> {
@@ -26,9 +34,9 @@ export class UserResolver {
             `User with ID: ${loggedUser.id} does not exist in DB.`
           )
         }
-        return user;
+        return user
       } else {
-        return null;
+        return null
       }
     } catch (err) {
       throw new Error(errorHandler(err))
@@ -37,7 +45,6 @@ export class UserResolver {
 
   @Query(() => User)
   async getUser(@Arg('username') username: string): Promise<User> {
-
     if (username.trim() === '') {
       throw new UserInputError('Username must be provided.')
     }
@@ -49,34 +56,35 @@ export class UserResolver {
     if (!user) {
       throw new UserInputError(`User '${username}' does not exist.`)
     }
-    return user;
+    return user
   }
   @Query(() => [User])
   async getAllUsers() {
-    const allUsers = await UserModel.find({}).select('username createdAt');
-    return allUsers;
+    const allUsers = await UserModel.find({}).select('username createdAt')
+    return allUsers
   }
 
-  @FieldResolver(returns => [RecentActivity])
+  @FieldResolver((returns) => [RecentActivity])
   async recentQuestions(@Root() user: User): Promise<RecentActivity[]> {
-    return await QuestionService.getRecentQuestions(user._id);
+    return await QuestionService.getRecentQuestions(user._id)
   }
 
-  @FieldResolver(returns => Int)
+  @FieldResolver((returns) => Int)
   async totalQuestions(@Root() user: User): Promise<number> {
-    return await QuestionService.getTotalQuestions(user._id);
+    return await QuestionService.getTotalQuestions(user._id)
   }
-  @FieldResolver(returns => Int)
+  @FieldResolver((returns) => Int)
   async totalAnswers(@Root() user: User): Promise<number> {
-    return await AnswerService.getTotalAnswers(user._id);
+    return await AnswerService.getTotalAnswers(user._id)
   }
-  @FieldResolver(returns => [RecentActivity])
+  @FieldResolver((returns) => [RecentActivity])
   async recentAnswers(@Root() user: User): Promise<RecentActivity[]> {
-    return await AnswerService.getRecentAnswers(user._id);
+    return await AnswerService.getRecentAnswers(user._id)
   }
 
   @Mutation(() => LoggedUser)
-  async register(@Arg('username') username: string,
+  async register(
+    @Arg('username') username: string,
     @Arg('password') password: string
   ): Promise<LoggedUser> {
     const { errors, valid } = registerValidator(username, password)
@@ -117,8 +125,10 @@ export class UserResolver {
     }
   }
   @Mutation(() => LoggedUser)
-  async login(@Arg('username') username: string,
-    @Arg('password') password: string): Promise<LoggedUser> {
+  async login(
+    @Arg('username') username: string,
+    @Arg('password') password: string
+  ): Promise<LoggedUser> {
     const { errors, valid } = loginValidator(username, password)
 
     if (!valid) {

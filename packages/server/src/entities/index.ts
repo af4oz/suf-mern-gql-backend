@@ -1,20 +1,20 @@
-import { Field, ID, ObjectType, registerEnumType } from "type-graphql";
-import { Question } from "./Question";
+import { Field, ID, ObjectType, registerEnumType } from 'type-graphql'
+import { Question } from './Question'
 
 export enum RoleType {
   USER = 'user',
-  ADMIN = 'admin'
+  ADMIN = 'admin',
 }
 registerEnumType(RoleType, {
-  name: 'RoleType'
+  name: 'RoleType',
 })
 
 export enum VoteType {
   DOWNVOTE = 'down',
-  UPVOTE = 'up'
+  UPVOTE = 'up',
 }
 registerEnumType(VoteType, {
-  name: 'VoteType'
+  name: 'VoteType',
 })
 
 export enum SortByType {
@@ -22,21 +22,21 @@ export enum SortByType {
   VOTES,
   VIEWS,
   NEWEST,
-  OLDEST
+  OLDEST,
 }
-registerEnumType(SortByType, { name: "SortByType" });
-registerEnumType(VoteType, { name: "VoteType" });
+registerEnumType(SortByType, { name: 'SortByType' })
+registerEnumType(VoteType, { name: 'VoteType' })
 
 @ObjectType()
 export class LoggedUser {
   @Field(() => ID)
-  _id: string;
+  _id: string
 
   @Field()
-  username: string;
+  username: string
 
   @Field()
-  token: string;
+  token: string
 
   @Field()
   role: RoleType
@@ -44,21 +44,20 @@ export class LoggedUser {
 
 @ObjectType()
 export class Tag {
+  @Field()
+  tagName: string
 
   @Field()
-  tagName: string;
-
-  @Field()
-  count: number;
+  count: number
 }
 
 @ObjectType()
 export class Author {
-  @Field(type => ID)
-  _id: string;
+  @Field((type) => ID)
+  _id: string
 
   @Field()
-  username: string;
+  username: string
 }
 
 @ObjectType()
@@ -71,13 +70,12 @@ export class NextPrevPage {
 }
 @ObjectType()
 export class PaginatedQuesList {
-  @Field(type => [Question], { nullable: 'items' })
-  questions: Question[];
+  @Field((type) => [Question], { nullable: 'items' })
+  questions: Question[]
 
   @Field({ nullable: true })
-  next?: NextPrevPage;
+  next?: NextPrevPage
 
   @Field({ nullable: true })
-  previous?: NextPrevPage;
-
+  previous?: NextPrevPage
 }

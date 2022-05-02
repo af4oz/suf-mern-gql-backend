@@ -1,14 +1,14 @@
 import React, { useState } from 'react'
 import { useLocation } from 'react-router-dom'
 
-import { IoMdMenu as MenuIcon } from 'react-icons/io';
-import { MdClear as CloseIcon } from 'react-icons/md';
+import { IoMdMenu as MenuIcon } from 'react-icons/io'
+import { MdClear as CloseIcon } from 'react-icons/md'
 import { GoGlobe as PublicIcon } from 'react-icons/go'
-import { MdLocalOffer as LocalOfferIcon } from 'react-icons/md';
-import { MdPeopleAlt as PeopleIcon } from 'react-icons/md';
-import { MenuItem, IconButton, Menu } from './CompStore';
+import { MdLocalOffer as LocalOfferIcon } from 'react-icons/md'
+import { MdPeopleAlt as PeopleIcon } from 'react-icons/md'
+import { MenuItem, IconButton, Menu } from './CompStore'
 
-import 'twin.macro';
+import 'twin.macro'
 
 const MobileNavMenu = () => {
   const { pathname } = useLocation()
@@ -23,7 +23,7 @@ const MobileNavMenu = () => {
   }
 
   return (
-    <div >
+    <div>
       <IconButton tag="button" tw="font-size[1.5em]" onClick={handleOpenMenu}>
         {!anchorEl ? <MenuIcon /> : <CloseIcon />}
       </IconButton>

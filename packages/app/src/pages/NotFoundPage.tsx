@@ -1,7 +1,7 @@
-import Error404 from '../svg/404-error.svg';
+import Error404 from '../svg/404-error.svg'
 
-import 'twin.macro';
-import { SvgIcon } from '../components/CompStore';
+import 'twin.macro'
+import { SvgIcon } from '../components/CompStore'
 
 const NotFoundPage = () => {
   return (
@@ -14,7 +14,7 @@ const NotFoundPage = () => {
         <p tw="text-sm">The page you requested does not exist.</p>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default NotFoundPage;
+export default NotFoundPage

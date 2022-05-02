@@ -1,57 +1,57 @@
-import { useState, useEffect } from 'react';
-import { useParams, Link as RouterLink } from 'react-router-dom';
-import RecentQuestions from '../components/RecentQuestions';
-import LoadingSpinner from '../components/LoadingSpinner';
-import { useAppContext } from '../context/state';
-import { formatDateAgo, getErrorMsg } from '../utils/helperFuncs';
+import { useState, useEffect } from 'react'
+import { useParams, Link as RouterLink } from 'react-router-dom'
+import RecentQuestions from '../components/RecentQuestions'
+import LoadingSpinner from '../components/LoadingSpinner'
+import { useAppContext } from '../context/state'
+import { formatDateAgo, getErrorMsg } from '../utils/helperFuncs'
 
-import tw, { styled } from 'twin.macro';
-import { Divider } from '../components/CompStore';
-import { useFetchUserLazyQuery, User } from '../generated/graphql';
+import tw, { styled } from 'twin.macro'
+import { Divider } from '../components/CompStore'
+import { useFetchUserLazyQuery, User } from '../generated/graphql'
 
 const UserInfo = styled.div`
   ${tw`flex justify-between color[inherit] items-center`}
-`;
+`
 const UserActivity = styled.div`
   ${tw`mt-4`}
-`;
+`
 
 const UserAvatar = styled.div`
   ${tw`bg-purple-200 bg-opacity-50 h-56 w-48 flex flex-col justify-center items-center rounded-sm mx-auto`}
-`;
+`
 const UserCard = styled.div`
   ${tw`w-full my-4 ml-2 mx-1 sm:ml-2 flex flex-row flex-wrap text-sm md:text-base`}
-`;
+`
 const UserPage = () => {
-  const { notify } = useAppContext();
-  const { username } = useParams<{ username: string }>();
-  const [fetchedUser, setFetchedUser] = useState<User | null>(null);
+  const { notify } = useAppContext()
+  const { username } = useParams<{ username: string }>()
+  const [fetchedUser, setFetchedUser] = useState<User | null>(null)
 
   const [fetchUser, { data, loading }] = useFetchUserLazyQuery({
     onError: (err) => {
-      notify(getErrorMsg(err), 'error');
+      notify(getErrorMsg(err), 'error')
     },
-  });
+  })
 
   useEffect(() => {
     if (username) {
-      fetchUser({ variables: { username } });
+      fetchUser({ variables: { username } })
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [username]);
+  }, [username])
 
   useEffect(() => {
     if (data) {
-      setFetchedUser(data.getUser as User);
+      setFetchedUser(data.getUser as User)
     }
-  }, [data]);
+  }, [data])
 
   if (loading || !fetchedUser) {
     return (
       <div style={{ minWidth: '100%', marginTop: '20%' }}>
         <LoadingSpinner />
       </div>
-    );
+    )
   }
 
   const {
@@ -63,7 +63,7 @@ const UserPage = () => {
     totalAnswers,
     recentQuestions,
     recentAnswers,
-  } = fetchedUser;
+  } = fetchedUser
 
   return (
     <UserCard>
@@ -129,7 +129,7 @@ const UserPage = () => {
         </UserActivity>
       </div>
     </UserCard>
-  );
-};
+  )
+}
 
-export default UserPage;
+export default UserPage

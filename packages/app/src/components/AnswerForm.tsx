@@ -1,31 +1,31 @@
-import { useForm } from 'react-hook-form';
-import { useAuthContext } from '../context/auth';
-import { useAppContext } from '../context/state';
-import AuthFormModal from './AuthFormModal';
-import * as yup from 'yup';
-import { yupResolver } from '@hookform/resolvers/yup';
-import { getErrorMsg } from '../utils/helperFuncs';
+import { useForm } from 'react-hook-form'
+import { useAuthContext } from '../context/auth'
+import { useAppContext } from '../context/state'
+import AuthFormModal from './AuthFormModal'
+import * as yup from 'yup'
+import { yupResolver } from '@hookform/resolvers/yup'
+import { getErrorMsg } from '../utils/helperFuncs'
 
-import 'twin.macro';
-import { TextField, Button, Link } from './CompStore';
-import Tag from './Tag';
+import 'twin.macro'
+import { TextField, Button, Link } from './CompStore'
+import Tag from './Tag'
 import {
   FetchQuestionDocument,
   FetchQuestionQuery,
   useAddAnswerMutation,
-} from '../generated/graphql';
+} from '../generated/graphql'
 
 const validationSchema = yup.object({
   answerBody: yup.string().min(30, 'Must be at least 30 characters'),
-});
+})
 
 interface Props {
-  quesId: string;
-  tags: string[];
+  quesId: string
+  tags: string[]
 }
 const AnswerForm = ({ quesId, tags }: Props) => {
-  const { user } = useAuthContext();
-  const { notify, clearEdit } = useAppContext();
+  const { user } = useAuthContext()
+  const { notify, clearEdit } = useAppContext()
   const {
     register,
     handleSubmit,
@@ -34,41 +34,41 @@ const AnswerForm = ({ quesId, tags }: Props) => {
   } = useForm<{ answerBody: string }>({
     mode: 'onChange',
     resolver: yupResolver(validationSchema),
-  });
+  })
 
   const [addAnswer, { loading }] = useAddAnswerMutation({
     onError: (err) => {
-      notify(getErrorMsg(err), 'error');
+      notify(getErrorMsg(err), 'error')
     },
-  });
+  })
 
   const postAnswer = ({ answerBody }: { answerBody: string }) => {
     addAnswer({
       variables: { quesId, body: answerBody },
       update: (proxy, { data }) => {
         // reset form state
-        reset();
+        reset()
 
         const dataInCache = proxy.readQuery<FetchQuestionQuery>({
           query: FetchQuestionDocument,
           variables: { quesId },
-        });
+        })
 
         const updatedData = {
           ...dataInCache?.viewQuestion,
           answers: data?.postAnswer,
-        };
+        }
 
         proxy.writeQuery({
           query: FetchQuestionDocument,
           variables: { quesId },
           data: { viewQuestion: updatedData },
-        });
+        })
 
-        notify('Answer submitted!');
+        notify('Answer submitted!')
       },
-    });
-  };
+    })
+  }
 
   return (
     <div>
@@ -116,7 +116,7 @@ const AnswerForm = ({ quesId, tags }: Props) => {
         )}
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default AnswerForm;
+export default AnswerForm

@@ -1,7 +1,7 @@
 import { ApolloClient, from, HttpLink, InMemoryCache } from '@apollo/client'
-import { setContext } from '@apollo/client/link/context';
-import storage from './utils/localStorage';
-import backendUrl from './backendUrl';
+import { setContext } from '@apollo/client/link/context'
+import storage from './utils/localStorage'
+import backendUrl from './backendUrl'
 
 const httpLink = new HttpLink({
   uri: backendUrl,

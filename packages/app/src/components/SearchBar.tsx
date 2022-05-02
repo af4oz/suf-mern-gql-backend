@@ -1,33 +1,33 @@
-import React, { ComponentProps, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { ComponentProps, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 
-import { InputAdornment, IconButton, TextField } from './CompStore';
+import { InputAdornment, IconButton, TextField } from './CompStore'
 
-import { MdSearch as SearchIcon } from 'react-icons/md';
-import { IoMdArrowBack as ArrowBackIcon } from 'react-icons/io';
+import { MdSearch as SearchIcon } from 'react-icons/md'
+import { IoMdArrowBack as ArrowBackIcon } from 'react-icons/io'
 
-import tw from 'twin.macro'; // eslint-disable-line no-unused-vars
+import tw from 'twin.macro' // eslint-disable-line no-unused-vars
 
 interface SearchBarProps extends ComponentProps<'div'> {
-  setSearchOpen?: (...args: any) => void;
+  setSearchOpen?: (...args: any) => void
 }
 
 const SearchBar = ({ setSearchOpen, ...rest }: SearchBarProps) => {
-  const [searchInput, setSearchInput] = useState('');
-  const navigate = useNavigate();
+  const [searchInput, setSearchInput] = useState('')
+  const navigate = useNavigate()
 
   const handleSearch = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (searchInput === '') return;
-    navigate(`/search/${searchInput}`);
-  };
+    e.preventDefault()
+    if (searchInput === '') return
+    navigate(`/search/${searchInput}`)
+  }
 
   const clearSearch = () => {
     if (setSearchOpen) {
-      setSearchOpen(false);
+      setSearchOpen(false)
     }
-    setSearchInput('');
-  };
+    setSearchInput('')
+  }
 
   return (
     <div css={[tw`flex-grow[.6]`]} {...rest}>
@@ -66,7 +66,7 @@ const SearchBar = ({ setSearchOpen, ...rest }: SearchBarProps) => {
         />
       </form>
     </div>
-  );
-};
+  )
+}
 
-export default SearchBar;
+export default SearchBar

@@ -1,23 +1,23 @@
-export type IError = Record<string, any>;
+export type IError = Record<string, any>
 
-import { ObjectId } from 'mongodb';
-import { Request } from 'express';
+import { ObjectId } from 'mongodb'
+import { Request } from 'express'
 
-export type Ref<T> = T | ObjectId;
+export type Ref<T> = T | ObjectId
 
 export type PageLimit = {
-  page: number;
-  limit: number;
-};
+  page: number
+  limit: number
+}
 export type PaginateResults = {
-  next?: PageLimit;
-  previous?: PageLimit;
-};
+  next?: PageLimit
+  previous?: PageLimit
+}
 
 export type TError = {
-  name: string;
-  message?: string;
-  kind?: string;
-};
+  name: string
+  message?: string
+  kind?: string
+}
 
-export type TContext = { req: Request };
+export type TContext = { req: Request }

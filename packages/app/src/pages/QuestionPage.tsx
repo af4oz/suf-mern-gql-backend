@@ -1,52 +1,52 @@
-import { useState, useEffect } from 'react';
-import { useParams, Link } from 'react-router-dom';
-import { useAppContext } from '../context/state';
-import { useAuthContext } from '../context/auth';
-import QuesPageContent from '../components/QuesPageContent';
-import AuthFormModal from '../components/AuthFormModal';
-import LoadingSpinner from '../components/LoadingSpinner';
-import { formatDateAgo, getErrorMsg } from '../utils/helperFuncs';
+import { useState, useEffect } from 'react'
+import { useParams, Link } from 'react-router-dom'
+import { useAppContext } from '../context/state'
+import { useAuthContext } from '../context/auth'
+import QuesPageContent from '../components/QuesPageContent'
+import AuthFormModal from '../components/AuthFormModal'
+import LoadingSpinner from '../components/LoadingSpinner'
+import { formatDateAgo, getErrorMsg } from '../utils/helperFuncs'
 
-import tw from 'twin.macro';
-import { Question, useFetchQuestionLazyQuery } from '../generated/graphql';
+import tw from 'twin.macro'
+import { Question, useFetchQuestionLazyQuery } from '../generated/graphql'
 
-const Container = tw.div`p-2 w-full`;
-const Header = tw.div``;
+const Container = tw.div`p-2 w-full`
+const Header = tw.div``
 
 const QuestionPage = () => {
-  const { clearEdit, notify } = useAppContext();
-  const { user } = useAuthContext();
-  const { quesId } = useParams<{ quesId: string }>();
-  const [question, setQuestion] = useState<Question | null>(null);
+  const { clearEdit, notify } = useAppContext()
+  const { user } = useAuthContext()
+  const { quesId } = useParams<{ quesId: string }>()
+  const [question, setQuestion] = useState<Question | null>(null)
 
   const [fetchQuestion, { data, loading }] = useFetchQuestionLazyQuery({
     onError: (err) => {
-      notify(getErrorMsg(err), 'error');
+      notify(getErrorMsg(err), 'error')
     },
-  });
+  })
 
   useEffect(() => {
     if (quesId) {
-      fetchQuestion({ variables: { quesId } });
+      fetchQuestion({ variables: { quesId } })
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [quesId]);
+  }, [quesId])
 
   useEffect(() => {
     if (data) {
-      setQuestion(data.viewQuestion as Question);
+      setQuestion(data.viewQuestion as Question)
     }
-  }, [data]);
+  }, [data])
 
   if (loading || !question) {
     return (
       <Container>
         <LoadingSpinner />
       </Container>
-    );
+    )
   }
 
-  const { title, views, createdAt, updatedAt } = question;
+  const { title, views, createdAt, updatedAt } = question
 
   return (
     <Container>
@@ -85,7 +85,7 @@ const QuestionPage = () => {
       </Header>
       <QuesPageContent question={question} />
     </Container>
-  );
-};
+  )
+}
 
-export default QuestionPage;
+export default QuestionPage

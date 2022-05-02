@@ -1,7 +1,7 @@
-import { ComponentProps } from 'react';
-import { useNavigate } from 'react-router-dom';
-import 'twin.macro'; //eslint-disable-line no-unused-vars
-import { useAppContext } from '../context/state';
+import { ComponentProps } from 'react'
+import { useNavigate } from 'react-router-dom'
+import 'twin.macro' //eslint-disable-line no-unused-vars
+import { useAppContext } from '../context/state'
 import {
   FetchQuestionDocument,
   FetchQuestionQuery,
@@ -12,14 +12,14 @@ import {
   useSubmitQuesVoteMutation,
   useUpdateQuesCommentMutation,
   VoteType,
-} from '../generated/graphql';
-import { getErrorMsg } from '../utils/helperFuncs';
-import AnswerForm from './AnswerForm';
-import AnswerList from './AnswerList';
-import QuesAnsDetails from './QuesAnsDetails';
+} from '../generated/graphql'
+import { getErrorMsg } from '../utils/helperFuncs'
+import AnswerForm from './AnswerForm'
+import AnswerList from './AnswerList'
+import QuesAnsDetails from './QuesAnsDetails'
 
 interface QuesPageContentProps extends ComponentProps<'div'> {
-  question: Question;
+  question: Question
 }
 
 const QuesPageContent = ({ question, ...rest }: QuesPageContentProps) => {
@@ -31,40 +31,40 @@ const QuesPageContent = ({ question, ...rest }: QuesPageContentProps) => {
     body,
     tags,
     author,
-  } = question;
+  } = question
 
-  const { setEditValues, notify } = useAppContext();
-  const navigate = useNavigate();
+  const { setEditValues, notify } = useAppContext()
+  const navigate = useNavigate()
 
   const [submitVote] = useSubmitQuesVoteMutation({
     onError: (err) => {
-      notify(getErrorMsg(err), 'error');
+      notify(getErrorMsg(err), 'error')
     },
-  });
+  })
 
   const [removeQuestion] = useRemoveQuestionMutation({
     onError: (err) => {
-      notify(getErrorMsg(err), 'error');
+      notify(getErrorMsg(err), 'error')
     },
-  });
+  })
 
   const [postQuesComment] = usePostQuesCommentMutation({
     onError: (err) => {
-      notify(getErrorMsg(err), 'error');
+      notify(getErrorMsg(err), 'error')
     },
-  });
+  })
 
   const [updateQuesComment] = useUpdateQuesCommentMutation({
     onError: (err) => {
-      notify(getErrorMsg(err), 'error');
+      notify(getErrorMsg(err), 'error')
     },
-  });
+  })
 
   const [removeQuesComment] = useRemoveQuesCommentMutation({
     onError: (err) => {
-      notify(getErrorMsg(err), 'error');
+      notify(getErrorMsg(err), 'error')
     },
-  });
+  })
 
   const voteQues = (voteType: VoteType, points: number) => {
     submitVote({
@@ -78,23 +78,23 @@ const QuesPageContent = ({ question, ...rest }: QuesPageContentProps) => {
           voted: voteType,
         },
       },
-    });
-  };
+    })
+  }
 
   const editQues = () => {
-    setEditValues({ quesId, title, body, tags });
-    navigate('/ask');
-  };
+    setEditValues({ quesId, title, body, tags })
+    navigate('/ask')
+  }
 
   const deleteQues = () => {
     removeQuestion({
       variables: { quesId },
       update: () => {
-        navigate('/');
-        notify('Question deleted!');
+        navigate('/')
+        notify('Question deleted!')
       },
-    });
-  };
+    })
+  }
 
   const addQuesComment = (commentBody: string) => {
     postQuesComment({
@@ -103,32 +103,32 @@ const QuesPageContent = ({ question, ...rest }: QuesPageContentProps) => {
         const dataInCache = proxy.readQuery<FetchQuestionQuery>({
           query: FetchQuestionDocument,
           variables: { quesId },
-        });
+        })
 
         const updatedData = {
           ...dataInCache?.viewQuestion,
           comments: data?.addQuesComment,
-        };
+        }
 
         proxy.writeQuery({
           query: FetchQuestionDocument,
           variables: { quesId },
           data: { viewQuestion: updatedData },
-        });
+        })
 
-        notify('Comment added to question!');
+        notify('Comment added to question!')
       },
-    });
-  };
+    })
+  }
 
   const editQuesComment = (editedCommentBody: string, commentId: string) => {
     updateQuesComment({
       variables: { quesId, commentId, body: editedCommentBody },
       update: () => {
-        notify('Comment edited!');
+        notify('Comment edited!')
       },
-    });
-  };
+    })
+  }
 
   const deleteQuesComment = (commentId: string) => {
     removeQuesComment({
@@ -137,27 +137,27 @@ const QuesPageContent = ({ question, ...rest }: QuesPageContentProps) => {
         const dataInCache = proxy.readQuery<FetchQuestionQuery>({
           query: FetchQuestionDocument,
           variables: { quesId },
-        });
+        })
 
         const filteredComments = dataInCache?.viewQuestion.comments.filter(
           (c) => c?._id !== data?.deleteQuesComment
-        );
+        )
 
         const updatedData = {
           ...dataInCache?.viewQuestion,
           comments: filteredComments,
-        };
+        }
 
         proxy.writeQuery({
           query: FetchQuestionDocument,
           variables: { quesId },
           data: { viewQuestion: updatedData },
-        });
+        })
 
-        notify('Comment deleted!');
+        notify('Comment deleted!')
       },
-    });
-  };
+    })
+  }
 
   return (
     <div tw="border-top[1px solid lightgray]" {...rest}>
@@ -180,7 +180,7 @@ const QuesPageContent = ({ question, ...rest }: QuesPageContentProps) => {
       />
       <AnswerForm quesId={quesId} tags={tags} />
     </div>
-  );
-};
+  )
+}
 
-export default QuesPageContent;
+export default QuesPageContent

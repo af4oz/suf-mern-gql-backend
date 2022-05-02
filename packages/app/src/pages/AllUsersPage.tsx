@@ -3,15 +3,20 @@ import LoadingSpinner from '../components/LoadingSpinner'
 import { useAppContext } from '../context/state'
 import { formatDateAgo, getErrorMsg } from '../utils/helperFuncs'
 
-import { MdSearch as SearchIcon } from 'react-icons/md';
-import tw from 'twin.macro';
-import { TextField, Avatar, Link, InputAdornment } from '../components/CompStore'
+import { MdSearch as SearchIcon } from 'react-icons/md'
+import tw from 'twin.macro'
+import {
+  TextField,
+  Avatar,
+  Link,
+  InputAdornment,
+} from '../components/CompStore'
 import { useFetchAllUsersQuery } from '../generated/graphql'
 
 const AllUsersPage = () => {
   const { notify } = useAppContext()
   const { data, loading } = useFetchAllUsersQuery({
-    onError: err => {
+    onError: (err) => {
       notify(getErrorMsg(err), 'error')
     },
   })
@@ -20,14 +25,14 @@ const AllUsersPage = () => {
 
   return (
     <div tw="p-2 w-full">
-      <h2 tw="text-xl my-2 text-purple-900 font-normal">
-        Users
-      </h2>
+      <h2 tw="text-xl my-2 text-purple-900 font-normal">Users</h2>
       <TextField
         tag="input"
         value={filterInput}
         placeholder="Filter by username"
-        onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFilterInput(e.target.value)}
+        onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+          setFilterInput(e.target.value)
+        }
         InputProps={{
           startAdornment: (
             <InputAdornment tw="text-purple-600 font-size[1.5em]">
@@ -39,7 +44,7 @@ const AllUsersPage = () => {
       {!loading && data ? (
         <div tw="flex mt-6 flex-wrap">
           {data.getAllUsers
-            .filter(u =>
+            .filter((u) =>
               u.username.toLowerCase().includes(filterInput.toLowerCase())
             )
             .map((u) => (

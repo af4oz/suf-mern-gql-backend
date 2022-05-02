@@ -1,25 +1,22 @@
-import { yupResolver } from '@hookform/resolvers/yup';
-import { useState } from 'react';
-import { useForm } from 'react-hook-form';
-import { BsFillPersonFill as PersonIcon } from 'react-icons/bs';
-import {
-  IoMdExit as ExitToAppIcon,
-  IoMdLock as LockIcon,
-} from 'react-icons/io';
+import { yupResolver } from '@hookform/resolvers/yup'
+import { useState } from 'react'
+import { useForm } from 'react-hook-form'
+import { BsFillPersonFill as PersonIcon } from 'react-icons/bs'
+import { IoMdExit as ExitToAppIcon, IoMdLock as LockIcon } from 'react-icons/io'
 import {
   MdVisibility as VisibilityIcon,
   MdVisibilityOff as VisibilityOffIcon,
-} from 'react-icons/md';
-import 'twin.macro';
-import * as yup from 'yup';
-import { useAuthContext } from '../context/auth';
-import { useAppContext } from '../context/state';
+} from 'react-icons/md'
+import 'twin.macro'
+import * as yup from 'yup'
+import { useAuthContext } from '../context/auth'
+import { useAppContext } from '../context/state'
 import {
   LoginUserMutationVariables,
   useLoginUserMutation,
-} from '../generated/graphql';
-import SofLogo from '../svg/stack-overflow.svg';
-import { getErrorMsg } from '../utils/helperFuncs';
+} from '../generated/graphql'
+import SofLogo from '../svg/stack-overflow.svg'
+import { getErrorMsg } from '../utils/helperFuncs'
 import {
   Button,
   EmptyLink,
@@ -27,24 +24,24 @@ import {
   InputAdornment,
   SvgIcon,
   TextField,
-} from './CompStore';
-import ErrorMessage from './ErrorMessage';
+} from './CompStore'
+import ErrorMessage from './ErrorMessage'
 
 const validationSchema = yup.object({
   username: yup.string().required('Required'),
   password: yup.string().required('Required'),
-});
+})
 
 interface LoginFormProps {
-  setAuthType: (...args: any) => void;
-  closeModal: () => void;
+  setAuthType: (...args: any) => void
+  closeModal: () => void
 }
 
 const LoginForm = ({ setAuthType, closeModal }: LoginFormProps) => {
-  const [showPass, setShowPass] = useState(false);
-  const [errorMsg, setErrorMsg] = useState<string | null>(null);
-  const { setUser } = useAuthContext();
-  const { notify } = useAppContext();
+  const [showPass, setShowPass] = useState(false)
+  const [errorMsg, setErrorMsg] = useState<string | null>(null)
+  const { setUser } = useAuthContext()
+  const { notify } = useAppContext()
   const {
     register,
     handleSubmit,
@@ -53,24 +50,24 @@ const LoginForm = ({ setAuthType, closeModal }: LoginFormProps) => {
   } = useForm<{ username: string; password: string }>({
     mode: 'onTouched',
     resolver: yupResolver(validationSchema),
-  });
+  })
 
   const [loginUser, { loading }] = useLoginUserMutation({
     onError: (err) => {
-      setErrorMsg(getErrorMsg(err));
+      setErrorMsg(getErrorMsg(err))
     },
-  });
+  })
   const onLogin = ({ username, password }: LoginUserMutationVariables) => {
     loginUser({
       variables: { username, password },
       update: (_, { data }) => {
-        setUser(data?.login);
-        notify(`Welcome, ${data?.login.username}! You're logged in.`);
-        reset();
-        closeModal();
+        setUser(data?.login)
+        notify(`Welcome, ${data?.login.username}! You're logged in.`)
+        reset()
+        closeModal()
       },
-    });
-  };
+    })
+  }
 
   return (
     <div tw="px-3 py-2">
@@ -147,7 +144,7 @@ const LoginForm = ({ setAuthType, closeModal }: LoginFormProps) => {
         clearErrorMsg={() => setErrorMsg(null)}
       />
     </div>
-  );
-};
+  )
+}
 
-export default LoginForm;
+export default LoginForm

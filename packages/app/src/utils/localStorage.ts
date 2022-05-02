@@ -1,4 +1,4 @@
-import { Author } from "../generated/graphql"
+import { Author } from '../generated/graphql'
 
 const storageKeyToken = 'sofCloneUserKey'
 const storageKeyDarkMode = 'sofCloneDarkMode'
@@ -23,4 +23,4 @@ const stroage = {
   loadDarkMode,
 }
 
-export default stroage;
+export default stroage

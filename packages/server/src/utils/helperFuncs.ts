@@ -1,9 +1,13 @@
-import { NextPrevPage } from "../entities";
+import { NextPrevPage } from '../entities'
 
-export const paginateResults = (page: number, limit: number, docCount: number) => {
+export const paginateResults = (
+  page: number,
+  limit: number,
+  docCount: number
+) => {
   const startIndex = (page - 1) * limit
   const endIndex = page * limit
-  let results: { next?: NextPrevPage, previous?: NextPrevPage } = {};
+  let results: { next?: NextPrevPage; previous?: NextPrevPage } = {}
 
   if (endIndex < docCount) {
     results.next = {
@@ -25,5 +29,3 @@ export const paginateResults = (page: number, limit: number, docCount: number) =
     results,
   }
 }
-
-

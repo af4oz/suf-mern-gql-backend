@@ -1,63 +1,79 @@
 import { useState } from 'react'
 import 'twin.macro' // eslint-disable-line no-unused-vars
 import { useAppContext } from '../context/state'
-import { FetchQuestionDocument, FetchQuestionQuery, Question, usePostAnsCommentMutation, useRemoveAnsCommentMutation, useRemoveAnswerMutation, useSubmitAcceptAnsMutation, useSubmitAnsVoteMutation, useUpdateAnsCommentMutation, useUpdateAnswerMutation, VoteType } from '../generated/graphql'
+import {
+  FetchQuestionDocument,
+  FetchQuestionQuery,
+  Question,
+  usePostAnsCommentMutation,
+  useRemoveAnsCommentMutation,
+  useRemoveAnswerMutation,
+  useSubmitAcceptAnsMutation,
+  useSubmitAnsVoteMutation,
+  useUpdateAnsCommentMutation,
+  useUpdateAnswerMutation,
+  VoteType,
+} from '../generated/graphql'
 import { AnsSortBy } from '../types'
 import { getErrorMsg } from '../utils/helperFuncs'
 import sortAnswers from '../utils/sortAnswers'
 import QuesAnsDetails from './QuesAnsDetails'
 import SortAnsBar from './SortAnsBar'
 
-
 interface AnswerListProps {
-  quesId: string;
-  answers: Question['answers'];
-  acceptedAnswer: Question['acceptedAnswer'];
-  quesAuthor: Question['author'];
+  quesId: string
+  answers: Question['answers']
+  acceptedAnswer: Question['acceptedAnswer']
+  quesAuthor: Question['author']
 }
 
-const AnswerList = ({ quesId, answers, acceptedAnswer, quesAuthor }: AnswerListProps) => {
+const AnswerList = ({
+  quesId,
+  answers,
+  acceptedAnswer,
+  quesAuthor,
+}: AnswerListProps) => {
   const { notify } = useAppContext()
   const [sortBy, setSortBy] = useState<AnsSortBy>('VOTES')
 
   const [updateAnswer] = useUpdateAnswerMutation({
-    onError: err => {
+    onError: (err) => {
       notify(getErrorMsg(err), 'error')
     },
   })
 
   const [removeAnswer] = useRemoveAnswerMutation({
-    onError: err => {
+    onError: (err) => {
       notify(getErrorMsg(err), 'error')
     },
   })
 
   const [submitVote] = useSubmitAnsVoteMutation({
-    onError: err => {
+    onError: (err) => {
       notify(getErrorMsg(err), 'error')
     },
   })
 
   const [submitAcceptAns] = useSubmitAcceptAnsMutation({
-    onError: err => {
+    onError: (err) => {
       notify(getErrorMsg(err), 'error')
     },
   })
 
   const [postAnsComment] = usePostAnsCommentMutation({
-    onError: err => {
+    onError: (err) => {
       notify(getErrorMsg(err), 'error')
     },
   })
 
   const [updateAnsComment] = useUpdateAnsCommentMutation({
-    onError: err => {
+    onError: (err) => {
       notify(getErrorMsg(err), 'error')
     },
   })
 
   const [removeAnsComment] = useRemoveAnsCommentMutation({
-    onError: err => {
+    onError: (err) => {
       notify(getErrorMsg(err), 'error')
     },
   })
@@ -71,7 +87,7 @@ const AnswerList = ({ quesId, answers, acceptedAnswer, quesAuthor }: AnswerListP
           __typename: 'Answer',
           _id: ansId,
           voted: voteType,
-          points: voteType === VoteType.Upvote ? points + 1 : points - 1
+          points: voteType === VoteType.Upvote ? points + 1 : points - 1,
         },
       },
     })
@@ -96,7 +112,7 @@ const AnswerList = ({ quesId, answers, acceptedAnswer, quesAuthor }: AnswerListP
         })
 
         const filteredAnswers = dataInCache?.viewQuestion.answers.filter(
-          c => c?._id !== data?.deleteAnswer
+          (c) => c?._id !== data?.deleteAnswer
         )
 
         const updatedData = {
@@ -144,7 +160,7 @@ const AnswerList = ({ quesId, answers, acceptedAnswer, quesAuthor }: AnswerListP
           variables: { quesId },
         })
 
-        const updatedAnswers = dataInCache?.viewQuestion.answers.map(a =>
+        const updatedAnswers = dataInCache?.viewQuestion.answers.map((a) =>
           a?._id === ansId ? { ...a, comments: data?.addAnsComment } : a
         )
 
@@ -164,7 +180,11 @@ const AnswerList = ({ quesId, answers, acceptedAnswer, quesAuthor }: AnswerListP
     })
   }
 
-  const editAnsComment = (editedCommentBody: string, commentId: string, ansId: string) => {
+  const editAnsComment = (
+    editedCommentBody: string,
+    commentId: string,
+    ansId: string
+  ) => {
     updateAnsComment({
       variables: { ansId, commentId, body: editedCommentBody },
       update: () => {
@@ -183,13 +203,13 @@ const AnswerList = ({ quesId, answers, acceptedAnswer, quesAuthor }: AnswerListP
         })
 
         const targetAnswer = dataInCache?.viewQuestion.answers.find(
-          a => a?._id === ansId
+          (a) => a?._id === ansId
         )
         const updatedComments = targetAnswer?.comments.filter(
-          c => c?._id !== data?.deleteAnsComment
+          (c) => c?._id !== data?.deleteAnsComment
         )
 
-        const updatedAnswers = dataInCache?.viewQuestion.answers.map(a =>
+        const updatedAnswers = dataInCache?.viewQuestion.answers.map((a) =>
           a?._id === ansId ? { ...a, comments: updatedComments } : a
         )
 
@@ -218,10 +238,7 @@ const AnswerList = ({ quesId, answers, acceptedAnswer, quesAuthor }: AnswerListP
           <h2 tw="text-purple-900 font-normal text-xl">
             {answerList.length} {answerList.length === 1 ? 'Answer' : 'Answers'}
           </h2>
-          <SortAnsBar
-            sortBy={sortBy}
-            setSortBy={setSortBy}
-          />
+          <SortAnsBar sortBy={sortBy} setSortBy={setSortBy} />
         </div>
       )}
       <div>
@@ -229,7 +246,9 @@ const AnswerList = ({ quesId, answers, acceptedAnswer, quesAuthor }: AnswerListP
           <div key={a!._id} tw="mb-3">
             <QuesAnsDetails
               quesAns={a!}
-              voteQuesAns={(voteType: VoteType) => voteAns(a!._id, voteType, a!.points)}
+              voteQuesAns={(voteType: VoteType) =>
+                voteAns(a!._id, voteType, a!.points)
+              }
               editQuesAns={editAns}
               deleteQuesAns={() => deleteAns(a!._id)}
               acceptAnswer={() => acceptAns(a!._id)}

@@ -1,18 +1,17 @@
-import tw from 'twin.macro'; //eslint-disable-line no-unused-vars
-import { Scalars } from '../generated/graphql';
-import { formatDateAgo, formatDayTime } from '../utils/helperFuncs';
-import { Avatar, Link } from './CompStore';
-
+import tw from 'twin.macro' //eslint-disable-line no-unused-vars
+import { Scalars } from '../generated/graphql'
+import { formatDateAgo, formatDayTime } from '../utils/helperFuncs'
+import { Avatar, Link } from './CompStore'
 
 const AvatarDetails = tw.div`text-xs`
 
 interface ByUserProps {
-  username: string;
-  userId: string;
-  isAnswer?: boolean;
-  filledVariant?: boolean;
-  createdAt?: Scalars['DateTime'];
-  updatedAt?: Scalars['DateTime'];
+  username: string
+  userId: string
+  isAnswer?: boolean
+  filledVariant?: boolean
+  createdAt?: Scalars['DateTime']
+  updatedAt?: Scalars['DateTime']
 }
 const ByUser = ({
   username,
@@ -31,7 +30,7 @@ const ByUser = ({
         tw="w-8 h-8"
       />
       <AvatarDetails>
-        <span >
+        <span>
           {filledVariant
             ? `${isAnswer ? 'answered' : 'asked'} ${formatDayTime(createdAt)}`
             : `asked ${formatDateAgo(createdAt)} ago`}

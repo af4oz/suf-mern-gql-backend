@@ -1,14 +1,13 @@
-import { ReactNode, useEffect, useReducer } from 'react';
-import createCtx from '../utils/createCtx';
-import storage from '../utils/localStorage';
+import { ReactNode, useEffect, useReducer } from 'react'
+import createCtx from '../utils/createCtx'
+import storage from '../utils/localStorage'
 
 interface IAuthContext {
-  user: any;
-  setUser: (userData: any) => void;
-  logoutUser: () => void;
+  user: any
+  setUser: (userData: any) => void
+  logoutUser: () => void
 }
-const [useAuthCtx, AuthCtxProvider] = createCtx<IAuthContext>();
-
+const [useAuthCtx, AuthCtxProvider] = createCtx<IAuthContext>()
 
 const authReducer = (state: any, action: any) => {
   switch (action.type) {
@@ -41,7 +40,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     }
   }, [])
 
-  const setUser: IAuthContext['setUser'] = userData => {
+  const setUser: IAuthContext['setUser'] = (userData) => {
     storage.saveUser(userData)
     dispatch({
       type: 'LOGIN',
@@ -61,4 +60,4 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   )
 }
 
-export const useAuthContext = useAuthCtx;
+export const useAuthContext = useAuthCtx

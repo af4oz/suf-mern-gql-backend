@@ -1,9 +1,6 @@
 {
   "compilerOptions": {
-    "lib": [
-      "es2020",
-      "DOM"
-    ],
+    "lib": ["es2020", "DOM"],
     "module": "commonjs",
     "target": "es2019",
     "strict": true,
@@ -15,11 +12,6 @@
     "experimentalDecorators": true,
     "strictPropertyInitialization": false
   },
-  "include": [
-    "src/**/*"
-  ],
-  "exclude": [
-    "node_modules/",
-    "graphql/"
-  ]
+  "include": ["src/**/*"],
+  "exclude": ["node_modules/", "graphql/"]
 }

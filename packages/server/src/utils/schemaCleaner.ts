@@ -4,4 +4,4 @@ export default {
     delete returnedObject.__v
     delete returnedObject.passwordHash
   },
-};
+}

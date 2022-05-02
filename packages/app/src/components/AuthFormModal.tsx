@@ -1,54 +1,54 @@
-import { useState, useEffect } from 'react';
-import LoginForm from './LoginForm';
-import RegisterForm from './RegisterForm';
-import UpvoteIcon from '../svg/upvote.svg';
-import DownvoteIcon from '../svg/downvote.svg';
+import { useState, useEffect } from 'react'
+import LoginForm from './LoginForm'
+import RegisterForm from './RegisterForm'
+import UpvoteIcon from '../svg/upvote.svg'
+import DownvoteIcon from '../svg/downvote.svg'
 
-import { BsFillPersonFill as PersonAddIcon } from 'react-icons/bs';
-import { IoMdExit as ExitToAppIcon } from 'react-icons/io';
+import { BsFillPersonFill as PersonAddIcon } from 'react-icons/bs'
+import { IoMdExit as ExitToAppIcon } from 'react-icons/io'
 
-import { SvgIcon, Button, IconButton, Link, MenuItem } from './CompStore';
-import { Dialog, DialogTitle, DialogContent } from './Dialog';
-import 'twin.macro';
+import { SvgIcon, Button, IconButton, Link, MenuItem } from './CompStore'
+import { Dialog, DialogTitle, DialogContent } from './Dialog'
+import 'twin.macro'
 
 type AuthFormModalProps = {
-  buttonType?: 'ask' | 'link' | 'upvote' | 'downvote' | 'mobile';
-  closeMenu?: () => void;
-};
+  buttonType?: 'ask' | 'link' | 'upvote' | 'downvote' | 'mobile'
+  closeMenu?: () => void
+}
 const AuthFormModal = ({ closeMenu, buttonType }: AuthFormModalProps) => {
-  const [modalOpen, setModalOpen] = useState(false);
-  const [isMounted, setIsMounted] = useState(false);
-  const [authType, setAuthType] = useState('login');
+  const [modalOpen, setModalOpen] = useState(false)
+  const [isMounted, setIsMounted] = useState(false)
+  const [authType, setAuthType] = useState('login')
 
   useEffect(() => {
-    setIsMounted(true);
+    setIsMounted(true)
     return () => {
-      setIsMounted(false);
-    };
-  }, [isMounted]);
+      setIsMounted(false)
+    }
+  }, [isMounted])
   const handleLoginModal = () => {
-    isMounted && setAuthType('login');
-    isMounted && setModalOpen(true);
+    isMounted && setAuthType('login')
+    isMounted && setModalOpen(true)
     if (buttonType === 'mobile') {
       if (closeMenu) {
-        closeMenu();
+        closeMenu()
       }
     }
-  };
+  }
 
   const handleSignupModal = () => {
-    isMounted && setAuthType('signup');
-    isMounted && setModalOpen(true);
+    isMounted && setAuthType('signup')
+    isMounted && setModalOpen(true)
     if (buttonType === 'mobile') {
       if (closeMenu) {
-        closeMenu();
+        closeMenu()
       }
     }
-  };
+  }
 
   const handleModalClose = () => {
-    isMounted && setModalOpen(false);
-  };
+    isMounted && setModalOpen(false)
+  }
 
   const triggerButton = () => {
     if (buttonType === 'ask') {
@@ -59,13 +59,13 @@ const AuthFormModal = ({ closeMenu, buttonType }: AuthFormModalProps) => {
         >
           Ask Question
         </Button>
-      );
+      )
     } else if (buttonType === 'link') {
       return (
         <Link to="#" onClick={handleLoginModal} style={{ cursor: 'pointer' }}>
           ask your own question.
         </Link>
-      );
+      )
     } else if (buttonType === 'upvote') {
       return (
         <IconButton tag="button" onClick={handleLoginModal}>
@@ -73,7 +73,7 @@ const AuthFormModal = ({ closeMenu, buttonType }: AuthFormModalProps) => {
             <UpvoteIcon />
           </SvgIcon>
         </IconButton>
-      );
+      )
     } else if (buttonType === 'downvote') {
       return (
         <IconButton tag="button" onClick={handleLoginModal}>
@@ -81,7 +81,7 @@ const AuthFormModal = ({ closeMenu, buttonType }: AuthFormModalProps) => {
             <DownvoteIcon />
           </SvgIcon>
         </IconButton>
-      );
+      )
     } else if (buttonType === 'mobile') {
       return (
         <div>
@@ -94,7 +94,7 @@ const AuthFormModal = ({ closeMenu, buttonType }: AuthFormModalProps) => {
             Sign Up
           </MenuItem>
         </div>
-      );
+      )
     } else {
       return (
         <div>
@@ -105,9 +105,9 @@ const AuthFormModal = ({ closeMenu, buttonType }: AuthFormModalProps) => {
             Sign Up
           </Button>
         </div>
-      );
+      )
     }
-  };
+  }
 
   return (
     <div style={{ display: 'inline' }}>
@@ -131,7 +131,7 @@ const AuthFormModal = ({ closeMenu, buttonType }: AuthFormModalProps) => {
         </Dialog>
       ) : null}
     </div>
-  );
-};
+  )
+}
 
-export default AuthFormModal;
+export default AuthFormModal

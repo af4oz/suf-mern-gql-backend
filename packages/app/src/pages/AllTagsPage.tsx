@@ -7,19 +7,16 @@ import { useAppContext } from '../context/state'
 import { useFetchAllTagsQuery } from '../generated/graphql'
 import { getErrorMsg } from '../utils/helperFuncs'
 
-
-const Tags = styled.div(() => [
-  tw`flex mt-4 flex-wrap`
-])
+const Tags = styled.div(() => [tw`flex mt-4 flex-wrap`])
 
 const TagContainer = styled.div(() => [
-  tw`border-gray-400 border-width[1px] border-solid rounded-sm p-2 m-1 min-width[8em]`
+  tw`border-gray-400 border-width[1px] border-solid rounded-sm p-2 m-1 min-width[8em]`,
 ])
 
 const AllTagsPage = () => {
   const { notify } = useAppContext()
   const { data, loading } = useFetchAllTagsQuery({
-    onError: err => {
+    onError: (err) => {
       notify(getErrorMsg(err), 'error')
     },
   })
@@ -28,9 +25,7 @@ const AllTagsPage = () => {
 
   return (
     <div tw="p-3 mt-2 w-full">
-      <h2 tw="text-xl text-purple-900  font-normal my-2">
-        Tags
-      </h2>
+      <h2 tw="text-xl text-purple-900  font-normal my-2">Tags</h2>
       <p tw="leading-5 text-gray-700 mb-4">
         A tag is a keyword or label that categorizes your question with other,
         similar questions. Using <br />
@@ -41,7 +36,9 @@ const AllTagsPage = () => {
         tag="input"
         value={filterInput}
         placeholder="Filter by tag name"
-        onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFilterInput(e.target.value)}
+        onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+          setFilterInput(e.target.value)
+        }
         tw="leading-3"
         InputProps={{
           startAdornment: (
@@ -52,13 +49,13 @@ const AllTagsPage = () => {
         }}
       />
       {!loading && data ? (
-        <Tags >
+        <Tags>
           {data.getAllTags
-            .filter(t =>
+            .filter((t) =>
               t.tagName.toLowerCase().includes(filterInput.toLowerCase())
             )
             .map((t) => (
-              <TagContainer key={t.tagName} >
+              <TagContainer key={t.tagName}>
                 <Tag
                   tag="a"
                   label={t.tagName}
@@ -66,9 +63,7 @@ const AllTagsPage = () => {
                   href={`/tags/${t.tagName}`}
                 />
                 <div tw="mt-2">
-                  <span tw="text-xs text-blue-800">
-                    {t.count} questions
-                  </span>
+                  <span tw="text-xs text-blue-800">{t.count} questions</span>
                 </div>
               </TagContainer>
             ))}

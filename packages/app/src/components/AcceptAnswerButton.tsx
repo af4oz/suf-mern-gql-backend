@@ -1,11 +1,11 @@
-import AcceptedIcon from '../svg/accepted.svg';
+import AcceptedIcon from '../svg/accepted.svg'
 
-import { Checkbox, SvgIcon } from './CompStore';
-import 'twin.macro';
+import { Checkbox, SvgIcon } from './CompStore'
+import 'twin.macro'
 
 interface Props {
-  checked: boolean;
-  handleAcceptAns: () => void;
+  checked: boolean
+  handleAcceptAns: () => void
 }
 
 const AcceptAnswerButton = ({ checked, handleAcceptAns }: Props) => {
@@ -24,7 +24,7 @@ const AcceptAnswerButton = ({ checked, handleAcceptAns }: Props) => {
       }
       onClick={handleAcceptAns}
     />
-  );
-};
+  )
+}
 
-export default AcceptAnswerButton;
+export default AcceptAnswerButton

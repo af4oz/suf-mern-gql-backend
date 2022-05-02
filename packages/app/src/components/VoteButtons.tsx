@@ -1,13 +1,13 @@
-import UpvoteIcon from '../svg/upvote.svg';
-import DownvoteIcon from '../svg/downvote.svg';
+import UpvoteIcon from '../svg/upvote.svg'
+import DownvoteIcon from '../svg/downvote.svg'
 
-import { Checkbox, SvgIcon } from './CompStore';
-import 'twin.macro'; // eslint-disable-line no-unused-vars
-import { VoteType } from '../generated/graphql';
+import { Checkbox, SvgIcon } from './CompStore'
+import 'twin.macro' // eslint-disable-line no-unused-vars
+import { VoteType } from '../generated/graphql'
 
 interface UpVoteButtonProps {
-  checked: boolean;
-  handleUpvote: (...args: any) => void;
+  checked: boolean
+  handleUpvote: (...args: any) => void
 }
 export const UpvoteButton = ({ checked, handleUpvote }: UpVoteButtonProps) => {
   return (
@@ -25,12 +25,12 @@ export const UpvoteButton = ({ checked, handleUpvote }: UpVoteButtonProps) => {
       }
       onClick={() => handleUpvote(VoteType.Upvote)}
     />
-  );
-};
+  )
+}
 
 interface DownVoteButtonProps {
-  checked: boolean;
-  handleDownvote: (...args: any) => void;
+  checked: boolean
+  handleDownvote: (...args: any) => void
 }
 
 export const DownvoteButton = ({
@@ -52,5 +52,5 @@ export const DownvoteButton = ({
       }
       onClick={() => handleDownvote(VoteType.Downvote)}
     />
-  );
-};
+  )
+}

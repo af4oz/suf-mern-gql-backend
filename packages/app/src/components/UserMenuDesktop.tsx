@@ -2,16 +2,16 @@ import { useState } from 'react'
 import AuthFormModal from './AuthFormModal'
 
 import { Menu, MenuItem, Avatar, EmptyLink, SvgIcon } from './CompStore'
-import { MdAccountCircle as AccountCircleIcon } from 'react-icons/md';
-import { IoMdPower as PowerIcon } from 'react-icons/io';
-import { MdKeyboardArrowDown as ArrowDownIcon } from 'react-icons/md';
+import { MdAccountCircle as AccountCircleIcon } from 'react-icons/md'
+import { IoMdPower as PowerIcon } from 'react-icons/io'
+import { MdKeyboardArrowDown as ArrowDownIcon } from 'react-icons/md'
 
 import tw from 'twin.macro' // eslint-disable-line no-unused-vars
-import { Author } from '../generated/graphql';
+import { Author } from '../generated/graphql'
 
 interface UserMenuDesktopProps {
-  user?: Author;
-  logoutUser: (...args: any) => void;
+  user?: Author
+  logoutUser: (...args: any) => void
 }
 const UserMenuDesktop = ({ user, logoutUser }: UserMenuDesktopProps) => {
   const [anchorEl, setAnchorEl] = useState<HTMLElement | undefined>(undefined)
@@ -41,15 +41,11 @@ const UserMenuDesktop = ({ user, logoutUser }: UserMenuDesktopProps) => {
               to={`/user/${user.username}`}
               alt={user.username}
               src={`https://secure.gravatar.com/avatar/${user._id}?s=164&d=identicon`}
-              styles={
-                {
-                  avatarRoot: tw`width[1.5em] height[1.5em]`
-                }
-              }
+              styles={{
+                avatarRoot: tw`width[1.5em] height[1.5em]`,
+              }}
             />
-            <span tw="text-purple-900">
-              {user.username}
-            </span>
+            <span tw="text-purple-900">{user.username}</span>
             <SvgIcon>
               <ArrowDownIcon />
             </SvgIcon>

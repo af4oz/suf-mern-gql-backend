@@ -1,4 +1,4 @@
-import tw from 'twin.macro';
+import tw from 'twin.macro'
 import { useAppContext } from '../context/state'
 import { useFetchAllTagsQuery } from '../generated/graphql'
 import { getErrorMsg } from '../utils/helperFuncs'
@@ -13,7 +13,7 @@ const RightSidePanel = () => {
   const { notify } = useAppContext()
 
   const { data, loading } = useFetchAllTagsQuery({
-    onError: err => {
+    onError: (err) => {
       notify(getErrorMsg(err), 'error')
     },
   })
@@ -24,7 +24,7 @@ const RightSidePanel = () => {
         <Heading>Top Tags</Heading>
         {!loading && data ? (
           <Tags col>
-            {data.getAllTags.slice(0, 26).map(t => (
+            {data.getAllTags.slice(0, 26).map((t) => (
               <Tag
                 label={
                   t.tagName.length > 13

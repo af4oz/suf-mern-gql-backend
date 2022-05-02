@@ -1,27 +1,27 @@
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { useForm } from 'react-hook-form';
-import { useAppContext } from '../context/state';
-import ErrorMessage from '../components/ErrorMessage';
-import * as yup from 'yup';
-import { yupResolver } from '@hookform/resolvers/yup';
-import { getErrorMsg } from '../utils/helperFuncs';
+import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
+import { useForm } from 'react-hook-form'
+import { useAppContext } from '../context/state'
+import ErrorMessage from '../components/ErrorMessage'
+import * as yup from 'yup'
+import { yupResolver } from '@hookform/resolvers/yup'
+import { getErrorMsg } from '../utils/helperFuncs'
 
-import 'twin.macro';
+import 'twin.macro'
 import {
   TextField,
   Button,
   ChipWithClose,
   Autocomplete,
-} from '../components/CompStore';
+} from '../components/CompStore'
 import {
   useAddQuestionMutation,
   useUpdateQuestionMutation,
-} from '../generated/graphql';
+} from '../generated/graphql'
 
 interface BaseQuestionArgs {
-  title: string;
-  body: string;
+  title: string
+  body: string
 }
 const validationSchema = yup.object({
   title: yup
@@ -32,14 +32,14 @@ const validationSchema = yup.object({
     .string()
     .required('Required')
     .min(30, 'Must be at least 30 characters'),
-});
+})
 
 const AskQuestionPage = () => {
-  const navigate = useNavigate();
-  const { editValues, clearEdit, notify } = useAppContext();
-  const [tagInput, setTagInput] = useState('');
-  const [tags, setTags] = useState(editValues ? editValues.tags : []);
-  const [errorMsg, setErrorMsg] = useState('');
+  const navigate = useNavigate()
+  const { editValues, clearEdit, notify } = useAppContext()
+  const [tagInput, setTagInput] = useState('')
+  const [tags, setTags] = useState(editValues ? editValues.tags : [])
+  const [errorMsg, setErrorMsg] = useState('')
   const {
     register,
     handleSubmit,
@@ -52,70 +52,70 @@ const AskQuestionPage = () => {
     },
     mode: 'onChange',
     resolver: yupResolver(validationSchema),
-  });
+  })
 
   const [addQuestion, { loading: addQuesLoading }] = useAddQuestionMutation({
     onError: (err) => {
-      setErrorMsg(getErrorMsg(err));
+      setErrorMsg(getErrorMsg(err))
     },
-  });
+  })
 
   const [updateQuestion, { loading: editQuesLoading }] =
     useUpdateQuestionMutation({
       onError: (err) => {
-        setErrorMsg(getErrorMsg(err));
+        setErrorMsg(getErrorMsg(err))
       },
-    });
+    })
 
   const postQuestion = ({ title, body }: BaseQuestionArgs) => {
-    if (tags.length === 0) return setErrorMsg('Atleast one tag must be added.');
+    if (tags.length === 0) return setErrorMsg('Atleast one tag must be added.')
 
     addQuestion({
       variables: { title, body, tags },
       update: (_, { data }) => {
-        navigate(`/questions/${data?.postQuestion._id}`);
-        reset();
-        notify('Question posted!');
+        navigate(`/questions/${data?.postQuestion._id}`)
+        reset()
+        notify('Question posted!')
       },
-    });
-  };
+    })
+  }
 
   const editQuestion = ({ title, body }: BaseQuestionArgs) => {
-    if (tags.length === 0) return setErrorMsg('Atleast one tag must be added.');
+    if (tags.length === 0) return setErrorMsg('Atleast one tag must be added.')
 
     updateQuestion({
       variables: { quesId: editValues.quesId, title, body, tags },
       update: (_, { data }) => {
-        navigate(`/questions/${data?.editQuestion._id}`);
-        clearEdit();
-        notify('Question edited!');
+        navigate(`/questions/${data?.editQuestion._id}`)
+        clearEdit()
+        notify('Question edited!')
       },
-    });
-  };
+    })
+  }
   const handleInputChange = (value: string) => {
-    const newInputValue = value.toLowerCase().trim();
+    const newInputValue = value.toLowerCase().trim()
 
     if (!/^[a-zA-Z0-9-]*$/.test(value)) {
-      return setErrorMsg('Only alphanumeric characters & dash are allowed.');
+      return setErrorMsg('Only alphanumeric characters & dash are allowed.')
     }
     if (newInputValue.length > 15) {
-      return setErrorMsg("A single tag can't have more than 15 characters.");
+      return setErrorMsg("A single tag can't have more than 15 characters.")
     }
 
-    setTagInput(newInputValue);
-  };
+    setTagInput(newInputValue)
+  }
   const handleChange = (value: string) => {
     if (tags.length >= 5) {
-      setTagInput('');
-      return setErrorMsg('Max 5 tags can be added! Not more than that.');
+      setTagInput('')
+      return setErrorMsg('Max 5 tags can be added! Not more than that.')
     }
     if (tags.includes(value)) {
       return setErrorMsg(
         "Duplicate tag found! You can't add the same tag twice."
-      );
+      )
     }
-    setTags(value);
-  };
+    setTags(value)
+  }
   return (
     <div tw="w-full my-6 mx-3">
       <h1 tw="text-purple-900 text-xl">
@@ -168,10 +168,10 @@ const AskQuestionPage = () => {
             value={tags}
             inputValue={tagInput}
             onInputChange={(_, value) => {
-              handleInputChange(value);
+              handleInputChange(value)
             }}
             onChange={(_, value) => {
-              handleChange(value);
+              handleChange(value)
             }}
             renderInput={(params) => (
               <TextField
@@ -206,7 +206,7 @@ const AskQuestionPage = () => {
         />
       </form>
     </div>
-  );
-};
+  )
+}
 
-export default AskQuestionPage;
+export default AskQuestionPage

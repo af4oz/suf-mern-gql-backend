@@ -1,35 +1,35 @@
-import { useForm } from 'react-hook-form';
-import { yupResolver } from '@hookform/resolvers/yup';
-import { useState, useEffect, ChangeEvent } from 'react';
-import { UpvoteButton, DownvoteButton } from './VoteButtons';
-import { useAuthContext } from '../context/auth';
-import PostedByUser from './PostedByUser';
-import CommentSection from './CommentSection';
-import AcceptAnswerButton from './AcceptAnswerButton';
-import DeleteDialog from './DeleteDialog';
-import AuthFormModal from './AuthFormModal';
-import * as yup from 'yup';
+import { useForm } from 'react-hook-form'
+import { yupResolver } from '@hookform/resolvers/yup'
+import { useState, useEffect, ChangeEvent } from 'react'
+import { UpvoteButton, DownvoteButton } from './VoteButtons'
+import { useAuthContext } from '../context/auth'
+import PostedByUser from './PostedByUser'
+import CommentSection from './CommentSection'
+import AcceptAnswerButton from './AcceptAnswerButton'
+import DeleteDialog from './DeleteDialog'
+import AuthFormModal from './AuthFormModal'
+import * as yup from 'yup'
 
-import tw from 'twin.macro'; // eslint-disable-line no-unused-vars
-import { LightButton, TextField, Tag } from './CompStore';
-import { Answer, Author, Question, VoteType } from '../generated/graphql';
+import tw from 'twin.macro' // eslint-disable-line no-unused-vars
+import { LightButton, TextField, Tag } from './CompStore'
+import { Answer, Author, Question, VoteType } from '../generated/graphql'
 
 const validationSchema = yup.object({
   editedAnswerBody: yup.string().min(30, 'Must be at least 30 characters'),
-});
+})
 
 interface QuesAnsDetailsProps {
-  quesAns: (Question | Answer) & { tags?: Question['tags'] };
-  voteQuesAns: (...args: any) => void;
-  editQuesAns(...args: any): void;
-  deleteQuesAns: () => void;
-  addComment: (...args: any) => void;
-  editComment: (...args: any) => void;
-  deleteComment: (...args: any) => void;
-  quesAuthor?: Author;
-  acceptAnswer?: () => void;
-  isAnswer?: boolean;
-  acceptedAnswer?: Question['acceptedAnswer'];
+  quesAns: (Question | Answer) & { tags?: Question['tags'] }
+  voteQuesAns: (...args: any) => void
+  editQuesAns(...args: any): void
+  deleteQuesAns: () => void
+  addComment: (...args: any) => void
+  editComment: (...args: any) => void
+  deleteComment: (...args: any) => void
+  quesAuthor?: Author
+  acceptAnswer?: () => void
+  isAnswer?: boolean
+  acceptedAnswer?: Question['acceptedAnswer']
 }
 
 function QuesAnsDetails({
@@ -55,11 +55,11 @@ function QuesAnsDetails({
     voted,
     createdAt,
     updatedAt,
-  } = quesAns;
+  } = quesAns
 
-  const { user } = useAuthContext();
-  const [editAnsOpen, setEditAnsOpen] = useState(false);
-  const [editedAnswerBody, setEditedAnswerBody] = useState(body);
+  const { user } = useAuthContext()
+  const [editAnsOpen, setEditAnsOpen] = useState(false)
+  const [editedAnswerBody, setEditedAnswerBody] = useState(body)
 
   const {
     register,
@@ -67,31 +67,31 @@ function QuesAnsDetails({
     reset,
     formState: { errors },
   } = useForm<{
-    editedAnswerBody: string;
+    editedAnswerBody: string
   }>({
     mode: 'onChange',
     resolver: yupResolver(validationSchema),
-  });
+  })
   useEffect(() => {
     if (isAnswer) {
-      setEditedAnswerBody(body);
+      setEditedAnswerBody(body)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [body, isAnswer]);
+  }, [body, isAnswer])
 
   const openEditInput = () => {
-    setEditAnsOpen(true);
-  };
+    setEditAnsOpen(true)
+  }
 
   const closeEditInput = () => {
-    setEditAnsOpen(false);
-  };
+    setEditAnsOpen(false)
+  }
 
   const handleAnswerEdit = () => {
-    reset();
-    editQuesAns(editedAnswerBody, id);
-    closeEditInput();
-  };
+    reset()
+    editQuesAns(editedAnswerBody, id)
+    closeEditInput()
+  }
 
   return (
     <div tw="flex flex-row flex-nowrap w-full">
@@ -204,7 +204,7 @@ function QuesAnsDetails({
         />
       </div>
     </div>
-  );
+  )
 }
 
-export default QuesAnsDetails;
+export default QuesAnsDetails

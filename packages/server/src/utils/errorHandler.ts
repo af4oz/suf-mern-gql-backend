@@ -10,4 +10,4 @@ const errorHandler = (error: any) => {
   return JSON.stringify(error, null, 2)
 }
 
-export default errorHandler;
+export default errorHandler

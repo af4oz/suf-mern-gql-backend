@@ -7,28 +7,28 @@ import SearchBar from './SearchBar'
 import { useAuthContext } from '../context/auth'
 import SofLogo from '../svg/stack-overflow.svg'
 
-import { MdSearch as SearchIcon } from 'react-icons/md';
+import { MdSearch as SearchIcon } from 'react-icons/md'
 
-import { IconButton } from './CompStore';
+import { IconButton } from './CompStore'
 import tw, { styled } from 'twin.macro' // eslint-disable-line no-unused-vars
 
 const AppBar = styled.div(() => [
-  tw`w-full flex flex-col flex-shrink-0 z-index[1100] box-border sticky top-0 left-auto right-0 color[inherit] border-solid border-t-4 border-t-pink-500 shadow-sm border-b-[1px] border-b-gray-500 bg-white`
+  tw`w-full flex flex-col flex-shrink-0 z-index[1100] box-border sticky top-0 left-auto right-0 color[inherit] border-solid border-t-4 border-t-pink-500 shadow-sm border-b-[1px] border-b-gray-500 bg-white`,
 ])
 const ToolBar = styled.div(() => [
-  tw`flex items-center relative px-0 md:px-6 min-height[48px] `
+  tw`flex items-center relative px-0 md:px-6 min-height[48px] `,
 ])
 const Container = styled.div(() => [
-  tw`w-full flex items-center mx-auto xl:max-width[1280px]`
+  tw`w-full flex items-center mx-auto xl:max-width[1280px]`,
 ])
 const MdScreenTopLeft = styled.div(() => [
-  tw`hidden sm:(inline-flex items-center) mr-2`
+  tw`hidden sm:(inline-flex items-center) mr-2`,
 ])
-const SmScreenTopLeft = tw.div`sm:hidden mr-4 flex items-center`;
+const SmScreenTopLeft = tw.div`sm:hidden mr-4 flex items-center`
 
-const SmScreenTopRight = tw.div`sm:hidden flex items-center`;
+const SmScreenTopRight = tw.div`sm:hidden flex items-center`
 
-const MdScreenTopRight = tw.div`hidden sm:block`;
+const MdScreenTopRight = tw.div`hidden sm:block`
 
 const NavBar = () => {
   const { user, logoutUser } = useAuthContext()
@@ -48,28 +48,19 @@ const NavBar = () => {
   }
 
   return (
-    <AppBar
-    >
+    <AppBar>
       <ToolBar>
         {!searchOpen && (
           <Container>
             <div tw="flex flex-grow-default items-center">
               <SmScreenTopLeft>
                 <NavMenuMobile />
-                <IconButton
-                  tag="a"
-                  href="/"
-                  tw="px-2 mb-1"
-                >
+                <IconButton tag="a" href="/" tw="px-2 mb-1">
                   <img src={SofLogo} width="25px" alt="sof-logo" />
                 </IconButton>
               </SmScreenTopLeft>
               <MdScreenTopLeft>
-                <IconButton
-                  tag="a"
-                  href="/"
-                  tw="mr-1 flex items-center"
-                >
+                <IconButton tag="a" href="/" tw="mr-1 flex items-center">
                   <img
                     src={SofLogo}
                     width="28px"
@@ -84,7 +75,7 @@ const NavBar = () => {
             <SmScreenTopRight>
               <IconButton
                 tag="button"
-                onClick={() => setSearchOpen(prevState => !prevState)}
+                onClick={() => setSearchOpen((prevState) => !prevState)}
                 tw="font-size[1.5em]"
               >
                 <SearchIcon />
@@ -96,9 +87,7 @@ const NavBar = () => {
             </MdScreenTopRight>
           </Container>
         )}
-        {searchOpen && (
-          <SearchBar setSearchOpen={setSearchOpen} />
-        )}
+        {searchOpen && <SearchBar setSearchOpen={setSearchOpen} />}
       </ToolBar>
     </AppBar>
   )

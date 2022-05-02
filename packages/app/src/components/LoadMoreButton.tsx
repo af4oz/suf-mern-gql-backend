@@ -1,15 +1,14 @@
 import LoadingSpinner from './LoadingSpinner'
-import { MdAutorenew as AutorenewIcon } from 'react-icons/md';
+import { MdAutorenew as AutorenewIcon } from 'react-icons/md'
 import tw from 'twin.macro' // eslint-disable-line no-unused-vars
 import { Button } from './CompStore'
 
 interface LoadMoreButtonProps {
-  handleLoadPosts: (...args: any) => void;
-  loading?: boolean;
+  handleLoadPosts: (...args: any) => void
+  loading?: boolean
 }
 
 const LoadMoreButton = ({ handleLoadPosts, loading }: LoadMoreButtonProps) => {
-
   return (
     <div tw="flex justify-center my-3">
       <Button
@@ -17,14 +16,12 @@ const LoadMoreButton = ({ handleLoadPosts, loading }: LoadMoreButtonProps) => {
         onClick={handleLoadPosts}
         disabled={loading}
       >
-        {
-          !loading && <AutorenewIcon />
-        }
+        {!loading && <AutorenewIcon />}
         {loading && (
           <LoadingSpinner
-            size='small'
+            size="small"
             styles={{
-              loaderIconWrapper: tw`text-white mr-2`
+              loaderIconWrapper: tw`text-white mr-2`,
             }}
           />
         )}

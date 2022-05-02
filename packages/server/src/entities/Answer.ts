@@ -1,51 +1,57 @@
-import { DocumentType, getModelForClass, modelOptions, prop, Severity } from '@typegoose/typegoose';
-import { ObjectId } from 'mongodb';
-import { Schema } from 'mongoose';
-import { Field, ID, Int, ObjectType } from 'type-graphql';
-import { Ref } from '../types';
-import schemaCleaner from '../utils/schemaCleaner';
-import { Author, VoteType } from './';
-import { Comment } from './Comment';
-import { Question } from './Question';
-import { User } from './User';
+import {
+  DocumentType,
+  getModelForClass,
+  modelOptions,
+  prop,
+  Severity,
+} from '@typegoose/typegoose'
+import { ObjectId } from 'mongodb'
+import { Schema } from 'mongoose'
+import { Field, ID, Int, ObjectType } from 'type-graphql'
+import { Ref } from '../types'
+import schemaCleaner from '../utils/schemaCleaner'
+import { Author, VoteType } from './'
+import { Comment } from './Comment'
+import { Question } from './Question'
+import { User } from './User'
 
 @modelOptions({
   schemaOptions: {
     toJSON: schemaCleaner,
     toObject: {
-      virtuals: true
-    }
+      virtuals: true,
+    },
   },
   options: {
-    allowMixed: Severity.ALLOW
+    allowMixed: Severity.ALLOW,
   },
 })
 @ObjectType()
 export class Answer {
   @Field(() => ID)
-  readonly _id: ObjectId;
+  readonly _id: ObjectId
 
-  @Field(type => Author)
+  @Field((type) => Author)
   @prop({ ref: () => 'User', required: true, type: Schema.Types.ObjectId })
-  author: Ref<User>;
+  author: Ref<User>
 
   @Field()
   @prop({ required: true, tirm: true, minlength: 30 })
   body: string
 
-  @Field(type => [Comment], { nullable: 'items' })
+  @Field((type) => [Comment], { nullable: 'items' })
   @prop({
     ref: () => (doc: DocumentType<Answer>) => doc.from!,
     foreignField: () => 'parentId',
     localField: (doc: DocumentType<Answer>) => doc.local,
     justOne: false,
-    default: []
+    default: [],
   })
-  comments?: Ref<Comment>[];
+  comments?: Ref<Comment>[]
 
-  @Field(type => Int)
+  @Field((type) => Int)
   @prop({ default: 0 })
-  points: number;
+  points: number
 
   @prop({
     ref: () => 'AnswerVotes',
@@ -54,10 +60,10 @@ export class Answer {
     justOne: false,
     count: true,
     match: {
-      vote: { $eq: VoteType.UPVOTE }
-    }
+      vote: { $eq: VoteType.UPVOTE },
+    },
   })
-  upvoteCount: number;
+  upvoteCount: number
 
   @prop({
     ref: () => 'AnswerVotes',
@@ -66,31 +72,31 @@ export class Answer {
     justOne: false,
     count: true,
     match: {
-      vote: { $eq: VoteType.DOWNVOTE }
-    }
+      vote: { $eq: VoteType.DOWNVOTE },
+    },
   })
-  downvoteCount: number;
+  downvoteCount: number
 
-  @Field(type => VoteType, { nullable: true })
+  @Field((type) => VoteType, { nullable: true })
   @prop({ default: null })
-  voted?: VoteType;
+  voted?: VoteType
 
-  @Field(type => Date)
+  @Field((type) => Date)
   @prop({ default: Date })
-  createdAt?: Date;
+  createdAt?: Date
 
-  @Field(type => Date)
+  @Field((type) => Date)
   @prop({ default: Date })
-  updatedAt?: Date;
+  updatedAt?: Date
 
   @prop({ required: true, ref: () => 'Question' })
-  question: Ref<Question>;
+  question: Ref<Question>
 
   @prop({ default: '_id' })
-  local?: string;
+  local?: string
 
   @prop({ default: 'Comment' })
-  from?: string;
+  from?: string
 }
 
-export const AnswerModel = getModelForClass(Answer);
+export const AnswerModel = getModelForClass(Answer)

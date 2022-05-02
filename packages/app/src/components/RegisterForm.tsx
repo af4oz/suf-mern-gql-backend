@@ -1,26 +1,26 @@
-import { yupResolver } from '@hookform/resolvers/yup';
-import { useState } from 'react';
-import { useForm } from 'react-hook-form';
-import { BsFillPersonFill as PersonIcon } from 'react-icons/bs';
+import { yupResolver } from '@hookform/resolvers/yup'
+import { useState } from 'react'
+import { useForm } from 'react-hook-form'
+import { BsFillPersonFill as PersonIcon } from 'react-icons/bs'
 import {
   IoMdLock as LockIcon,
   IoMdPersonAdd as PersonAddIcon,
-} from 'react-icons/io';
+} from 'react-icons/io'
 import {
   MdEnhancedEncryption as EnhancedEncryptionIcon,
   MdVisibility as VisibilityIcon,
   MdVisibilityOff as VisibilityOffIcon,
-} from 'react-icons/md';
-import 'twin.macro';
-import * as yup from 'yup';
-import { useAuthContext } from '../context/auth';
-import { useAppContext } from '../context/state';
+} from 'react-icons/md'
+import 'twin.macro'
+import * as yup from 'yup'
+import { useAuthContext } from '../context/auth'
+import { useAppContext } from '../context/state'
 import {
   RegisterUserMutationVariables,
   useRegisterUserMutation,
-} from '../generated/graphql';
-import SofLogo from '../svg/stack-overflow.svg';
-import { getErrorMsg } from '../utils/helperFuncs';
+} from '../generated/graphql'
+import SofLogo from '../svg/stack-overflow.svg'
+import { getErrorMsg } from '../utils/helperFuncs'
 import {
   Button,
   EmptyLink,
@@ -28,8 +28,8 @@ import {
   InputAdornment,
   SvgIcon,
   TextField,
-} from './CompStore';
-import ErrorMessage from './ErrorMessage';
+} from './CompStore'
+import ErrorMessage from './ErrorMessage'
 
 const validationSchema = yup.object({
   username: yup
@@ -49,19 +49,19 @@ const validationSchema = yup.object({
     .string()
     .required('Required')
     .min(6, 'Must be at least 6 characters'),
-});
+})
 
 interface RegisterFormProps {
-  setAuthType: (...args: any) => void;
-  closeModal: (...args: any) => void;
+  setAuthType: (...args: any) => void
+  closeModal: (...args: any) => void
 }
 
 const RegisterForm = ({ setAuthType, closeModal }: RegisterFormProps) => {
-  const [showPass, setShowPass] = useState(false);
-  const [errorMsg, setErrorMsg] = useState<string>('');
-  const [showConfPass, setShowConfPass] = useState(false);
-  const { setUser } = useAuthContext();
-  const { notify } = useAppContext();
+  const [showPass, setShowPass] = useState(false)
+  const [errorMsg, setErrorMsg] = useState<string>('')
+  const [showConfPass, setShowConfPass] = useState(false)
+  const { setUser } = useAuthContext()
+  const { notify } = useAppContext()
   const {
     register,
     handleSubmit,
@@ -70,30 +70,30 @@ const RegisterForm = ({ setAuthType, closeModal }: RegisterFormProps) => {
   } = useForm<RegisterUserMutationVariables & { confirmPassword: string }>({
     mode: 'onTouched',
     resolver: yupResolver(validationSchema),
-  });
+  })
 
   const [registerUser, { loading }] = useRegisterUserMutation({
     onError: (err) => {
-      setErrorMsg(getErrorMsg(err));
+      setErrorMsg(getErrorMsg(err))
     },
-  });
+  })
 
   const onSubmit = handleSubmit(({ username, confirmPassword, password }) => {
     if (password !== confirmPassword)
-      return setErrorMsg('Both passwords need to match.');
+      return setErrorMsg('Both passwords need to match.')
 
     registerUser({
       variables: { username, password },
       update: (_, { data }) => {
-        setUser(data?.register);
+        setUser(data?.register)
         notify(
           `Welcome, ${data?.register.username}! You've successfully registered.`
-        );
-        reset();
-        closeModal();
+        )
+        reset()
+        closeModal()
       },
-    });
-  });
+    })
+  })
 
   return (
     <div tw="px-3 py-2">
@@ -201,7 +201,7 @@ const RegisterForm = ({ setAuthType, closeModal }: RegisterFormProps) => {
       </p>
       <ErrorMessage errorMsg={errorMsg} clearErrorMsg={() => setErrorMsg('')} />
     </div>
-  );
-};
+  )
+}
 
-export default RegisterForm;
+export default RegisterForm

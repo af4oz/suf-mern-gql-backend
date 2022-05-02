@@ -8,10 +8,14 @@ import { TContext } from '../types'
 import authChecker from '../utils/authChecker'
 import errorHandler from '../utils/errorHandler'
 
-@Resolver(of => Comment)
+@Resolver((of) => Comment)
 export class AnsCommentResolver {
-  @Mutation(returns => [Comment])
-  async addAnsComment(@Arg('ansId', type => ID) ansId: string, @Arg('body') body: string, @Ctx() context: TContext): Promise<Comment[]> {
+  @Mutation((returns) => [Comment])
+  async addAnsComment(
+    @Arg('ansId', (type) => ID) ansId: string,
+    @Arg('body') body: string,
+    @Ctx() context: TContext
+  ): Promise<Comment[]> {
     const loggedUser = authChecker(context)
 
     if (body.trim() === '' || body.length < 5) {
@@ -23,33 +27,37 @@ export class AnsCommentResolver {
       if (!answer) {
         throw new UserInputError(
           `Answer with ID: ${ansId} does not exist in DB.`
-        );
+        )
       }
       await CommentModel.create({
         body,
         author: new ObjectId(loggedUser.id),
-        parentId: answer._id
-      });
+        parentId: answer._id,
+      })
 
-      const populatedAns = await answer
-        .populate([{
+      const populatedAns = await answer.populate([
+        {
           path: 'comments',
           model: CommentModel,
           populate: {
             path: 'author',
             select: 'username',
-            model: UserModel
-          }
-        }]);
+            model: UserModel,
+          },
+        },
+      ])
 
-      return populatedAns.comments as Comment[];
+      return populatedAns.comments as Comment[]
     } catch (err) {
       throw new Error(errorHandler(err))
     }
   }
-  @Mutation(returns => ID)
-  async deleteAnsComment(@Arg('ansId', type => ID) ansId: string, @Arg('commentId', type => ID) commentId: string, @Ctx() context: TContext): Promise<string> {
-
+  @Mutation((returns) => ID)
+  async deleteAnsComment(
+    @Arg('ansId', (type) => ID) ansId: string,
+    @Arg('commentId', (type) => ID) commentId: string,
+    @Ctx() context: TContext
+  ): Promise<string> {
     const loggedUser = authChecker(context)
 
     try {
@@ -61,9 +69,7 @@ export class AnsCommentResolver {
       }
       const answer = await AnswerModel.findById(ansId)
       if (!answer) {
-        throw new UserInputError(
-          `Answer with ID: ${ansId} does not exist!`
-        )
+        throw new UserInputError(`Answer with ID: ${ansId} does not exist!`)
       }
       const comment = await CommentModel.findById(commentId)
 
@@ -73,20 +79,23 @@ export class AnsCommentResolver {
         )
       }
 
-      if (
-        comment.author.toString() !== user._id.toString()
-      ) {
+      if (comment.author.toString() !== user._id.toString()) {
         throw new AuthenticationError('Access is denied.')
       }
-      await comment.delete();
+      await comment.delete()
 
-      return commentId;
+      return commentId
     } catch (err) {
       throw new Error(errorHandler(err))
     }
   }
-  @Mutation(returns => [Comment])
-  async editAnsComment(@Arg('ansId', type => ID) ansId: string, @Arg('commentId', type => ID) commentId: string, @Arg('body') body: string, @Ctx() context: TContext): Promise<Comment[]> {
+  @Mutation((returns) => [Comment])
+  async editAnsComment(
+    @Arg('ansId', (type) => ID) ansId: string,
+    @Arg('commentId', (type) => ID) commentId: string,
+    @Arg('body') body: string,
+    @Ctx() context: TContext
+  ): Promise<Comment[]> {
     const loggedUser = authChecker(context)
 
     if (body.trim() === '' || body.length < 5) {
@@ -94,14 +103,14 @@ export class AnsCommentResolver {
     }
 
     try {
-      const comment = await CommentModel.findById(commentId);
+      const comment = await CommentModel.findById(commentId)
       if (!comment) {
         throw new UserInputError(
           `Comment with ID: '${commentId}' does not exist in DB.`
         )
       }
 
-      const answer = await AnswerModel.findById(ansId);
+      const answer = await AnswerModel.findById(ansId)
       if (!answer) {
         throw new UserInputError(
           `Answer with ID: ${ansId} does not exist in DB.`
@@ -112,23 +121,24 @@ export class AnsCommentResolver {
         throw new AuthenticationError('Access is denied.')
       }
 
-      comment.body = body;
-      comment.updatedAt = new Date();
+      comment.body = body
+      comment.updatedAt = new Date()
 
       await comment.save()
 
-      const populatedAns = await answer
-        .populate([{
+      const populatedAns = await answer.populate([
+        {
           path: 'comments',
           model: CommentModel,
           populate: {
             path: 'author',
             select: 'username',
-            model: UserModel
-          }
-        }]);
+            model: UserModel,
+          },
+        },
+      ])
 
-      return populatedAns.comments as Comment[];
+      return populatedAns.comments as Comment[]
     } catch (err) {
       throw new Error(errorHandler(err))
     }

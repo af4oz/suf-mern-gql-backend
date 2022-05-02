@@ -23,4 +23,4 @@ const ToastNotification = () => {
   )
 }
 
-export default ToastNotification;
+export default ToastNotification

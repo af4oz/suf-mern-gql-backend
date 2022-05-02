@@ -1,18 +1,18 @@
 import { useState } from 'react'
 import AuthFormModal from './AuthFormModal'
 
-import { IoMdMore as MoreVertIcon } from 'react-icons/io';
-import { MdAccountCircle as AccountCircleIcon } from 'react-icons/md';
-import { IoMdPower as PowerIcon } from 'react-icons/io';
+import { IoMdMore as MoreVertIcon } from 'react-icons/io'
+import { MdAccountCircle as AccountCircleIcon } from 'react-icons/md'
+import { IoMdPower as PowerIcon } from 'react-icons/io'
 
-import { Menu, MenuItem, IconButton, SvgIcon, Avatar } from './CompStore';
+import { Menu, MenuItem, IconButton, SvgIcon, Avatar } from './CompStore'
 
-import 'twin.macro';
-import { Author } from '../generated/graphql';
+import 'twin.macro'
+import { Author } from '../generated/graphql'
 
 interface MobileUserMenuProps {
-  user?: Author;
-  logoutUser: (...args: any) => void;
+  user?: Author
+  logoutUser: (...args: any) => void
 }
 
 const MobileUserMenu = ({ user, logoutUser }: MobileUserMenuProps) => {
@@ -33,17 +33,15 @@ const MobileUserMenu = ({ user, logoutUser }: MobileUserMenuProps) => {
 
   return (
     <div>
-      <IconButton tag="button" onClick={handleOpenMenu} tw="font-size[1.5em]" >
-        {
-          user ? (
-            <Avatar
-              to={`/user/${user.username}`}
-              alt={user.username}
-              src={`https://secure.gravatar.com/avatar/${user._id}?s=164&d=identicon`}
-              tw="width[1.2em] height[1.2em] font-size[.8em]"
-            />
-          ) : null
-        }
+      <IconButton tag="button" onClick={handleOpenMenu} tw="font-size[1.5em]">
+        {user ? (
+          <Avatar
+            to={`/user/${user.username}`}
+            alt={user.username}
+            src={`https://secure.gravatar.com/avatar/${user._id}?s=164&d=identicon`}
+            tw="width[1.2em] height[1.2em] font-size[.8em]"
+          />
+        ) : null}
         <MoreVertIcon />
       </IconButton>
       <Menu

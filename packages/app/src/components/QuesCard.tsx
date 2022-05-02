@@ -1,9 +1,9 @@
 import { Link } from 'react-router-dom'
 import PostedByUser from './PostedByUser'
-import tw from 'twin.macro'; //eslint-disable-line no-unused-vars
-import { Question as IQuestion } from '../generated/graphql';
+import tw from 'twin.macro' //eslint-disable-line no-unused-vars
+import { Question as IQuestion } from '../generated/graphql'
 
-import { Tag } from './CompStore';
+import { Tag } from './CompStore'
 
 const StatsContainer = tw.div`ml-0 mr-1 sm:(ml-2 mr-3) text-center text-xs`
 
@@ -14,7 +14,7 @@ const Container = tw.div`flex p-1 sm:p-2`
 const Question = tw.h3`m-0 mb-2`
 
 interface QuesCardProps {
-  question: IQuestion;
+  question: IQuestion
 }
 
 const QuesCard = ({ question }: QuesCardProps) => {
@@ -33,7 +33,7 @@ const QuesCard = ({ question }: QuesCardProps) => {
   return (
     <Container>
       <StatsContainer>
-        <div >
+        <div>
           <span tw="block text-gray-600 text-sm">{points}</span>
           <div>votes</div>
         </div>
@@ -54,8 +54,13 @@ const QuesCard = ({ question }: QuesCardProps) => {
         </Question>
         <p tw="m-0 pb-1 text-xs">{body}</p>
         <div tw="flex flex-wrap float-left">
-          {tags.map(t => (
-            <Tag tag="a" key={t} href={`/tags/${t}`} styles={{ link: tw`margin[0 .25em .25em]` }}>
+          {tags.map((t) => (
+            <Tag
+              tag="a"
+              key={t}
+              href={`/tags/${t}`}
+              styles={{ link: tw`margin[0 .25em .25em]` }}
+            >
               {t}
             </Tag>
           ))}
