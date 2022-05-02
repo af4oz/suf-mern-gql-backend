@@ -5,7 +5,7 @@ import UserMenuMobile from '../Menus/UserMenuMobile'
 import UserMenuDesktop from '../Menus/UserMenuDesktop'
 import SearchBar from '../SearchBar'
 import { useAuthContext } from '~~/context/auth'
-import SofLogo from '../svg/stack-overflow.svg'
+import SofLogo from '~~/svg/stack-overflow.svg'
 
 import { MdSearch as SearchIcon } from 'react-icons/md'
 

@@ -1,1001 +1,588 @@
-import { gql } from '@apollo/client'
-import * as Apollo from '@apollo/client'
-export type Maybe<T> = T | null
-export type Exact<T extends { [key: string]: unknown }> = {
-  [K in keyof T]: T[K]
-}
-export type MakeOptional<T, K extends keyof T> = Omit<T, K> & {
-  [SubKey in K]?: Maybe<T[SubKey]>
-}
-export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & {
-  [SubKey in K]: Maybe<T[SubKey]>
-}
-const defaultOptions = {}
+import { gql } from '@apollo/client';
+import * as Apollo from '@apollo/client';
+export type Maybe<T> = T | null;
+export type InputMaybe<T> = Maybe<T>;
+export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
+export type MakeOptional<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]?: Maybe<T[SubKey]> };
+export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]: Maybe<T[SubKey]> };
+const defaultOptions = {} as const;
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
-  ID: string
-  String: string
-  Boolean: boolean
-  Int: number
-  Float: number
+  ID: string;
+  String: string;
+  Boolean: boolean;
+  Int: number;
+  Float: number;
   /** A date-time string at UTC, such as 2007-12-03T10:15:30Z, compliant with the `date-time` format outlined in section 5.6 of the RFC 3339 profile of the ISO 8601 standard for representation of dates and times using the Gregorian calendar. */
-  DateTime: any
-}
+  DateTime: any;
+};
 
 export type Answer = {
-  __typename?: 'Answer'
-  _id: Scalars['ID']
-  author: Author
-  body: Scalars['String']
-  comments: Array<Maybe<Comment>>
-  createdAt: Scalars['DateTime']
-  points: Scalars['Int']
-  updatedAt: Scalars['DateTime']
-  voted?: Maybe<VoteType>
-}
+  __typename?: 'Answer';
+  _id: Scalars['ID'];
+  author: Author;
+  body: Scalars['String'];
+  comments: Array<Maybe<Comment>>;
+  points: Scalars['Int'];
+  voted?: Maybe<VoteType>;
+  createdAt: Scalars['DateTime'];
+  updatedAt: Scalars['DateTime'];
+};
 
 export type AnswerVotes = {
-  __typename?: 'AnswerVotes'
-  ansId: Scalars['ID']
-  userId: Scalars['ID']
-  vote: VoteType
-}
+  __typename?: 'AnswerVotes';
+  userId: Scalars['ID'];
+  ansId: Scalars['ID'];
+  vote: VoteType;
+};
 
 export type Author = {
-  __typename?: 'Author'
-  _id: Scalars['ID']
-  username: Scalars['String']
-}
+  __typename?: 'Author';
+  _id: Scalars['ID'];
+  username: Scalars['String'];
+};
 
 export type Comment = {
-  __typename?: 'Comment'
-  _id: Scalars['ID']
-  author: Author
-  body: Scalars['String']
-  createdAt: Scalars['DateTime']
-  updatedAt: Scalars['DateTime']
-}
+  __typename?: 'Comment';
+  _id: Scalars['ID'];
+  author: Author;
+  body: Scalars['String'];
+  createdAt: Scalars['DateTime'];
+  updatedAt: Scalars['DateTime'];
+};
 
 export type LoggedUser = {
-  __typename?: 'LoggedUser'
-  _id: Scalars['ID']
-  role: Scalars['String']
-  token: Scalars['String']
-  username: Scalars['String']
-}
+  __typename?: 'LoggedUser';
+  _id: Scalars['ID'];
+  username: Scalars['String'];
+  token: Scalars['String'];
+  role: Scalars['String'];
+};
 
 export type Mutation = {
-  __typename?: 'Mutation'
-  acceptAnswer: Question
-  addAnsComment: Array<Comment>
-  addQuesComment: Array<Comment>
-  deleteAnsComment: Scalars['ID']
-  deleteAnswer: Scalars['ID']
-  deleteQuesComment: Scalars['ID']
-  deleteQuestion: Scalars['ID']
-  editAnsComment: Array<Comment>
-  editAnswer: Array<Answer>
-  editQuesComment: Array<Comment>
-  editQuestion: Question
-  login: LoggedUser
-  postAnswer: Array<Answer>
-  postQuestion: Question
-  register: LoggedUser
-  voteAnswer: Answer
-  voteQuestion: Question
-}
+  __typename?: 'Mutation';
+  addAnsComment: Array<Comment>;
+  deleteAnsComment: Scalars['ID'];
+  editAnsComment: Array<Comment>;
+  postAnswer: Array<Answer>;
+  deleteAnswer: Scalars['ID'];
+  editAnswer: Array<Answer>;
+  voteAnswer: Answer;
+  acceptAnswer: Question;
+  addQuesComment: Array<Comment>;
+  deleteQuesComment: Scalars['ID'];
+  editQuesComment: Array<Comment>;
+  postQuestion: Question;
+  deleteQuestion: Scalars['ID'];
+  editQuestion: Question;
+  voteQuestion: Question;
+  register: LoggedUser;
+  login: LoggedUser;
+};
 
-export type MutationAcceptAnswerArgs = {
-  ansId: Scalars['ID']
-  quesId: Scalars['ID']
-}
 
 export type MutationAddAnsCommentArgs = {
-  ansId: Scalars['ID']
-  body: Scalars['String']
-}
+  body: Scalars['String'];
+  ansId: Scalars['ID'];
+};
 
-export type MutationAddQuesCommentArgs = {
-  body: Scalars['String']
-  quesId: Scalars['ID']
-}
 
 export type MutationDeleteAnsCommentArgs = {
-  ansId: Scalars['ID']
-  commentId: Scalars['ID']
-}
+  commentId: Scalars['ID'];
+  ansId: Scalars['ID'];
+};
 
-export type MutationDeleteAnswerArgs = {
-  ansId: Scalars['ID']
-  quesId: Scalars['ID']
-}
-
-export type MutationDeleteQuesCommentArgs = {
-  commentId: Scalars['ID']
-  quesId: Scalars['ID']
-}
-
-export type MutationDeleteQuestionArgs = {
-  quesId: Scalars['ID']
-}
 
 export type MutationEditAnsCommentArgs = {
-  ansId: Scalars['ID']
-  body: Scalars['String']
-  commentId: Scalars['ID']
-}
+  body: Scalars['String'];
+  commentId: Scalars['ID'];
+  ansId: Scalars['ID'];
+};
 
-export type MutationEditAnswerArgs = {
-  ansId: Scalars['ID']
-  body: Scalars['String']
-  quesId: Scalars['ID']
-}
-
-export type MutationEditQuesCommentArgs = {
-  body: Scalars['String']
-  commentId: Scalars['ID']
-  quesId: Scalars['ID']
-}
-
-export type MutationEditQuestionArgs = {
-  body: Scalars['String']
-  quesId: Scalars['ID']
-  tags: Array<Scalars['String']>
-  title: Scalars['String']
-}
-
-export type MutationLoginArgs = {
-  password: Scalars['String']
-  username: Scalars['String']
-}
 
 export type MutationPostAnswerArgs = {
-  body: Scalars['String']
-  quesId: Scalars['ID']
-}
+  body: Scalars['String'];
+  quesId: Scalars['ID'];
+};
 
-export type MutationPostQuestionArgs = {
-  body: Scalars['String']
-  tags: Array<Scalars['String']>
-  title: Scalars['String']
-}
 
-export type MutationRegisterArgs = {
-  password: Scalars['String']
-  username: Scalars['String']
-}
+export type MutationDeleteAnswerArgs = {
+  ansId: Scalars['ID'];
+  quesId: Scalars['ID'];
+};
+
+
+export type MutationEditAnswerArgs = {
+  body: Scalars['String'];
+  ansId: Scalars['ID'];
+  quesId: Scalars['ID'];
+};
+
 
 export type MutationVoteAnswerArgs = {
-  ansId: Scalars['ID']
-  quesId: Scalars['ID']
-  voteType: VoteType
-}
+  voteType: VoteType;
+  ansId: Scalars['ID'];
+  quesId: Scalars['ID'];
+};
+
+
+export type MutationAcceptAnswerArgs = {
+  ansId: Scalars['ID'];
+  quesId: Scalars['ID'];
+};
+
+
+export type MutationAddQuesCommentArgs = {
+  body: Scalars['String'];
+  quesId: Scalars['ID'];
+};
+
+
+export type MutationDeleteQuesCommentArgs = {
+  commentId: Scalars['ID'];
+  quesId: Scalars['ID'];
+};
+
+
+export type MutationEditQuesCommentArgs = {
+  body: Scalars['String'];
+  commentId: Scalars['ID'];
+  quesId: Scalars['ID'];
+};
+
+
+export type MutationPostQuestionArgs = {
+  tags: Array<Scalars['String']>;
+  body: Scalars['String'];
+  title: Scalars['String'];
+};
+
+
+export type MutationDeleteQuestionArgs = {
+  quesId: Scalars['ID'];
+};
+
+
+export type MutationEditQuestionArgs = {
+  tags: Array<Scalars['String']>;
+  body: Scalars['String'];
+  title: Scalars['String'];
+  quesId: Scalars['ID'];
+};
+
 
 export type MutationVoteQuestionArgs = {
-  quesId: Scalars['ID']
-  voteType: VoteType
-}
+  voteType: VoteType;
+  quesId: Scalars['ID'];
+};
+
+
+export type MutationRegisterArgs = {
+  password: Scalars['String'];
+  username: Scalars['String'];
+};
+
+
+export type MutationLoginArgs = {
+  password: Scalars['String'];
+  username: Scalars['String'];
+};
 
 export type NextPrevPage = {
-  __typename?: 'NextPrevPage'
-  limit: Scalars['Float']
-  page: Scalars['Float']
-}
+  __typename?: 'NextPrevPage';
+  page: Scalars['Float'];
+  limit: Scalars['Float'];
+};
 
 export type PaginatedQuesList = {
-  __typename?: 'PaginatedQuesList'
-  next?: Maybe<NextPrevPage>
-  previous?: Maybe<NextPrevPage>
-  questions: Array<Maybe<Question>>
-}
+  __typename?: 'PaginatedQuesList';
+  questions: Array<Maybe<Question>>;
+  next?: Maybe<NextPrevPage>;
+  previous?: Maybe<NextPrevPage>;
+};
 
 export type Query = {
-  __typename?: 'Query'
-  getAllTags: Array<Tag>
-  getAllUsers: Array<User>
-  getQuestions: PaginatedQuesList
-  getUser: User
-  viewQuestion: Question
-  whoami: User
-}
+  __typename?: 'Query';
+  getQuestions: PaginatedQuesList;
+  viewQuestion: Question;
+  getAllTags: Array<Tag>;
+  whoami: User;
+  getUser: User;
+  getAllUsers: Array<User>;
+};
+
 
 export type QueryGetQuestionsArgs = {
-  filterBySearch?: Maybe<Scalars['String']>
-  filterByTag?: Maybe<Scalars['String']>
-  limit: Scalars['Int']
-  page: Scalars['Int']
-  sortBy: SortByType
-}
+  sortBy: SortByType;
+  page: Scalars['Int'];
+  limit: Scalars['Int'];
+  filterByTag?: InputMaybe<Scalars['String']>;
+  filterBySearch?: InputMaybe<Scalars['String']>;
+};
 
-export type QueryGetUserArgs = {
-  username: Scalars['String']
-}
 
 export type QueryViewQuestionArgs = {
-  quesId: Scalars['ID']
-}
+  quesId: Scalars['ID'];
+};
+
+
+export type QueryGetUserArgs = {
+  username: Scalars['String'];
+};
 
 export type Question = {
-  __typename?: 'Question'
-  _id: Scalars['ID']
-  acceptedAnswer?: Maybe<Scalars['ID']>
-  answerCount: Scalars['Int']
-  answers: Array<Maybe<Answer>>
-  author: Author
-  body: Scalars['String']
-  comments: Array<Maybe<Comment>>
-  createdAt: Scalars['DateTime']
-  hotAlgo: Scalars['Float']
-  points: Scalars['Int']
-  tags: Array<Scalars['String']>
-  title: Scalars['String']
-  updatedAt: Scalars['DateTime']
-  views: Scalars['Int']
-  voted?: Maybe<VoteType>
-}
+  __typename?: 'Question';
+  _id: Scalars['ID'];
+  author: Author;
+  title: Scalars['String'];
+  body: Scalars['String'];
+  tags: Array<Scalars['String']>;
+  comments: Array<Maybe<Comment>>;
+  answers: Array<Maybe<Answer>>;
+  answerCount: Scalars['Int'];
+  points: Scalars['Int'];
+  views: Scalars['Int'];
+  hotAlgo: Scalars['Float'];
+  acceptedAnswer?: Maybe<Scalars['ID']>;
+  voted?: Maybe<VoteType>;
+  createdAt: Scalars['DateTime'];
+  updatedAt: Scalars['DateTime'];
+};
 
 export type QuestionVotes = {
-  __typename?: 'QuestionVotes'
-  quesId: Scalars['ID']
-  userId: Scalars['ID']
-  vote: VoteType
-}
+  __typename?: 'QuestionVotes';
+  userId: Scalars['ID'];
+  quesId: Scalars['ID'];
+  vote: VoteType;
+};
 
 export type RecentActivity = {
-  __typename?: 'RecentActivity'
-  _id: Scalars['ID']
-  createdAt: Scalars['DateTime']
-  points: Scalars['Int']
-  title: Scalars['String']
-}
+  __typename?: 'RecentActivity';
+  _id: Scalars['ID'];
+  title: Scalars['String'];
+  points: Scalars['Int'];
+  createdAt: Scalars['DateTime'];
+};
 
 export enum RoleType {
-  Admin = 'ADMIN',
   User = 'USER',
+  Admin = 'ADMIN'
 }
 
 export enum SortByType {
   Hot = 'HOT',
-  Newest = 'NEWEST',
-  Oldest = 'OLDEST',
-  Views = 'VIEWS',
   Votes = 'VOTES',
+  Views = 'VIEWS',
+  Newest = 'NEWEST',
+  Oldest = 'OLDEST'
 }
 
 export type Tag = {
-  __typename?: 'Tag'
-  count: Scalars['Float']
-  tagName: Scalars['String']
-}
+  __typename?: 'Tag';
+  tagName: Scalars['String'];
+  count: Scalars['Float'];
+};
 
 export type User = {
-  __typename?: 'User'
-  _id: Scalars['ID']
-  answers: Array<Maybe<Answer>>
-  createdAt: Scalars['DateTime']
-  questions: Array<Maybe<Question>>
-  recentAnswers: Array<Maybe<RecentActivity>>
-  recentQuestions: Array<Maybe<RecentActivity>>
-  rep: Scalars['Int']
-  role: RoleType
-  totalAnswers: Scalars['Int']
-  totalQuestions: Scalars['Int']
-  username: Scalars['String']
-}
+  __typename?: 'User';
+  _id: Scalars['ID'];
+  username: Scalars['String'];
+  role: RoleType;
+  questions: Array<Maybe<Question>>;
+  answers: Array<Maybe<Answer>>;
+  createdAt: Scalars['DateTime'];
+  rep: Scalars['Int'];
+  recentQuestions: Array<Maybe<RecentActivity>>;
+  recentAnswers: Array<Maybe<RecentActivity>>;
+  totalQuestions: Scalars['Int'];
+  totalAnswers: Scalars['Int'];
+};
 
 export enum VoteType {
   Downvote = 'DOWNVOTE',
-  Upvote = 'UPVOTE',
+  Upvote = 'UPVOTE'
 }
 
-export type AuthorDetailsFragment = {
-  __typename?: 'Author'
-  _id: string
-  username: string
-}
+export type AuthorDetailsFragment = { __typename?: 'Author', _id: string, username: string };
 
-export type AnswerDetailsFragment = {
-  __typename?: 'Answer'
-  _id: string
-  body: string
-  points: number
-  voted?: VoteType | null | undefined
-  createdAt: any
-  updatedAt: any
-  author: { __typename?: 'Author'; _id: string; username: string }
-  comments: Array<
-    | {
-        __typename?: 'Comment'
-        _id: string
-        body: string
-        createdAt: any
-        updatedAt: any
-        author: { __typename?: 'Author'; _id: string; username: string }
-      }
-    | null
-    | undefined
-  >
-}
+export type AnswerDetailsFragment = { __typename?: 'Answer', _id: string, body: string, points: number, voted?: VoteType | null, createdAt: any, updatedAt: any, author: { __typename?: 'Author', _id: string, username: string }, comments: Array<{ __typename?: 'Comment', _id: string, body: string, createdAt: any, updatedAt: any, author: { __typename?: 'Author', _id: string, username: string } } | null> };
 
-export type QuestionDetailsFragment = {
-  __typename?: 'Question'
-  _id: string
-  title: string
-  body: string
-  tags: Array<string>
-  points: number
-  views: number
-  acceptedAnswer?: string | null | undefined
-  voted?: VoteType | null | undefined
-  createdAt: any
-  updatedAt: any
-  author: { __typename?: 'Author'; _id: string; username: string }
-  comments: Array<
-    | {
-        __typename?: 'Comment'
-        _id: string
-        body: string
-        createdAt: any
-        updatedAt: any
-        author: { __typename?: 'Author'; _id: string; username: string }
-      }
-    | null
-    | undefined
-  >
-  answers: Array<
-    | {
-        __typename?: 'Answer'
-        _id: string
-        body: string
-        points: number
-        voted?: VoteType | null | undefined
-        createdAt: any
-        updatedAt: any
-        author: { __typename?: 'Author'; _id: string; username: string }
-        comments: Array<
-          | {
-              __typename?: 'Comment'
-              _id: string
-              body: string
-              createdAt: any
-              updatedAt: any
-              author: { __typename?: 'Author'; _id: string; username: string }
-            }
-          | null
-          | undefined
-        >
-      }
-    | null
-    | undefined
-  >
-}
+export type QuestionDetailsFragment = { __typename?: 'Question', _id: string, title: string, body: string, tags: Array<string>, points: number, views: number, acceptedAnswer?: string | null, voted?: VoteType | null, createdAt: any, updatedAt: any, author: { __typename?: 'Author', _id: string, username: string }, comments: Array<{ __typename?: 'Comment', _id: string, body: string, createdAt: any, updatedAt: any, author: { __typename?: 'Author', _id: string, username: string } } | null>, answers: Array<{ __typename?: 'Answer', _id: string, body: string, points: number, voted?: VoteType | null, createdAt: any, updatedAt: any, author: { __typename?: 'Author', _id: string, username: string }, comments: Array<{ __typename?: 'Comment', _id: string, body: string, createdAt: any, updatedAt: any, author: { __typename?: 'Author', _id: string, username: string } } | null> } | null> };
 
-export type PostQuestionDetailsFragment = {
-  __typename?: 'Question'
-  _id: string
-  title: string
-  body: string
-  tags: Array<string>
-  points: number
-  views: number
-  voted?: VoteType | null | undefined
-  createdAt: any
-  updatedAt: any
-  author: { __typename?: 'Author'; _id: string; username: string }
-}
+export type PostQuestionDetailsFragment = { __typename?: 'Question', _id: string, title: string, body: string, tags: Array<string>, points: number, views: number, voted?: VoteType | null, createdAt: any, updatedAt: any, author: { __typename?: 'Author', _id: string, username: string } };
 
-export type LoggedUserDetailsFragment = {
-  __typename?: 'LoggedUser'
-  _id: string
-  username: string
-  role: string
-  token: string
-}
+export type LoggedUserDetailsFragment = { __typename?: 'LoggedUser', _id: string, username: string, role: string, token: string };
 
-export type CommentDetailsFragment = {
-  __typename?: 'Comment'
-  _id: string
-  body: string
-  createdAt: any
-  updatedAt: any
-  author: { __typename?: 'Author'; _id: string; username: string }
-}
+export type CommentDetailsFragment = { __typename?: 'Comment', _id: string, body: string, createdAt: any, updatedAt: any, author: { __typename?: 'Author', _id: string, username: string } };
 
 export type RegisterUserMutationVariables = Exact<{
-  username: Scalars['String']
-  password: Scalars['String']
-}>
+  username: Scalars['String'];
+  password: Scalars['String'];
+}>;
 
-export type RegisterUserMutation = {
-  __typename?: 'Mutation'
-  register: {
-    __typename?: 'LoggedUser'
-    _id: string
-    username: string
-    role: string
-    token: string
-  }
-}
+
+export type RegisterUserMutation = { __typename?: 'Mutation', register: { __typename?: 'LoggedUser', _id: string, username: string, role: string, token: string } };
 
 export type LoginUserMutationVariables = Exact<{
-  username: Scalars['String']
-  password: Scalars['String']
-}>
+  username: Scalars['String'];
+  password: Scalars['String'];
+}>;
 
-export type LoginUserMutation = {
-  __typename?: 'Mutation'
-  login: {
-    __typename?: 'LoggedUser'
-    _id: string
-    username: string
-    role: string
-    token: string
-  }
-}
+
+export type LoginUserMutation = { __typename?: 'Mutation', login: { __typename?: 'LoggedUser', _id: string, username: string, role: string, token: string } };
 
 export type AddQuestionMutationVariables = Exact<{
-  title: Scalars['String']
-  body: Scalars['String']
-  tags: Array<Scalars['String']> | Scalars['String']
-}>
+  title: Scalars['String'];
+  body: Scalars['String'];
+  tags: Array<Scalars['String']> | Scalars['String'];
+}>;
 
-export type AddQuestionMutation = {
-  __typename?: 'Mutation'
-  postQuestion: {
-    __typename?: 'Question'
-    _id: string
-    title: string
-    body: string
-    tags: Array<string>
-    points: number
-    views: number
-    voted?: VoteType | null | undefined
-    createdAt: any
-    updatedAt: any
-    author: { __typename?: 'Author'; _id: string; username: string }
-  }
-}
+
+export type AddQuestionMutation = { __typename?: 'Mutation', postQuestion: { __typename?: 'Question', _id: string, title: string, body: string, tags: Array<string>, points: number, views: number, voted?: VoteType | null, createdAt: any, updatedAt: any, author: { __typename?: 'Author', _id: string, username: string } } };
 
 export type UpdateQuestionMutationVariables = Exact<{
-  quesId: Scalars['ID']
-  title: Scalars['String']
-  body: Scalars['String']
-  tags: Array<Scalars['String']> | Scalars['String']
-}>
+  quesId: Scalars['ID'];
+  title: Scalars['String'];
+  body: Scalars['String'];
+  tags: Array<Scalars['String']> | Scalars['String'];
+}>;
 
-export type UpdateQuestionMutation = {
-  __typename?: 'Mutation'
-  editQuestion: {
-    __typename?: 'Question'
-    _id: string
-    title: string
-    body: string
-    tags: Array<string>
-    points: number
-    views: number
-    acceptedAnswer?: string | null | undefined
-    voted?: VoteType | null | undefined
-    createdAt: any
-    updatedAt: any
-    author: { __typename?: 'Author'; _id: string; username: string }
-    comments: Array<
-      | {
-          __typename?: 'Comment'
-          _id: string
-          body: string
-          createdAt: any
-          updatedAt: any
-          author: { __typename?: 'Author'; _id: string; username: string }
-        }
-      | null
-      | undefined
-    >
-    answers: Array<
-      | {
-          __typename?: 'Answer'
-          _id: string
-          body: string
-          points: number
-          voted?: VoteType | null | undefined
-          createdAt: any
-          updatedAt: any
-          author: { __typename?: 'Author'; _id: string; username: string }
-          comments: Array<
-            | {
-                __typename?: 'Comment'
-                _id: string
-                body: string
-                createdAt: any
-                updatedAt: any
-                author: {
-                  __typename?: 'Author'
-                  _id: string
-                  username: string
-                }
-              }
-            | null
-            | undefined
-          >
-        }
-      | null
-      | undefined
-    >
-  }
-}
+
+export type UpdateQuestionMutation = { __typename?: 'Mutation', editQuestion: { __typename?: 'Question', _id: string, title: string, body: string, tags: Array<string>, points: number, views: number, acceptedAnswer?: string | null, voted?: VoteType | null, createdAt: any, updatedAt: any, author: { __typename?: 'Author', _id: string, username: string }, comments: Array<{ __typename?: 'Comment', _id: string, body: string, createdAt: any, updatedAt: any, author: { __typename?: 'Author', _id: string, username: string } } | null>, answers: Array<{ __typename?: 'Answer', _id: string, body: string, points: number, voted?: VoteType | null, createdAt: any, updatedAt: any, author: { __typename?: 'Author', _id: string, username: string }, comments: Array<{ __typename?: 'Comment', _id: string, body: string, createdAt: any, updatedAt: any, author: { __typename?: 'Author', _id: string, username: string } } | null> } | null> } };
 
 export type RemoveQuestionMutationVariables = Exact<{
-  quesId: Scalars['ID']
-}>
+  quesId: Scalars['ID'];
+}>;
 
-export type RemoveQuestionMutation = {
-  __typename?: 'Mutation'
-  deleteQuestion: string
-}
+
+export type RemoveQuestionMutation = { __typename?: 'Mutation', deleteQuestion: string };
 
 export type SubmitQuesVoteMutationVariables = Exact<{
-  quesId: Scalars['ID']
-  voteType: VoteType
-}>
+  quesId: Scalars['ID'];
+  voteType: VoteType;
+}>;
 
-export type SubmitQuesVoteMutation = {
-  __typename?: 'Mutation'
-  voteQuestion: {
-    __typename?: 'Question'
-    _id: string
-    voted?: VoteType | null | undefined
-    points: number
-  }
-}
+
+export type SubmitQuesVoteMutation = { __typename?: 'Mutation', voteQuestion: { __typename?: 'Question', _id: string, voted?: VoteType | null, points: number } };
 
 export type PostQuesCommentMutationVariables = Exact<{
-  quesId: Scalars['ID']
-  body: Scalars['String']
-}>
+  quesId: Scalars['ID'];
+  body: Scalars['String'];
+}>;
 
-export type PostQuesCommentMutation = {
-  __typename?: 'Mutation'
-  addQuesComment: Array<{
-    __typename?: 'Comment'
-    _id: string
-    body: string
-    createdAt: any
-    updatedAt: any
-    author: { __typename?: 'Author'; _id: string; username: string }
-  }>
-}
+
+export type PostQuesCommentMutation = { __typename?: 'Mutation', addQuesComment: Array<{ __typename?: 'Comment', _id: string, body: string, createdAt: any, updatedAt: any, author: { __typename?: 'Author', _id: string, username: string } }> };
 
 export type UpdateQuesCommentMutationVariables = Exact<{
-  quesId: Scalars['ID']
-  commentId: Scalars['ID']
-  body: Scalars['String']
-}>
+  quesId: Scalars['ID'];
+  commentId: Scalars['ID'];
+  body: Scalars['String'];
+}>;
 
-export type UpdateQuesCommentMutation = {
-  __typename?: 'Mutation'
-  editQuesComment: Array<{
-    __typename?: 'Comment'
-    _id: string
-    body: string
-    createdAt: any
-    updatedAt: any
-    author: { __typename?: 'Author'; _id: string; username: string }
-  }>
-}
+
+export type UpdateQuesCommentMutation = { __typename?: 'Mutation', editQuesComment: Array<{ __typename?: 'Comment', _id: string, body: string, createdAt: any, updatedAt: any, author: { __typename?: 'Author', _id: string, username: string } }> };
 
 export type RemoveQuesCommentMutationVariables = Exact<{
-  quesId: Scalars['ID']
-  commentId: Scalars['ID']
-}>
+  quesId: Scalars['ID'];
+  commentId: Scalars['ID'];
+}>;
 
-export type RemoveQuesCommentMutation = {
-  __typename?: 'Mutation'
-  deleteQuesComment: string
-}
+
+export type RemoveQuesCommentMutation = { __typename?: 'Mutation', deleteQuesComment: string };
 
 export type AddAnswerMutationVariables = Exact<{
-  quesId: Scalars['ID']
-  body: Scalars['String']
-}>
+  quesId: Scalars['ID'];
+  body: Scalars['String'];
+}>;
 
-export type AddAnswerMutation = {
-  __typename?: 'Mutation'
-  postAnswer: Array<{
-    __typename?: 'Answer'
-    _id: string
-    body: string
-    points: number
-    voted?: VoteType | null | undefined
-    createdAt: any
-    updatedAt: any
-    author: { __typename?: 'Author'; _id: string; username: string }
-    comments: Array<
-      | {
-          __typename?: 'Comment'
-          _id: string
-          body: string
-          createdAt: any
-          updatedAt: any
-          author: { __typename?: 'Author'; _id: string; username: string }
-        }
-      | null
-      | undefined
-    >
-  }>
-}
+
+export type AddAnswerMutation = { __typename?: 'Mutation', postAnswer: Array<{ __typename?: 'Answer', _id: string, body: string, points: number, voted?: VoteType | null, createdAt: any, updatedAt: any, author: { __typename?: 'Author', _id: string, username: string }, comments: Array<{ __typename?: 'Comment', _id: string, body: string, createdAt: any, updatedAt: any, author: { __typename?: 'Author', _id: string, username: string } } | null> }> };
 
 export type UpdateAnswerMutationVariables = Exact<{
-  quesId: Scalars['ID']
-  ansId: Scalars['ID']
-  body: Scalars['String']
-}>
+  quesId: Scalars['ID'];
+  ansId: Scalars['ID'];
+  body: Scalars['String'];
+}>;
 
-export type UpdateAnswerMutation = {
-  __typename?: 'Mutation'
-  editAnswer: Array<{
-    __typename?: 'Answer'
-    _id: string
-    body: string
-    points: number
-    voted?: VoteType | null | undefined
-    createdAt: any
-    updatedAt: any
-    author: { __typename?: 'Author'; _id: string; username: string }
-    comments: Array<
-      | {
-          __typename?: 'Comment'
-          _id: string
-          body: string
-          createdAt: any
-          updatedAt: any
-          author: { __typename?: 'Author'; _id: string; username: string }
-        }
-      | null
-      | undefined
-    >
-  }>
-}
+
+export type UpdateAnswerMutation = { __typename?: 'Mutation', editAnswer: Array<{ __typename?: 'Answer', _id: string, body: string, points: number, voted?: VoteType | null, createdAt: any, updatedAt: any, author: { __typename?: 'Author', _id: string, username: string }, comments: Array<{ __typename?: 'Comment', _id: string, body: string, createdAt: any, updatedAt: any, author: { __typename?: 'Author', _id: string, username: string } } | null> }> };
 
 export type RemoveAnswerMutationVariables = Exact<{
-  quesId: Scalars['ID']
-  ansId: Scalars['ID']
-}>
+  quesId: Scalars['ID'];
+  ansId: Scalars['ID'];
+}>;
 
-export type RemoveAnswerMutation = {
-  __typename?: 'Mutation'
-  deleteAnswer: string
-}
+
+export type RemoveAnswerMutation = { __typename?: 'Mutation', deleteAnswer: string };
 
 export type SubmitAnsVoteMutationVariables = Exact<{
-  quesId: Scalars['ID']
-  ansId: Scalars['ID']
-  voteType: VoteType
-}>
+  quesId: Scalars['ID'];
+  ansId: Scalars['ID'];
+  voteType: VoteType;
+}>;
 
-export type SubmitAnsVoteMutation = {
-  __typename?: 'Mutation'
-  voteAnswer: {
-    __typename?: 'Answer'
-    _id: string
-    voted?: VoteType | null | undefined
-    points: number
-  }
-}
+
+export type SubmitAnsVoteMutation = { __typename?: 'Mutation', voteAnswer: { __typename?: 'Answer', _id: string, voted?: VoteType | null, points: number } };
 
 export type SubmitAcceptAnsMutationVariables = Exact<{
-  quesId: Scalars['ID']
-  ansId: Scalars['ID']
-}>
+  quesId: Scalars['ID'];
+  ansId: Scalars['ID'];
+}>;
 
-export type SubmitAcceptAnsMutation = {
-  __typename?: 'Mutation'
-  acceptAnswer: {
-    __typename?: 'Question'
-    _id: string
-    acceptedAnswer?: string | null | undefined
-  }
-}
+
+export type SubmitAcceptAnsMutation = { __typename?: 'Mutation', acceptAnswer: { __typename?: 'Question', _id: string, acceptedAnswer?: string | null } };
 
 export type PostAnsCommentMutationVariables = Exact<{
-  ansId: Scalars['ID']
-  body: Scalars['String']
-}>
+  ansId: Scalars['ID'];
+  body: Scalars['String'];
+}>;
 
-export type PostAnsCommentMutation = {
-  __typename?: 'Mutation'
-  addAnsComment: Array<{
-    __typename?: 'Comment'
-    _id: string
-    body: string
-    createdAt: any
-    updatedAt: any
-    author: { __typename?: 'Author'; _id: string; username: string }
-  }>
-}
+
+export type PostAnsCommentMutation = { __typename?: 'Mutation', addAnsComment: Array<{ __typename?: 'Comment', _id: string, body: string, createdAt: any, updatedAt: any, author: { __typename?: 'Author', _id: string, username: string } }> };
 
 export type UpdateAnsCommentMutationVariables = Exact<{
-  ansId: Scalars['ID']
-  commentId: Scalars['ID']
-  body: Scalars['String']
-}>
+  ansId: Scalars['ID'];
+  commentId: Scalars['ID'];
+  body: Scalars['String'];
+}>;
 
-export type UpdateAnsCommentMutation = {
-  __typename?: 'Mutation'
-  editAnsComment: Array<{
-    __typename?: 'Comment'
-    _id: string
-    body: string
-    createdAt: any
-    updatedAt: any
-    author: { __typename?: 'Author'; _id: string; username: string }
-  }>
-}
+
+export type UpdateAnsCommentMutation = { __typename?: 'Mutation', editAnsComment: Array<{ __typename?: 'Comment', _id: string, body: string, createdAt: any, updatedAt: any, author: { __typename?: 'Author', _id: string, username: string } }> };
 
 export type RemoveAnsCommentMutationVariables = Exact<{
-  ansId: Scalars['ID']
-  commentId: Scalars['ID']
-}>
+  ansId: Scalars['ID'];
+  commentId: Scalars['ID'];
+}>;
 
-export type RemoveAnsCommentMutation = {
-  __typename?: 'Mutation'
-  deleteAnsComment: string
-}
+
+export type RemoveAnsCommentMutation = { __typename?: 'Mutation', deleteAnsComment: string };
 
 export type FetchQuestionsQueryVariables = Exact<{
-  sortBy: SortByType
-  page: Scalars['Int']
-  limit: Scalars['Int']
-  filterByTag?: Maybe<Scalars['String']>
-  filterBySearch?: Maybe<Scalars['String']>
-}>
+  sortBy: SortByType;
+  page: Scalars['Int'];
+  limit: Scalars['Int'];
+  filterByTag?: InputMaybe<Scalars['String']>;
+  filterBySearch?: InputMaybe<Scalars['String']>;
+}>;
 
-export type FetchQuestionsQuery = {
-  __typename?: 'Query'
-  getQuestions: {
-    __typename?: 'PaginatedQuesList'
-    next?: { __typename?: 'NextPrevPage'; page: number } | null | undefined
-    previous?: { __typename?: 'NextPrevPage'; page: number } | null | undefined
-    questions: Array<
-      | {
-          __typename?: 'Question'
-          _id: string
-          title: string
-          body: string
-          tags: Array<string>
-          points: number
-          views: number
-          createdAt: any
-          updatedAt: any
-          answerCount: number
-          author: { __typename?: 'Author'; _id: string; username: string }
-        }
-      | null
-      | undefined
-    >
-  }
-}
+
+export type FetchQuestionsQuery = { __typename?: 'Query', getQuestions: { __typename?: 'PaginatedQuesList', next?: { __typename?: 'NextPrevPage', page: number } | null, previous?: { __typename?: 'NextPrevPage', page: number } | null, questions: Array<{ __typename?: 'Question', _id: string, title: string, body: string, tags: Array<string>, points: number, views: number, createdAt: any, updatedAt: any, answerCount: number, author: { __typename?: 'Author', _id: string, username: string } } | null> } };
 
 export type FetchQuestionQueryVariables = Exact<{
-  quesId: Scalars['ID']
-}>
+  quesId: Scalars['ID'];
+}>;
 
-export type FetchQuestionQuery = {
-  __typename?: 'Query'
-  viewQuestion: {
-    __typename?: 'Question'
-    _id: string
-    title: string
-    body: string
-    tags: Array<string>
-    points: number
-    views: number
-    createdAt: any
-    updatedAt: any
-    acceptedAnswer?: string | null | undefined
-    voted?: VoteType | null | undefined
-    author: { __typename?: 'Author'; _id: string; username: string }
-    answers: Array<
-      | {
-          __typename?: 'Answer'
-          _id: string
-          body: string
-          points: number
-          voted?: VoteType | null | undefined
-          createdAt: any
-          updatedAt: any
-          author: { __typename?: 'Author'; _id: string; username: string }
-          comments: Array<
-            | {
-                __typename?: 'Comment'
-                _id: string
-                body: string
-                createdAt: any
-                updatedAt: any
-                author: {
-                  __typename?: 'Author'
-                  _id: string
-                  username: string
-                }
-              }
-            | null
-            | undefined
-          >
-        }
-      | null
-      | undefined
-    >
-    comments: Array<
-      | {
-          __typename?: 'Comment'
-          _id: string
-          body: string
-          createdAt: any
-          updatedAt: any
-          author: { __typename?: 'Author'; _id: string; username: string }
-        }
-      | null
-      | undefined
-    >
-  }
-}
+
+export type FetchQuestionQuery = { __typename?: 'Query', viewQuestion: { __typename?: 'Question', _id: string, title: string, body: string, tags: Array<string>, points: number, views: number, createdAt: any, updatedAt: any, acceptedAnswer?: string | null, voted?: VoteType | null, author: { __typename?: 'Author', _id: string, username: string }, answers: Array<{ __typename?: 'Answer', _id: string, body: string, points: number, voted?: VoteType | null, createdAt: any, updatedAt: any, author: { __typename?: 'Author', _id: string, username: string }, comments: Array<{ __typename?: 'Comment', _id: string, body: string, createdAt: any, updatedAt: any, author: { __typename?: 'Author', _id: string, username: string } } | null> } | null>, comments: Array<{ __typename?: 'Comment', _id: string, body: string, createdAt: any, updatedAt: any, author: { __typename?: 'Author', _id: string, username: string } } | null> } };
 
 export type FetchUserQueryVariables = Exact<{
-  username: Scalars['String']
-}>
+  username: Scalars['String'];
+}>;
 
-export type FetchUserQuery = {
-  __typename?: 'Query'
-  getUser: {
-    __typename?: 'User'
-    _id: string
-    username: string
-    role: RoleType
-    createdAt: any
-    rep: number
-    totalQuestions: number
-    totalAnswers: number
-    recentQuestions: Array<
-      | {
-          __typename?: 'RecentActivity'
-          _id: string
-          title: string
-          points: number
-          createdAt: any
-        }
-      | null
-      | undefined
-    >
-    recentAnswers: Array<
-      | {
-          __typename?: 'RecentActivity'
-          _id: string
-          title: string
-          points: number
-          createdAt: any
-        }
-      | null
-      | undefined
-    >
-  }
-}
 
-export type FetchAllTagsQueryVariables = Exact<{ [key: string]: never }>
+export type FetchUserQuery = { __typename?: 'Query', getUser: { __typename?: 'User', _id: string, username: string, role: RoleType, createdAt: any, rep: number, totalQuestions: number, totalAnswers: number, recentQuestions: Array<{ __typename?: 'RecentActivity', _id: string, title: string, points: number, createdAt: any } | null>, recentAnswers: Array<{ __typename?: 'RecentActivity', _id: string, title: string, points: number, createdAt: any } | null> } };
 
-export type FetchAllTagsQuery = {
-  __typename?: 'Query'
-  getAllTags: Array<{ __typename?: 'Tag'; tagName: string; count: number }>
-}
+export type FetchAllTagsQueryVariables = Exact<{ [key: string]: never; }>;
 
-export type FetchAllUsersQueryVariables = Exact<{ [key: string]: never }>
 
-export type FetchAllUsersQuery = {
-  __typename?: 'Query'
-  getAllUsers: Array<{
-    __typename?: 'User'
-    _id: string
-    username: string
-    createdAt: any
-  }>
-}
+export type FetchAllTagsQuery = { __typename?: 'Query', getAllTags: Array<{ __typename?: 'Tag', tagName: string, count: number }> };
+
+export type FetchAllUsersQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type FetchAllUsersQuery = { __typename?: 'Query', getAllUsers: Array<{ __typename?: 'User', _id: string, username: string, createdAt: any }> };
 
 export const AuthorDetailsFragmentDoc = gql`
-  fragment AuthorDetails on Author {
-    _id
-    username
-  }
-`
+    fragment AuthorDetails on Author {
+  _id
+  username
+}
+    `;
 export const CommentDetailsFragmentDoc = gql`
-  fragment CommentDetails on Comment {
-    _id
-    author {
-      ...AuthorDetails
-    }
-    body
-    createdAt
-    updatedAt
+    fragment CommentDetails on Comment {
+  _id
+  author {
+    ...AuthorDetails
   }
-  ${AuthorDetailsFragmentDoc}
-`
+  body
+  createdAt
+  updatedAt
+}
+    ${AuthorDetailsFragmentDoc}`;
 export const AnswerDetailsFragmentDoc = gql`
-  fragment AnswerDetails on Answer {
-    _id
-    author {
-      ...AuthorDetails
-    }
-    body
-    comments {
-      ...CommentDetails
-    }
-    points
-    voted
-    createdAt
-    updatedAt
+    fragment AnswerDetails on Answer {
+  _id
+  author {
+    ...AuthorDetails
   }
-  ${AuthorDetailsFragmentDoc}
-  ${CommentDetailsFragmentDoc}
-`
+  body
+  comments {
+    ...CommentDetails
+  }
+  points
+  voted
+  createdAt
+  updatedAt
+}
+    ${AuthorDetailsFragmentDoc}
+${CommentDetailsFragmentDoc}`;
 export const QuestionDetailsFragmentDoc = gql`
-  fragment QuestionDetails on Question {
-    _id
-    author {
-      ...AuthorDetails
-    }
-    title
-    body
-    tags
-    points
-    views
-    acceptedAnswer
-    comments {
-      ...CommentDetails
-    }
-    answers {
-      ...AnswerDetails
-    }
-    voted
-    createdAt
-    updatedAt
+    fragment QuestionDetails on Question {
+  _id
+  author {
+    ...AuthorDetails
   }
-  ${AuthorDetailsFragmentDoc}
-  ${CommentDetailsFragmentDoc}
-  ${AnswerDetailsFragmentDoc}
-`
+  title
+  body
+  tags
+  points
+  views
+  acceptedAnswer
+  comments {
+    ...CommentDetails
+  }
+  answers {
+    ...AnswerDetails
+  }
+  voted
+  createdAt
+  updatedAt
+}
+    ${AuthorDetailsFragmentDoc}
+${CommentDetailsFragmentDoc}
+${AnswerDetailsFragmentDoc}`;
 export const PostQuestionDetailsFragmentDoc = gql`
-  fragment PostQuestionDetails on Question {
-    _id
-    author {
-      ...AuthorDetails
-    }
-    title
-    body
-    tags
-    points
-    views
-    voted
-    createdAt
-    updatedAt
+    fragment PostQuestionDetails on Question {
+  _id
+  author {
+    ...AuthorDetails
   }
-  ${AuthorDetailsFragmentDoc}
-`
+  title
+  body
+  tags
+  points
+  views
+  voted
+  createdAt
+  updatedAt
+}
+    ${AuthorDetailsFragmentDoc}`;
 export const LoggedUserDetailsFragmentDoc = gql`
-  fragment LoggedUserDetails on LoggedUser {
-    _id
-    username
-    role
-    token
-  }
-`
+    fragment LoggedUserDetails on LoggedUser {
+  _id
+  username
+  role
+  token
+}
+    `;
 export const RegisterUserDocument = gql`
-  mutation registerUser($username: String!, $password: String!) {
-    register(username: $username, password: $password) {
-      ...LoggedUserDetails
-    }
+    mutation registerUser($username: String!, $password: String!) {
+  register(username: $username, password: $password) {
+    ...LoggedUserDetails
   }
-  ${LoggedUserDetailsFragmentDoc}
-`
-export type RegisterUserMutationFn = Apollo.MutationFunction<
-  RegisterUserMutation,
-  RegisterUserMutationVariables
->
+}
+    ${LoggedUserDetailsFragmentDoc}`;
+export type RegisterUserMutationFn = Apollo.MutationFunction<RegisterUserMutation, RegisterUserMutationVariables>;
 
 /**
  * __useRegisterUserMutation__
@@ -1015,39 +602,21 @@ export type RegisterUserMutationFn = Apollo.MutationFunction<
  *   },
  * });
  */
-export function useRegisterUserMutation(
-  baseOptions?: Apollo.MutationHookOptions<
-    RegisterUserMutation,
-    RegisterUserMutationVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useMutation<
-    RegisterUserMutation,
-    RegisterUserMutationVariables
-  >(RegisterUserDocument, options)
-}
-export type RegisterUserMutationHookResult = ReturnType<
-  typeof useRegisterUserMutation
->
-export type RegisterUserMutationResult =
-  Apollo.MutationResult<RegisterUserMutation>
-export type RegisterUserMutationOptions = Apollo.BaseMutationOptions<
-  RegisterUserMutation,
-  RegisterUserMutationVariables
->
+export function useRegisterUserMutation(baseOptions?: Apollo.MutationHookOptions<RegisterUserMutation, RegisterUserMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<RegisterUserMutation, RegisterUserMutationVariables>(RegisterUserDocument, options);
+      }
+export type RegisterUserMutationHookResult = ReturnType<typeof useRegisterUserMutation>;
+export type RegisterUserMutationResult = Apollo.MutationResult<RegisterUserMutation>;
+export type RegisterUserMutationOptions = Apollo.BaseMutationOptions<RegisterUserMutation, RegisterUserMutationVariables>;
 export const LoginUserDocument = gql`
-  mutation loginUser($username: String!, $password: String!) {
-    login(username: $username, password: $password) {
-      ...LoggedUserDetails
-    }
+    mutation loginUser($username: String!, $password: String!) {
+  login(username: $username, password: $password) {
+    ...LoggedUserDetails
   }
-  ${LoggedUserDetailsFragmentDoc}
-`
-export type LoginUserMutationFn = Apollo.MutationFunction<
-  LoginUserMutation,
-  LoginUserMutationVariables
->
+}
+    ${LoggedUserDetailsFragmentDoc}`;
+export type LoginUserMutationFn = Apollo.MutationFunction<LoginUserMutation, LoginUserMutationVariables>;
 
 /**
  * __useLoginUserMutation__
@@ -1067,38 +636,21 @@ export type LoginUserMutationFn = Apollo.MutationFunction<
  *   },
  * });
  */
-export function useLoginUserMutation(
-  baseOptions?: Apollo.MutationHookOptions<
-    LoginUserMutation,
-    LoginUserMutationVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useMutation<LoginUserMutation, LoginUserMutationVariables>(
-    LoginUserDocument,
-    options
-  )
-}
-export type LoginUserMutationHookResult = ReturnType<
-  typeof useLoginUserMutation
->
-export type LoginUserMutationResult = Apollo.MutationResult<LoginUserMutation>
-export type LoginUserMutationOptions = Apollo.BaseMutationOptions<
-  LoginUserMutation,
-  LoginUserMutationVariables
->
+export function useLoginUserMutation(baseOptions?: Apollo.MutationHookOptions<LoginUserMutation, LoginUserMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<LoginUserMutation, LoginUserMutationVariables>(LoginUserDocument, options);
+      }
+export type LoginUserMutationHookResult = ReturnType<typeof useLoginUserMutation>;
+export type LoginUserMutationResult = Apollo.MutationResult<LoginUserMutation>;
+export type LoginUserMutationOptions = Apollo.BaseMutationOptions<LoginUserMutation, LoginUserMutationVariables>;
 export const AddQuestionDocument = gql`
-  mutation addQuestion($title: String!, $body: String!, $tags: [String!]!) {
-    postQuestion(title: $title, body: $body, tags: $tags) {
-      ...PostQuestionDetails
-    }
+    mutation addQuestion($title: String!, $body: String!, $tags: [String!]!) {
+  postQuestion(title: $title, body: $body, tags: $tags) {
+    ...PostQuestionDetails
   }
-  ${PostQuestionDetailsFragmentDoc}
-`
-export type AddQuestionMutationFn = Apollo.MutationFunction<
-  AddQuestionMutation,
-  AddQuestionMutationVariables
->
+}
+    ${PostQuestionDetailsFragmentDoc}`;
+export type AddQuestionMutationFn = Apollo.MutationFunction<AddQuestionMutation, AddQuestionMutationVariables>;
 
 /**
  * __useAddQuestionMutation__
@@ -1119,44 +671,21 @@ export type AddQuestionMutationFn = Apollo.MutationFunction<
  *   },
  * });
  */
-export function useAddQuestionMutation(
-  baseOptions?: Apollo.MutationHookOptions<
-    AddQuestionMutation,
-    AddQuestionMutationVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useMutation<AddQuestionMutation, AddQuestionMutationVariables>(
-    AddQuestionDocument,
-    options
-  )
-}
-export type AddQuestionMutationHookResult = ReturnType<
-  typeof useAddQuestionMutation
->
-export type AddQuestionMutationResult =
-  Apollo.MutationResult<AddQuestionMutation>
-export type AddQuestionMutationOptions = Apollo.BaseMutationOptions<
-  AddQuestionMutation,
-  AddQuestionMutationVariables
->
+export function useAddQuestionMutation(baseOptions?: Apollo.MutationHookOptions<AddQuestionMutation, AddQuestionMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<AddQuestionMutation, AddQuestionMutationVariables>(AddQuestionDocument, options);
+      }
+export type AddQuestionMutationHookResult = ReturnType<typeof useAddQuestionMutation>;
+export type AddQuestionMutationResult = Apollo.MutationResult<AddQuestionMutation>;
+export type AddQuestionMutationOptions = Apollo.BaseMutationOptions<AddQuestionMutation, AddQuestionMutationVariables>;
 export const UpdateQuestionDocument = gql`
-  mutation updateQuestion(
-    $quesId: ID!
-    $title: String!
-    $body: String!
-    $tags: [String!]!
-  ) {
-    editQuestion(quesId: $quesId, title: $title, body: $body, tags: $tags) {
-      ...QuestionDetails
-    }
+    mutation updateQuestion($quesId: ID!, $title: String!, $body: String!, $tags: [String!]!) {
+  editQuestion(quesId: $quesId, title: $title, body: $body, tags: $tags) {
+    ...QuestionDetails
   }
-  ${QuestionDetailsFragmentDoc}
-`
-export type UpdateQuestionMutationFn = Apollo.MutationFunction<
-  UpdateQuestionMutation,
-  UpdateQuestionMutationVariables
->
+}
+    ${QuestionDetailsFragmentDoc}`;
+export type UpdateQuestionMutationFn = Apollo.MutationFunction<UpdateQuestionMutation, UpdateQuestionMutationVariables>;
 
 /**
  * __useUpdateQuestionMutation__
@@ -1178,36 +707,19 @@ export type UpdateQuestionMutationFn = Apollo.MutationFunction<
  *   },
  * });
  */
-export function useUpdateQuestionMutation(
-  baseOptions?: Apollo.MutationHookOptions<
-    UpdateQuestionMutation,
-    UpdateQuestionMutationVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useMutation<
-    UpdateQuestionMutation,
-    UpdateQuestionMutationVariables
-  >(UpdateQuestionDocument, options)
-}
-export type UpdateQuestionMutationHookResult = ReturnType<
-  typeof useUpdateQuestionMutation
->
-export type UpdateQuestionMutationResult =
-  Apollo.MutationResult<UpdateQuestionMutation>
-export type UpdateQuestionMutationOptions = Apollo.BaseMutationOptions<
-  UpdateQuestionMutation,
-  UpdateQuestionMutationVariables
->
+export function useUpdateQuestionMutation(baseOptions?: Apollo.MutationHookOptions<UpdateQuestionMutation, UpdateQuestionMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UpdateQuestionMutation, UpdateQuestionMutationVariables>(UpdateQuestionDocument, options);
+      }
+export type UpdateQuestionMutationHookResult = ReturnType<typeof useUpdateQuestionMutation>;
+export type UpdateQuestionMutationResult = Apollo.MutationResult<UpdateQuestionMutation>;
+export type UpdateQuestionMutationOptions = Apollo.BaseMutationOptions<UpdateQuestionMutation, UpdateQuestionMutationVariables>;
 export const RemoveQuestionDocument = gql`
-  mutation removeQuestion($quesId: ID!) {
-    deleteQuestion(quesId: $quesId)
-  }
-`
-export type RemoveQuestionMutationFn = Apollo.MutationFunction<
-  RemoveQuestionMutation,
-  RemoveQuestionMutationVariables
->
+    mutation removeQuestion($quesId: ID!) {
+  deleteQuestion(quesId: $quesId)
+}
+    `;
+export type RemoveQuestionMutationFn = Apollo.MutationFunction<RemoveQuestionMutation, RemoveQuestionMutationVariables>;
 
 /**
  * __useRemoveQuestionMutation__
@@ -1226,40 +738,23 @@ export type RemoveQuestionMutationFn = Apollo.MutationFunction<
  *   },
  * });
  */
-export function useRemoveQuestionMutation(
-  baseOptions?: Apollo.MutationHookOptions<
-    RemoveQuestionMutation,
-    RemoveQuestionMutationVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useMutation<
-    RemoveQuestionMutation,
-    RemoveQuestionMutationVariables
-  >(RemoveQuestionDocument, options)
-}
-export type RemoveQuestionMutationHookResult = ReturnType<
-  typeof useRemoveQuestionMutation
->
-export type RemoveQuestionMutationResult =
-  Apollo.MutationResult<RemoveQuestionMutation>
-export type RemoveQuestionMutationOptions = Apollo.BaseMutationOptions<
-  RemoveQuestionMutation,
-  RemoveQuestionMutationVariables
->
+export function useRemoveQuestionMutation(baseOptions?: Apollo.MutationHookOptions<RemoveQuestionMutation, RemoveQuestionMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<RemoveQuestionMutation, RemoveQuestionMutationVariables>(RemoveQuestionDocument, options);
+      }
+export type RemoveQuestionMutationHookResult = ReturnType<typeof useRemoveQuestionMutation>;
+export type RemoveQuestionMutationResult = Apollo.MutationResult<RemoveQuestionMutation>;
+export type RemoveQuestionMutationOptions = Apollo.BaseMutationOptions<RemoveQuestionMutation, RemoveQuestionMutationVariables>;
 export const SubmitQuesVoteDocument = gql`
-  mutation submitQuesVote($quesId: ID!, $voteType: VoteType!) {
-    voteQuestion(quesId: $quesId, voteType: $voteType) {
-      _id
-      voted
-      points
-    }
+    mutation submitQuesVote($quesId: ID!, $voteType: VoteType!) {
+  voteQuestion(quesId: $quesId, voteType: $voteType) {
+    _id
+    voted
+    points
   }
-`
-export type SubmitQuesVoteMutationFn = Apollo.MutationFunction<
-  SubmitQuesVoteMutation,
-  SubmitQuesVoteMutationVariables
->
+}
+    `;
+export type SubmitQuesVoteMutationFn = Apollo.MutationFunction<SubmitQuesVoteMutation, SubmitQuesVoteMutationVariables>;
 
 /**
  * __useSubmitQuesVoteMutation__
@@ -1279,39 +774,21 @@ export type SubmitQuesVoteMutationFn = Apollo.MutationFunction<
  *   },
  * });
  */
-export function useSubmitQuesVoteMutation(
-  baseOptions?: Apollo.MutationHookOptions<
-    SubmitQuesVoteMutation,
-    SubmitQuesVoteMutationVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useMutation<
-    SubmitQuesVoteMutation,
-    SubmitQuesVoteMutationVariables
-  >(SubmitQuesVoteDocument, options)
-}
-export type SubmitQuesVoteMutationHookResult = ReturnType<
-  typeof useSubmitQuesVoteMutation
->
-export type SubmitQuesVoteMutationResult =
-  Apollo.MutationResult<SubmitQuesVoteMutation>
-export type SubmitQuesVoteMutationOptions = Apollo.BaseMutationOptions<
-  SubmitQuesVoteMutation,
-  SubmitQuesVoteMutationVariables
->
+export function useSubmitQuesVoteMutation(baseOptions?: Apollo.MutationHookOptions<SubmitQuesVoteMutation, SubmitQuesVoteMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<SubmitQuesVoteMutation, SubmitQuesVoteMutationVariables>(SubmitQuesVoteDocument, options);
+      }
+export type SubmitQuesVoteMutationHookResult = ReturnType<typeof useSubmitQuesVoteMutation>;
+export type SubmitQuesVoteMutationResult = Apollo.MutationResult<SubmitQuesVoteMutation>;
+export type SubmitQuesVoteMutationOptions = Apollo.BaseMutationOptions<SubmitQuesVoteMutation, SubmitQuesVoteMutationVariables>;
 export const PostQuesCommentDocument = gql`
-  mutation postQuesComment($quesId: ID!, $body: String!) {
-    addQuesComment(quesId: $quesId, body: $body) {
-      ...CommentDetails
-    }
+    mutation postQuesComment($quesId: ID!, $body: String!) {
+  addQuesComment(quesId: $quesId, body: $body) {
+    ...CommentDetails
   }
-  ${CommentDetailsFragmentDoc}
-`
-export type PostQuesCommentMutationFn = Apollo.MutationFunction<
-  PostQuesCommentMutation,
-  PostQuesCommentMutationVariables
->
+}
+    ${CommentDetailsFragmentDoc}`;
+export type PostQuesCommentMutationFn = Apollo.MutationFunction<PostQuesCommentMutation, PostQuesCommentMutationVariables>;
 
 /**
  * __usePostQuesCommentMutation__
@@ -1331,39 +808,21 @@ export type PostQuesCommentMutationFn = Apollo.MutationFunction<
  *   },
  * });
  */
-export function usePostQuesCommentMutation(
-  baseOptions?: Apollo.MutationHookOptions<
-    PostQuesCommentMutation,
-    PostQuesCommentMutationVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useMutation<
-    PostQuesCommentMutation,
-    PostQuesCommentMutationVariables
-  >(PostQuesCommentDocument, options)
-}
-export type PostQuesCommentMutationHookResult = ReturnType<
-  typeof usePostQuesCommentMutation
->
-export type PostQuesCommentMutationResult =
-  Apollo.MutationResult<PostQuesCommentMutation>
-export type PostQuesCommentMutationOptions = Apollo.BaseMutationOptions<
-  PostQuesCommentMutation,
-  PostQuesCommentMutationVariables
->
+export function usePostQuesCommentMutation(baseOptions?: Apollo.MutationHookOptions<PostQuesCommentMutation, PostQuesCommentMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<PostQuesCommentMutation, PostQuesCommentMutationVariables>(PostQuesCommentDocument, options);
+      }
+export type PostQuesCommentMutationHookResult = ReturnType<typeof usePostQuesCommentMutation>;
+export type PostQuesCommentMutationResult = Apollo.MutationResult<PostQuesCommentMutation>;
+export type PostQuesCommentMutationOptions = Apollo.BaseMutationOptions<PostQuesCommentMutation, PostQuesCommentMutationVariables>;
 export const UpdateQuesCommentDocument = gql`
-  mutation updateQuesComment($quesId: ID!, $commentId: ID!, $body: String!) {
-    editQuesComment(quesId: $quesId, commentId: $commentId, body: $body) {
-      ...CommentDetails
-    }
+    mutation updateQuesComment($quesId: ID!, $commentId: ID!, $body: String!) {
+  editQuesComment(quesId: $quesId, commentId: $commentId, body: $body) {
+    ...CommentDetails
   }
-  ${CommentDetailsFragmentDoc}
-`
-export type UpdateQuesCommentMutationFn = Apollo.MutationFunction<
-  UpdateQuesCommentMutation,
-  UpdateQuesCommentMutationVariables
->
+}
+    ${CommentDetailsFragmentDoc}`;
+export type UpdateQuesCommentMutationFn = Apollo.MutationFunction<UpdateQuesCommentMutation, UpdateQuesCommentMutationVariables>;
 
 /**
  * __useUpdateQuesCommentMutation__
@@ -1384,36 +843,19 @@ export type UpdateQuesCommentMutationFn = Apollo.MutationFunction<
  *   },
  * });
  */
-export function useUpdateQuesCommentMutation(
-  baseOptions?: Apollo.MutationHookOptions<
-    UpdateQuesCommentMutation,
-    UpdateQuesCommentMutationVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useMutation<
-    UpdateQuesCommentMutation,
-    UpdateQuesCommentMutationVariables
-  >(UpdateQuesCommentDocument, options)
-}
-export type UpdateQuesCommentMutationHookResult = ReturnType<
-  typeof useUpdateQuesCommentMutation
->
-export type UpdateQuesCommentMutationResult =
-  Apollo.MutationResult<UpdateQuesCommentMutation>
-export type UpdateQuesCommentMutationOptions = Apollo.BaseMutationOptions<
-  UpdateQuesCommentMutation,
-  UpdateQuesCommentMutationVariables
->
+export function useUpdateQuesCommentMutation(baseOptions?: Apollo.MutationHookOptions<UpdateQuesCommentMutation, UpdateQuesCommentMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UpdateQuesCommentMutation, UpdateQuesCommentMutationVariables>(UpdateQuesCommentDocument, options);
+      }
+export type UpdateQuesCommentMutationHookResult = ReturnType<typeof useUpdateQuesCommentMutation>;
+export type UpdateQuesCommentMutationResult = Apollo.MutationResult<UpdateQuesCommentMutation>;
+export type UpdateQuesCommentMutationOptions = Apollo.BaseMutationOptions<UpdateQuesCommentMutation, UpdateQuesCommentMutationVariables>;
 export const RemoveQuesCommentDocument = gql`
-  mutation removeQuesComment($quesId: ID!, $commentId: ID!) {
-    deleteQuesComment(quesId: $quesId, commentId: $commentId)
-  }
-`
-export type RemoveQuesCommentMutationFn = Apollo.MutationFunction<
-  RemoveQuesCommentMutation,
-  RemoveQuesCommentMutationVariables
->
+    mutation removeQuesComment($quesId: ID!, $commentId: ID!) {
+  deleteQuesComment(quesId: $quesId, commentId: $commentId)
+}
+    `;
+export type RemoveQuesCommentMutationFn = Apollo.MutationFunction<RemoveQuesCommentMutation, RemoveQuesCommentMutationVariables>;
 
 /**
  * __useRemoveQuesCommentMutation__
@@ -1433,39 +875,21 @@ export type RemoveQuesCommentMutationFn = Apollo.MutationFunction<
  *   },
  * });
  */
-export function useRemoveQuesCommentMutation(
-  baseOptions?: Apollo.MutationHookOptions<
-    RemoveQuesCommentMutation,
-    RemoveQuesCommentMutationVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useMutation<
-    RemoveQuesCommentMutation,
-    RemoveQuesCommentMutationVariables
-  >(RemoveQuesCommentDocument, options)
-}
-export type RemoveQuesCommentMutationHookResult = ReturnType<
-  typeof useRemoveQuesCommentMutation
->
-export type RemoveQuesCommentMutationResult =
-  Apollo.MutationResult<RemoveQuesCommentMutation>
-export type RemoveQuesCommentMutationOptions = Apollo.BaseMutationOptions<
-  RemoveQuesCommentMutation,
-  RemoveQuesCommentMutationVariables
->
+export function useRemoveQuesCommentMutation(baseOptions?: Apollo.MutationHookOptions<RemoveQuesCommentMutation, RemoveQuesCommentMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<RemoveQuesCommentMutation, RemoveQuesCommentMutationVariables>(RemoveQuesCommentDocument, options);
+      }
+export type RemoveQuesCommentMutationHookResult = ReturnType<typeof useRemoveQuesCommentMutation>;
+export type RemoveQuesCommentMutationResult = Apollo.MutationResult<RemoveQuesCommentMutation>;
+export type RemoveQuesCommentMutationOptions = Apollo.BaseMutationOptions<RemoveQuesCommentMutation, RemoveQuesCommentMutationVariables>;
 export const AddAnswerDocument = gql`
-  mutation addAnswer($quesId: ID!, $body: String!) {
-    postAnswer(quesId: $quesId, body: $body) {
-      ...AnswerDetails
-    }
+    mutation addAnswer($quesId: ID!, $body: String!) {
+  postAnswer(quesId: $quesId, body: $body) {
+    ...AnswerDetails
   }
-  ${AnswerDetailsFragmentDoc}
-`
-export type AddAnswerMutationFn = Apollo.MutationFunction<
-  AddAnswerMutation,
-  AddAnswerMutationVariables
->
+}
+    ${AnswerDetailsFragmentDoc}`;
+export type AddAnswerMutationFn = Apollo.MutationFunction<AddAnswerMutation, AddAnswerMutationVariables>;
 
 /**
  * __useAddAnswerMutation__
@@ -1485,38 +909,21 @@ export type AddAnswerMutationFn = Apollo.MutationFunction<
  *   },
  * });
  */
-export function useAddAnswerMutation(
-  baseOptions?: Apollo.MutationHookOptions<
-    AddAnswerMutation,
-    AddAnswerMutationVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useMutation<AddAnswerMutation, AddAnswerMutationVariables>(
-    AddAnswerDocument,
-    options
-  )
-}
-export type AddAnswerMutationHookResult = ReturnType<
-  typeof useAddAnswerMutation
->
-export type AddAnswerMutationResult = Apollo.MutationResult<AddAnswerMutation>
-export type AddAnswerMutationOptions = Apollo.BaseMutationOptions<
-  AddAnswerMutation,
-  AddAnswerMutationVariables
->
+export function useAddAnswerMutation(baseOptions?: Apollo.MutationHookOptions<AddAnswerMutation, AddAnswerMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<AddAnswerMutation, AddAnswerMutationVariables>(AddAnswerDocument, options);
+      }
+export type AddAnswerMutationHookResult = ReturnType<typeof useAddAnswerMutation>;
+export type AddAnswerMutationResult = Apollo.MutationResult<AddAnswerMutation>;
+export type AddAnswerMutationOptions = Apollo.BaseMutationOptions<AddAnswerMutation, AddAnswerMutationVariables>;
 export const UpdateAnswerDocument = gql`
-  mutation updateAnswer($quesId: ID!, $ansId: ID!, $body: String!) {
-    editAnswer(quesId: $quesId, ansId: $ansId, body: $body) {
-      ...AnswerDetails
-    }
+    mutation updateAnswer($quesId: ID!, $ansId: ID!, $body: String!) {
+  editAnswer(quesId: $quesId, ansId: $ansId, body: $body) {
+    ...AnswerDetails
   }
-  ${AnswerDetailsFragmentDoc}
-`
-export type UpdateAnswerMutationFn = Apollo.MutationFunction<
-  UpdateAnswerMutation,
-  UpdateAnswerMutationVariables
->
+}
+    ${AnswerDetailsFragmentDoc}`;
+export type UpdateAnswerMutationFn = Apollo.MutationFunction<UpdateAnswerMutation, UpdateAnswerMutationVariables>;
 
 /**
  * __useUpdateAnswerMutation__
@@ -1537,36 +944,19 @@ export type UpdateAnswerMutationFn = Apollo.MutationFunction<
  *   },
  * });
  */
-export function useUpdateAnswerMutation(
-  baseOptions?: Apollo.MutationHookOptions<
-    UpdateAnswerMutation,
-    UpdateAnswerMutationVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useMutation<
-    UpdateAnswerMutation,
-    UpdateAnswerMutationVariables
-  >(UpdateAnswerDocument, options)
-}
-export type UpdateAnswerMutationHookResult = ReturnType<
-  typeof useUpdateAnswerMutation
->
-export type UpdateAnswerMutationResult =
-  Apollo.MutationResult<UpdateAnswerMutation>
-export type UpdateAnswerMutationOptions = Apollo.BaseMutationOptions<
-  UpdateAnswerMutation,
-  UpdateAnswerMutationVariables
->
+export function useUpdateAnswerMutation(baseOptions?: Apollo.MutationHookOptions<UpdateAnswerMutation, UpdateAnswerMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UpdateAnswerMutation, UpdateAnswerMutationVariables>(UpdateAnswerDocument, options);
+      }
+export type UpdateAnswerMutationHookResult = ReturnType<typeof useUpdateAnswerMutation>;
+export type UpdateAnswerMutationResult = Apollo.MutationResult<UpdateAnswerMutation>;
+export type UpdateAnswerMutationOptions = Apollo.BaseMutationOptions<UpdateAnswerMutation, UpdateAnswerMutationVariables>;
 export const RemoveAnswerDocument = gql`
-  mutation removeAnswer($quesId: ID!, $ansId: ID!) {
-    deleteAnswer(quesId: $quesId, ansId: $ansId)
-  }
-`
-export type RemoveAnswerMutationFn = Apollo.MutationFunction<
-  RemoveAnswerMutation,
-  RemoveAnswerMutationVariables
->
+    mutation removeAnswer($quesId: ID!, $ansId: ID!) {
+  deleteAnswer(quesId: $quesId, ansId: $ansId)
+}
+    `;
+export type RemoveAnswerMutationFn = Apollo.MutationFunction<RemoveAnswerMutation, RemoveAnswerMutationVariables>;
 
 /**
  * __useRemoveAnswerMutation__
@@ -1586,40 +976,23 @@ export type RemoveAnswerMutationFn = Apollo.MutationFunction<
  *   },
  * });
  */
-export function useRemoveAnswerMutation(
-  baseOptions?: Apollo.MutationHookOptions<
-    RemoveAnswerMutation,
-    RemoveAnswerMutationVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useMutation<
-    RemoveAnswerMutation,
-    RemoveAnswerMutationVariables
-  >(RemoveAnswerDocument, options)
-}
-export type RemoveAnswerMutationHookResult = ReturnType<
-  typeof useRemoveAnswerMutation
->
-export type RemoveAnswerMutationResult =
-  Apollo.MutationResult<RemoveAnswerMutation>
-export type RemoveAnswerMutationOptions = Apollo.BaseMutationOptions<
-  RemoveAnswerMutation,
-  RemoveAnswerMutationVariables
->
+export function useRemoveAnswerMutation(baseOptions?: Apollo.MutationHookOptions<RemoveAnswerMutation, RemoveAnswerMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<RemoveAnswerMutation, RemoveAnswerMutationVariables>(RemoveAnswerDocument, options);
+      }
+export type RemoveAnswerMutationHookResult = ReturnType<typeof useRemoveAnswerMutation>;
+export type RemoveAnswerMutationResult = Apollo.MutationResult<RemoveAnswerMutation>;
+export type RemoveAnswerMutationOptions = Apollo.BaseMutationOptions<RemoveAnswerMutation, RemoveAnswerMutationVariables>;
 export const SubmitAnsVoteDocument = gql`
-  mutation submitAnsVote($quesId: ID!, $ansId: ID!, $voteType: VoteType!) {
-    voteAnswer(quesId: $quesId, ansId: $ansId, voteType: $voteType) {
-      _id
-      voted
-      points
-    }
+    mutation submitAnsVote($quesId: ID!, $ansId: ID!, $voteType: VoteType!) {
+  voteAnswer(quesId: $quesId, ansId: $ansId, voteType: $voteType) {
+    _id
+    voted
+    points
   }
-`
-export type SubmitAnsVoteMutationFn = Apollo.MutationFunction<
-  SubmitAnsVoteMutation,
-  SubmitAnsVoteMutationVariables
->
+}
+    `;
+export type SubmitAnsVoteMutationFn = Apollo.MutationFunction<SubmitAnsVoteMutation, SubmitAnsVoteMutationVariables>;
 
 /**
  * __useSubmitAnsVoteMutation__
@@ -1640,39 +1013,22 @@ export type SubmitAnsVoteMutationFn = Apollo.MutationFunction<
  *   },
  * });
  */
-export function useSubmitAnsVoteMutation(
-  baseOptions?: Apollo.MutationHookOptions<
-    SubmitAnsVoteMutation,
-    SubmitAnsVoteMutationVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useMutation<
-    SubmitAnsVoteMutation,
-    SubmitAnsVoteMutationVariables
-  >(SubmitAnsVoteDocument, options)
-}
-export type SubmitAnsVoteMutationHookResult = ReturnType<
-  typeof useSubmitAnsVoteMutation
->
-export type SubmitAnsVoteMutationResult =
-  Apollo.MutationResult<SubmitAnsVoteMutation>
-export type SubmitAnsVoteMutationOptions = Apollo.BaseMutationOptions<
-  SubmitAnsVoteMutation,
-  SubmitAnsVoteMutationVariables
->
+export function useSubmitAnsVoteMutation(baseOptions?: Apollo.MutationHookOptions<SubmitAnsVoteMutation, SubmitAnsVoteMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<SubmitAnsVoteMutation, SubmitAnsVoteMutationVariables>(SubmitAnsVoteDocument, options);
+      }
+export type SubmitAnsVoteMutationHookResult = ReturnType<typeof useSubmitAnsVoteMutation>;
+export type SubmitAnsVoteMutationResult = Apollo.MutationResult<SubmitAnsVoteMutation>;
+export type SubmitAnsVoteMutationOptions = Apollo.BaseMutationOptions<SubmitAnsVoteMutation, SubmitAnsVoteMutationVariables>;
 export const SubmitAcceptAnsDocument = gql`
-  mutation submitAcceptAns($quesId: ID!, $ansId: ID!) {
-    acceptAnswer(quesId: $quesId, ansId: $ansId) {
-      _id
-      acceptedAnswer
-    }
+    mutation submitAcceptAns($quesId: ID!, $ansId: ID!) {
+  acceptAnswer(quesId: $quesId, ansId: $ansId) {
+    _id
+    acceptedAnswer
   }
-`
-export type SubmitAcceptAnsMutationFn = Apollo.MutationFunction<
-  SubmitAcceptAnsMutation,
-  SubmitAcceptAnsMutationVariables
->
+}
+    `;
+export type SubmitAcceptAnsMutationFn = Apollo.MutationFunction<SubmitAcceptAnsMutation, SubmitAcceptAnsMutationVariables>;
 
 /**
  * __useSubmitAcceptAnsMutation__
@@ -1692,39 +1048,21 @@ export type SubmitAcceptAnsMutationFn = Apollo.MutationFunction<
  *   },
  * });
  */
-export function useSubmitAcceptAnsMutation(
-  baseOptions?: Apollo.MutationHookOptions<
-    SubmitAcceptAnsMutation,
-    SubmitAcceptAnsMutationVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useMutation<
-    SubmitAcceptAnsMutation,
-    SubmitAcceptAnsMutationVariables
-  >(SubmitAcceptAnsDocument, options)
-}
-export type SubmitAcceptAnsMutationHookResult = ReturnType<
-  typeof useSubmitAcceptAnsMutation
->
-export type SubmitAcceptAnsMutationResult =
-  Apollo.MutationResult<SubmitAcceptAnsMutation>
-export type SubmitAcceptAnsMutationOptions = Apollo.BaseMutationOptions<
-  SubmitAcceptAnsMutation,
-  SubmitAcceptAnsMutationVariables
->
+export function useSubmitAcceptAnsMutation(baseOptions?: Apollo.MutationHookOptions<SubmitAcceptAnsMutation, SubmitAcceptAnsMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<SubmitAcceptAnsMutation, SubmitAcceptAnsMutationVariables>(SubmitAcceptAnsDocument, options);
+      }
+export type SubmitAcceptAnsMutationHookResult = ReturnType<typeof useSubmitAcceptAnsMutation>;
+export type SubmitAcceptAnsMutationResult = Apollo.MutationResult<SubmitAcceptAnsMutation>;
+export type SubmitAcceptAnsMutationOptions = Apollo.BaseMutationOptions<SubmitAcceptAnsMutation, SubmitAcceptAnsMutationVariables>;
 export const PostAnsCommentDocument = gql`
-  mutation postAnsComment($ansId: ID!, $body: String!) {
-    addAnsComment(ansId: $ansId, body: $body) {
-      ...CommentDetails
-    }
+    mutation postAnsComment($ansId: ID!, $body: String!) {
+  addAnsComment(ansId: $ansId, body: $body) {
+    ...CommentDetails
   }
-  ${CommentDetailsFragmentDoc}
-`
-export type PostAnsCommentMutationFn = Apollo.MutationFunction<
-  PostAnsCommentMutation,
-  PostAnsCommentMutationVariables
->
+}
+    ${CommentDetailsFragmentDoc}`;
+export type PostAnsCommentMutationFn = Apollo.MutationFunction<PostAnsCommentMutation, PostAnsCommentMutationVariables>;
 
 /**
  * __usePostAnsCommentMutation__
@@ -1744,39 +1082,21 @@ export type PostAnsCommentMutationFn = Apollo.MutationFunction<
  *   },
  * });
  */
-export function usePostAnsCommentMutation(
-  baseOptions?: Apollo.MutationHookOptions<
-    PostAnsCommentMutation,
-    PostAnsCommentMutationVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useMutation<
-    PostAnsCommentMutation,
-    PostAnsCommentMutationVariables
-  >(PostAnsCommentDocument, options)
-}
-export type PostAnsCommentMutationHookResult = ReturnType<
-  typeof usePostAnsCommentMutation
->
-export type PostAnsCommentMutationResult =
-  Apollo.MutationResult<PostAnsCommentMutation>
-export type PostAnsCommentMutationOptions = Apollo.BaseMutationOptions<
-  PostAnsCommentMutation,
-  PostAnsCommentMutationVariables
->
+export function usePostAnsCommentMutation(baseOptions?: Apollo.MutationHookOptions<PostAnsCommentMutation, PostAnsCommentMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<PostAnsCommentMutation, PostAnsCommentMutationVariables>(PostAnsCommentDocument, options);
+      }
+export type PostAnsCommentMutationHookResult = ReturnType<typeof usePostAnsCommentMutation>;
+export type PostAnsCommentMutationResult = Apollo.MutationResult<PostAnsCommentMutation>;
+export type PostAnsCommentMutationOptions = Apollo.BaseMutationOptions<PostAnsCommentMutation, PostAnsCommentMutationVariables>;
 export const UpdateAnsCommentDocument = gql`
-  mutation updateAnsComment($ansId: ID!, $commentId: ID!, $body: String!) {
-    editAnsComment(ansId: $ansId, commentId: $commentId, body: $body) {
-      ...CommentDetails
-    }
+    mutation updateAnsComment($ansId: ID!, $commentId: ID!, $body: String!) {
+  editAnsComment(ansId: $ansId, commentId: $commentId, body: $body) {
+    ...CommentDetails
   }
-  ${CommentDetailsFragmentDoc}
-`
-export type UpdateAnsCommentMutationFn = Apollo.MutationFunction<
-  UpdateAnsCommentMutation,
-  UpdateAnsCommentMutationVariables
->
+}
+    ${CommentDetailsFragmentDoc}`;
+export type UpdateAnsCommentMutationFn = Apollo.MutationFunction<UpdateAnsCommentMutation, UpdateAnsCommentMutationVariables>;
 
 /**
  * __useUpdateAnsCommentMutation__
@@ -1797,36 +1117,19 @@ export type UpdateAnsCommentMutationFn = Apollo.MutationFunction<
  *   },
  * });
  */
-export function useUpdateAnsCommentMutation(
-  baseOptions?: Apollo.MutationHookOptions<
-    UpdateAnsCommentMutation,
-    UpdateAnsCommentMutationVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useMutation<
-    UpdateAnsCommentMutation,
-    UpdateAnsCommentMutationVariables
-  >(UpdateAnsCommentDocument, options)
-}
-export type UpdateAnsCommentMutationHookResult = ReturnType<
-  typeof useUpdateAnsCommentMutation
->
-export type UpdateAnsCommentMutationResult =
-  Apollo.MutationResult<UpdateAnsCommentMutation>
-export type UpdateAnsCommentMutationOptions = Apollo.BaseMutationOptions<
-  UpdateAnsCommentMutation,
-  UpdateAnsCommentMutationVariables
->
+export function useUpdateAnsCommentMutation(baseOptions?: Apollo.MutationHookOptions<UpdateAnsCommentMutation, UpdateAnsCommentMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UpdateAnsCommentMutation, UpdateAnsCommentMutationVariables>(UpdateAnsCommentDocument, options);
+      }
+export type UpdateAnsCommentMutationHookResult = ReturnType<typeof useUpdateAnsCommentMutation>;
+export type UpdateAnsCommentMutationResult = Apollo.MutationResult<UpdateAnsCommentMutation>;
+export type UpdateAnsCommentMutationOptions = Apollo.BaseMutationOptions<UpdateAnsCommentMutation, UpdateAnsCommentMutationVariables>;
 export const RemoveAnsCommentDocument = gql`
-  mutation removeAnsComment($ansId: ID!, $commentId: ID!) {
-    deleteAnsComment(ansId: $ansId, commentId: $commentId)
-  }
-`
-export type RemoveAnsCommentMutationFn = Apollo.MutationFunction<
-  RemoveAnsCommentMutation,
-  RemoveAnsCommentMutationVariables
->
+    mutation removeAnsComment($ansId: ID!, $commentId: ID!) {
+  deleteAnsComment(ansId: $ansId, commentId: $commentId)
+}
+    `;
+export type RemoveAnsCommentMutationFn = Apollo.MutationFunction<RemoveAnsCommentMutation, RemoveAnsCommentMutationVariables>;
 
 /**
  * __useRemoveAnsCommentMutation__
@@ -1846,66 +1149,45 @@ export type RemoveAnsCommentMutationFn = Apollo.MutationFunction<
  *   },
  * });
  */
-export function useRemoveAnsCommentMutation(
-  baseOptions?: Apollo.MutationHookOptions<
-    RemoveAnsCommentMutation,
-    RemoveAnsCommentMutationVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useMutation<
-    RemoveAnsCommentMutation,
-    RemoveAnsCommentMutationVariables
-  >(RemoveAnsCommentDocument, options)
-}
-export type RemoveAnsCommentMutationHookResult = ReturnType<
-  typeof useRemoveAnsCommentMutation
->
-export type RemoveAnsCommentMutationResult =
-  Apollo.MutationResult<RemoveAnsCommentMutation>
-export type RemoveAnsCommentMutationOptions = Apollo.BaseMutationOptions<
-  RemoveAnsCommentMutation,
-  RemoveAnsCommentMutationVariables
->
+export function useRemoveAnsCommentMutation(baseOptions?: Apollo.MutationHookOptions<RemoveAnsCommentMutation, RemoveAnsCommentMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<RemoveAnsCommentMutation, RemoveAnsCommentMutationVariables>(RemoveAnsCommentDocument, options);
+      }
+export type RemoveAnsCommentMutationHookResult = ReturnType<typeof useRemoveAnsCommentMutation>;
+export type RemoveAnsCommentMutationResult = Apollo.MutationResult<RemoveAnsCommentMutation>;
+export type RemoveAnsCommentMutationOptions = Apollo.BaseMutationOptions<RemoveAnsCommentMutation, RemoveAnsCommentMutationVariables>;
 export const FetchQuestionsDocument = gql`
-  query fetchQuestions(
-    $sortBy: SortByType!
-    $page: Int!
-    $limit: Int!
-    $filterByTag: String
-    $filterBySearch: String
+    query fetchQuestions($sortBy: SortByType!, $page: Int!, $limit: Int!, $filterByTag: String, $filterBySearch: String) {
+  getQuestions(
+    sortBy: $sortBy
+    page: $page
+    limit: $limit
+    filterByTag: $filterByTag
+    filterBySearch: $filterBySearch
   ) {
-    getQuestions(
-      sortBy: $sortBy
-      page: $page
-      limit: $limit
-      filterByTag: $filterByTag
-      filterBySearch: $filterBySearch
-    ) {
-      next {
-        page
+    next {
+      page
+    }
+    previous {
+      page
+    }
+    questions {
+      _id
+      author {
+        ...AuthorDetails
       }
-      previous {
-        page
-      }
-      questions {
-        _id
-        author {
-          ...AuthorDetails
-        }
-        title
-        body
-        tags
-        points
-        views
-        createdAt
-        updatedAt
-        answerCount
-      }
+      title
+      body
+      tags
+      points
+      views
+      createdAt
+      updatedAt
+      answerCount
     }
   }
-  ${AuthorDetailsFragmentDoc}
-`
+}
+    ${AuthorDetailsFragmentDoc}`;
 
 /**
  * __useFetchQuestionsQuery__
@@ -1927,71 +1209,47 @@ export const FetchQuestionsDocument = gql`
  *   },
  * });
  */
-export function useFetchQuestionsQuery(
-  baseOptions: Apollo.QueryHookOptions<
-    FetchQuestionsQuery,
-    FetchQuestionsQueryVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useQuery<FetchQuestionsQuery, FetchQuestionsQueryVariables>(
-    FetchQuestionsDocument,
-    options
-  )
-}
-export function useFetchQuestionsLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<
-    FetchQuestionsQuery,
-    FetchQuestionsQueryVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useLazyQuery<FetchQuestionsQuery, FetchQuestionsQueryVariables>(
-    FetchQuestionsDocument,
-    options
-  )
-}
-export type FetchQuestionsQueryHookResult = ReturnType<
-  typeof useFetchQuestionsQuery
->
-export type FetchQuestionsLazyQueryHookResult = ReturnType<
-  typeof useFetchQuestionsLazyQuery
->
-export type FetchQuestionsQueryResult = Apollo.QueryResult<
-  FetchQuestionsQuery,
-  FetchQuestionsQueryVariables
->
+export function useFetchQuestionsQuery(baseOptions: Apollo.QueryHookOptions<FetchQuestionsQuery, FetchQuestionsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<FetchQuestionsQuery, FetchQuestionsQueryVariables>(FetchQuestionsDocument, options);
+      }
+export function useFetchQuestionsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<FetchQuestionsQuery, FetchQuestionsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<FetchQuestionsQuery, FetchQuestionsQueryVariables>(FetchQuestionsDocument, options);
+        }
+export type FetchQuestionsQueryHookResult = ReturnType<typeof useFetchQuestionsQuery>;
+export type FetchQuestionsLazyQueryHookResult = ReturnType<typeof useFetchQuestionsLazyQuery>;
+export type FetchQuestionsQueryResult = Apollo.QueryResult<FetchQuestionsQuery, FetchQuestionsQueryVariables>;
 export const FetchQuestionDocument = gql`
-  query fetchQuestion($quesId: ID!) {
-    viewQuestion(quesId: $quesId) {
-      _id
-      author {
-        ...AuthorDetails
-      }
-      title
-      body
-      tags
-      points
-      views
-      createdAt
-      updatedAt
-      answers {
-        ...AnswerDetails
-      }
-      author {
-        ...AuthorDetails
-      }
-      comments {
-        ...CommentDetails
-      }
-      acceptedAnswer
-      voted
+    query fetchQuestion($quesId: ID!) {
+  viewQuestion(quesId: $quesId) {
+    _id
+    author {
+      ...AuthorDetails
     }
+    title
+    body
+    tags
+    points
+    views
+    createdAt
+    updatedAt
+    answers {
+      ...AnswerDetails
+    }
+    author {
+      ...AuthorDetails
+    }
+    comments {
+      ...CommentDetails
+    }
+    acceptedAnswer
+    voted
   }
-  ${AuthorDetailsFragmentDoc}
-  ${AnswerDetailsFragmentDoc}
-  ${CommentDetailsFragmentDoc}
-`
+}
+    ${AuthorDetailsFragmentDoc}
+${AnswerDetailsFragmentDoc}
+${CommentDetailsFragmentDoc}`;
 
 /**
  * __useFetchQuestionQuery__
@@ -2009,65 +1267,42 @@ export const FetchQuestionDocument = gql`
  *   },
  * });
  */
-export function useFetchQuestionQuery(
-  baseOptions: Apollo.QueryHookOptions<
-    FetchQuestionQuery,
-    FetchQuestionQueryVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useQuery<FetchQuestionQuery, FetchQuestionQueryVariables>(
-    FetchQuestionDocument,
-    options
-  )
-}
-export function useFetchQuestionLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<
-    FetchQuestionQuery,
-    FetchQuestionQueryVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useLazyQuery<FetchQuestionQuery, FetchQuestionQueryVariables>(
-    FetchQuestionDocument,
-    options
-  )
-}
-export type FetchQuestionQueryHookResult = ReturnType<
-  typeof useFetchQuestionQuery
->
-export type FetchQuestionLazyQueryHookResult = ReturnType<
-  typeof useFetchQuestionLazyQuery
->
-export type FetchQuestionQueryResult = Apollo.QueryResult<
-  FetchQuestionQuery,
-  FetchQuestionQueryVariables
->
+export function useFetchQuestionQuery(baseOptions: Apollo.QueryHookOptions<FetchQuestionQuery, FetchQuestionQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<FetchQuestionQuery, FetchQuestionQueryVariables>(FetchQuestionDocument, options);
+      }
+export function useFetchQuestionLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<FetchQuestionQuery, FetchQuestionQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<FetchQuestionQuery, FetchQuestionQueryVariables>(FetchQuestionDocument, options);
+        }
+export type FetchQuestionQueryHookResult = ReturnType<typeof useFetchQuestionQuery>;
+export type FetchQuestionLazyQueryHookResult = ReturnType<typeof useFetchQuestionLazyQuery>;
+export type FetchQuestionQueryResult = Apollo.QueryResult<FetchQuestionQuery, FetchQuestionQueryVariables>;
 export const FetchUserDocument = gql`
-  query fetchUser($username: String!) {
-    getUser(username: $username) {
+    query fetchUser($username: String!) {
+  getUser(username: $username) {
+    _id
+    username
+    role
+    createdAt
+    rep
+    totalQuestions
+    totalAnswers
+    recentQuestions {
       _id
-      username
-      role
+      title
+      points
       createdAt
-      rep
-      totalQuestions
-      totalAnswers
-      recentQuestions {
-        _id
-        title
-        points
-        createdAt
-      }
-      recentAnswers {
-        _id
-        title
-        points
-        createdAt
-      }
+    }
+    recentAnswers {
+      _id
+      title
+      points
+      createdAt
     }
   }
-`
+}
+    `;
 
 /**
  * __useFetchUserQuery__
@@ -2085,43 +1320,25 @@ export const FetchUserDocument = gql`
  *   },
  * });
  */
-export function useFetchUserQuery(
-  baseOptions: Apollo.QueryHookOptions<FetchUserQuery, FetchUserQueryVariables>
-) {
-  const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useQuery<FetchUserQuery, FetchUserQueryVariables>(
-    FetchUserDocument,
-    options
-  )
-}
-export function useFetchUserLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<
-    FetchUserQuery,
-    FetchUserQueryVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useLazyQuery<FetchUserQuery, FetchUserQueryVariables>(
-    FetchUserDocument,
-    options
-  )
-}
-export type FetchUserQueryHookResult = ReturnType<typeof useFetchUserQuery>
-export type FetchUserLazyQueryHookResult = ReturnType<
-  typeof useFetchUserLazyQuery
->
-export type FetchUserQueryResult = Apollo.QueryResult<
-  FetchUserQuery,
-  FetchUserQueryVariables
->
+export function useFetchUserQuery(baseOptions: Apollo.QueryHookOptions<FetchUserQuery, FetchUserQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<FetchUserQuery, FetchUserQueryVariables>(FetchUserDocument, options);
+      }
+export function useFetchUserLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<FetchUserQuery, FetchUserQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<FetchUserQuery, FetchUserQueryVariables>(FetchUserDocument, options);
+        }
+export type FetchUserQueryHookResult = ReturnType<typeof useFetchUserQuery>;
+export type FetchUserLazyQueryHookResult = ReturnType<typeof useFetchUserLazyQuery>;
+export type FetchUserQueryResult = Apollo.QueryResult<FetchUserQuery, FetchUserQueryVariables>;
 export const FetchAllTagsDocument = gql`
-  query fetchAllTags {
-    getAllTags {
-      tagName
-      count
-    }
+    query fetchAllTags {
+  getAllTags {
+    tagName
+    count
   }
-`
+}
+    `;
 
 /**
  * __useFetchAllTagsQuery__
@@ -2138,49 +1355,26 @@ export const FetchAllTagsDocument = gql`
  *   },
  * });
  */
-export function useFetchAllTagsQuery(
-  baseOptions?: Apollo.QueryHookOptions<
-    FetchAllTagsQuery,
-    FetchAllTagsQueryVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useQuery<FetchAllTagsQuery, FetchAllTagsQueryVariables>(
-    FetchAllTagsDocument,
-    options
-  )
-}
-export function useFetchAllTagsLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<
-    FetchAllTagsQuery,
-    FetchAllTagsQueryVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useLazyQuery<FetchAllTagsQuery, FetchAllTagsQueryVariables>(
-    FetchAllTagsDocument,
-    options
-  )
-}
-export type FetchAllTagsQueryHookResult = ReturnType<
-  typeof useFetchAllTagsQuery
->
-export type FetchAllTagsLazyQueryHookResult = ReturnType<
-  typeof useFetchAllTagsLazyQuery
->
-export type FetchAllTagsQueryResult = Apollo.QueryResult<
-  FetchAllTagsQuery,
-  FetchAllTagsQueryVariables
->
+export function useFetchAllTagsQuery(baseOptions?: Apollo.QueryHookOptions<FetchAllTagsQuery, FetchAllTagsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<FetchAllTagsQuery, FetchAllTagsQueryVariables>(FetchAllTagsDocument, options);
+      }
+export function useFetchAllTagsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<FetchAllTagsQuery, FetchAllTagsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<FetchAllTagsQuery, FetchAllTagsQueryVariables>(FetchAllTagsDocument, options);
+        }
+export type FetchAllTagsQueryHookResult = ReturnType<typeof useFetchAllTagsQuery>;
+export type FetchAllTagsLazyQueryHookResult = ReturnType<typeof useFetchAllTagsLazyQuery>;
+export type FetchAllTagsQueryResult = Apollo.QueryResult<FetchAllTagsQuery, FetchAllTagsQueryVariables>;
 export const FetchAllUsersDocument = gql`
-  query fetchAllUsers {
-    getAllUsers {
-      _id
-      username
-      createdAt
-    }
+    query fetchAllUsers {
+  getAllUsers {
+    _id
+    username
+    createdAt
   }
-`
+}
+    `;
 
 /**
  * __useFetchAllUsersQuery__
@@ -2197,37 +1391,14 @@ export const FetchAllUsersDocument = gql`
  *   },
  * });
  */
-export function useFetchAllUsersQuery(
-  baseOptions?: Apollo.QueryHookOptions<
-    FetchAllUsersQuery,
-    FetchAllUsersQueryVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useQuery<FetchAllUsersQuery, FetchAllUsersQueryVariables>(
-    FetchAllUsersDocument,
-    options
-  )
-}
-export function useFetchAllUsersLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<
-    FetchAllUsersQuery,
-    FetchAllUsersQueryVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useLazyQuery<FetchAllUsersQuery, FetchAllUsersQueryVariables>(
-    FetchAllUsersDocument,
-    options
-  )
-}
-export type FetchAllUsersQueryHookResult = ReturnType<
-  typeof useFetchAllUsersQuery
->
-export type FetchAllUsersLazyQueryHookResult = ReturnType<
-  typeof useFetchAllUsersLazyQuery
->
-export type FetchAllUsersQueryResult = Apollo.QueryResult<
-  FetchAllUsersQuery,
-  FetchAllUsersQueryVariables
->
+export function useFetchAllUsersQuery(baseOptions?: Apollo.QueryHookOptions<FetchAllUsersQuery, FetchAllUsersQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<FetchAllUsersQuery, FetchAllUsersQueryVariables>(FetchAllUsersDocument, options);
+      }
+export function useFetchAllUsersLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<FetchAllUsersQuery, FetchAllUsersQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<FetchAllUsersQuery, FetchAllUsersQueryVariables>(FetchAllUsersDocument, options);
+        }
+export type FetchAllUsersQueryHookResult = ReturnType<typeof useFetchAllUsersQuery>;
+export type FetchAllUsersLazyQueryHookResult = ReturnType<typeof useFetchAllUsersLazyQuery>;
+export type FetchAllUsersQueryResult = Apollo.QueryResult<FetchAllUsersQuery, FetchAllUsersQueryVariables>;

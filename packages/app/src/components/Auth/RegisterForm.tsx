@@ -19,7 +19,7 @@ import {
   RegisterUserMutationVariables,
   useRegisterUserMutation,
 } from '../../generated/graphql'
-import SofLogo from '../svg/stack-overflow.svg'
+import SofLogo from '~~/svg/stack-overflow.svg'
 import { getErrorMsg } from '~~/utils/helperFuncs'
 import {
   Button,

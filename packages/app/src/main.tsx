@@ -8,6 +8,7 @@ import apolloClient from './apolloClient'
 import { AuthProvider } from './context/auth'
 import { AppProvider } from './context/state'
 import GlobalStyles from './styles/GlobalStyles'
+import ToastNotification from './components/ToastNotification'
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
@@ -16,6 +17,7 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
         <AuthProvider>
           <AppProvider>
             <GlobalStyles />
+            <ToastNotification />
             <App />
           </AppProvider>
         </AuthProvider>

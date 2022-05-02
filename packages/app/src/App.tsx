@@ -1,16 +1,12 @@
-import NavBar from './components/Navs/NavBar'
-import ToastNotification from './components/ToastNotification'
 import Routes from './pages/Routes'
 
-import { Paper } from './components/CompStore'
+import DefaultLayout from './components/Layout/Default'
 
 const App = () => {
   return (
-    <Paper>
-      <ToastNotification />
-      <NavBar />
+    <DefaultLayout>
       <Routes />
-    </Paper>
+    </DefaultLayout>
   )
 }
 

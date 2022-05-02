@@ -3,6 +3,7 @@ import { useAuthContext } from '../context/auth'
 
 import 'twin.macro'
 import { lazy, Suspense } from 'react'
+import MainLayout from '~~/components/Layout/MainLayout'
 
 const QuesList = lazy(() => import('./QuesList'))
 const AllTags = lazy(() => import('./AllTags'))
@@ -11,73 +12,78 @@ const User = lazy(() => import('./User'))
 const Question = lazy(() => import('./Question'))
 const AskQuestion = lazy(() => import('./AskQuestion'))
 const RightSidePanel = lazy(() => import('../components/Layout/RightSidePanel'))
-const NavMenuDesktop = lazy(() => import('../components/Navs/NavMenuDesktop'))
 const NotFound = lazy(() => import('./NotFound'))
 
 const AppRoutes = () => {
   const { user } = useAuthContext()
 
   return (
-    <div tw="max-width[1264px] w-full mx-auto flex flex-row flex-nowrap relative">
+    <MainLayout>
       <Suspense fallback={<div>loading...</div>}>
         <Routes>
           <Route
             path="/"
             element={
               <>
-                <NavMenuDesktop />
                 <QuesList />
                 <RightSidePanel />
               </>
             }
-          ></Route>
-          <Route path="/ask">
-            {user ? (
+          />
+          <Route
+            path="/ask"
+            element={
+              user ? (
+                <>
+                  <AskQuestion />
+                  <RightSidePanel />
+                </>
+              ) : (
+                <Navigate to="/" />
+              )
+            }
+          />
+          <Route path="/tags" element={<AllTags />} />
+          <Route path="/users" element={<AllUsers />} />
+          <Route path="/user/:username" element={<User />} />
+          <Route
+            path="/questions/:quesId"
+            element={
               <>
-                <NavMenuDesktop />
-                <AskQuestion />
+                <Question />
                 <RightSidePanel />
               </>
-            ) : (
-              <Navigate to="/" />
-            )}
-          </Route>
-
-          <Route path="/tags">
-            <NavMenuDesktop />
-            <AllTags />
-          </Route>
-          <Route path="/users">
-            <NavMenuDesktop />
-            <AllUsers />
-          </Route>
-          <Route path="/user/:username">
-            <NavMenuDesktop />
-            <User />
-          </Route>
-          <Route path="/questions/:quesId">
-            <NavMenuDesktop />
-            <Question />
-            <RightSidePanel />
-          </Route>
-          <Route path="/tags/:tagName">
-            <NavMenuDesktop />
-            <QuesList tagFilterActive={true} />
-            <RightSidePanel />
-          </Route>
-          <Route path="/search/:query">
-            <NavMenuDesktop />
-            <QuesList searchFilterActive={true} />
-            <RightSidePanel />
-          </Route>
-          <Route>
-            <NavMenuDesktop />
-            <NotFound />
-            <RightSidePanel />
-          </Route>
+            }
+          ></Route>
+          <Route
+            path="/tags/:tagName"
+            element={
+              <>
+                <QuesList tagFilterActive={true} />
+                <RightSidePanel />
+              </>
+            }
+          ></Route>
+          <Route
+            path="/search/:query"
+            element={
+              <>
+                <QuesList searchFilterActive={true} />
+                <RightSidePanel />
+              </>
+            }
+          ></Route>
+          <Route
+            element={
+              <>
+                <NotFound />
+                <RightSidePanel />
+              </>
+            }
+          ></Route>
         </Routes>
       </Suspense>
-    </div>
+    </MainLayout>
   )
 }
 
