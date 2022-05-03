@@ -1,5 +1,5 @@
-import UpvoteIcon from '../svg/upvote.svg'
-import DownvoteIcon from '../svg/downvote.svg'
+import UpvoteIcon from '../../svg/upvote.svg?component'
+import DownvoteIcon from '../../svg/downvote.svg?component'
 
 import { Checkbox, SvgIcon } from '../CompStore'
 import 'twin.macro' // eslint-disable-line no-unused-vars

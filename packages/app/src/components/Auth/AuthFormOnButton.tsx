@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react'
 import LoginForm from './LoginForm'
 import RegisterForm from './RegisterForm'
-import UpvoteIcon from '~~/svg/upvote.svg'
-import DownvoteIcon from '~~/svg/downvote.svg'
+import UpvoteIcon from '~~/svg/upvote.svg?component'
+import DownvoteIcon from '~~/svg/downvote.svg?component'
 
 import { BsFillPersonFill as PersonAddIcon } from 'react-icons/bs'
 import { IoMdExit as ExitToAppIcon } from 'react-icons/io'

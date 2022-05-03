@@ -1,4 +1,4 @@
-import AcceptedIcon from '../svg/accepted.svg'
+import AcceptedIcon from '~~/svg/accepted.svg?component'
 
 import { Checkbox, SvgIcon } from '../CompStore'
 import 'twin.macro'

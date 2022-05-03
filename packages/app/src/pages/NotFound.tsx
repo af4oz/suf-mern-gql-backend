@@ -1,4 +1,4 @@
-import Error404 from '../svg/404-error.svg'
+import Error404 from '../svg/404-error.svg?component'
 
 import 'twin.macro'
 import { SvgIcon } from '../components/CompStore'
