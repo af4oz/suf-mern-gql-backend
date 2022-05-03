@@ -5,7 +5,8 @@ import { MdLocalOffer as LocalOfferIcon } from 'react-icons/md'
 import { MdPeopleAlt as PeopleIcon } from 'react-icons/md'
 
 import tw, { css } from 'twin.macro' // eslint-disable-line no-unused-vars
-import { Divider, MenuItem } from '../CompStore'
+import MenuItem from '../my-mui/Menu/Item'
+import Divider from '../my-mui/Divider'
 
 const DesktopNavMenu = () => {
   const { pathname } = useLocation()

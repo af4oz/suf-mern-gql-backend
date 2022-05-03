@@ -1,6 +1,6 @@
-import React from 'react'
 import 'twin.macro'
-import { VButton as Button, VButtonGroup as ButtonGroup } from '../CompStore'
+import React from 'react'
+import { VButton as Button, ButtonGroup } from '../my-mui/Misc'
 
 interface SortQuesBarProps {
   sortBy: 'HOT' | 'VOTES' | 'VIEWS' | 'NEWEST' | 'OLDEST'

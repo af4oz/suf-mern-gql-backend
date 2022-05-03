@@ -1,7 +1,8 @@
 import UpvoteIcon from '../../svg/upvote.svg?component'
 import DownvoteIcon from '../../svg/downvote.svg?component'
 
-import { Checkbox, SvgIcon } from '../CompStore'
+import { SvgIcon } from '../my-mui/Misc'
+import Checkbox from '../my-mui/Checkbox'
 import 'twin.macro' // eslint-disable-line no-unused-vars
 import { VoteType } from '~~/generated/graphql'
 

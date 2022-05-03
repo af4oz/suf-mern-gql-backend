@@ -1,7 +1,7 @@
 import { formatDateAgo } from '../../utils/helperFuncs'
 
 import tw, { styled } from 'twin.macro' // eslint-disable-line no-unused-vars
-import { Link } from '../CompStore'
+import { Link } from '../my-mui/Misc'
 import { RecentActivity } from '../../generated/graphql'
 
 const PointsBox = styled.div(() => [

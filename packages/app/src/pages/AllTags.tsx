@@ -1,7 +1,9 @@
 import React, { useState } from 'react'
 import { MdSearch as SearchIcon } from 'react-icons/md'
 import tw, { styled } from 'twin.macro'
-import { InputAdornment, Tag, TextField } from '../components/CompStore'
+import InputAdornment from '~~/components/my-mui/InputAdornment'
+import Tag from '~~/components/my-mui/Tag'
+import TextField from '~~/components/my-mui/TextField'
 import LoadingSpinner from '../components/LoadingSpinner'
 import { useAppContext } from '../context/state'
 import { useFetchAllTagsQuery } from '../generated/graphql'
@@ -48,7 +50,7 @@ const AllTagsPage = () => {
           ),
         }}
       />
-      {!loading && data ? (
+      {!loading && data && (
         <Tags>
           {data.getAllTags
             .filter((t) =>
@@ -63,12 +65,13 @@ const AllTagsPage = () => {
                   href={`/tags/${t.tagName}`}
                 />
                 <div tw="mt-2">
-                  <span tw="text-xs text-blue-800">{t.count} questions</span>
+                  <span tw="text-xs text-blue-800">{t.count} question(s)</span>
                 </div>
               </TagContainer>
             ))}
         </Tags>
-      ) : (
+      )}
+      {loading && (
         <div style={{ minWidth: '100%' }}>
           <LoadingSpinner />
         </div>

@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { Dialog, DialogTitle, DialogContent, DialogActions } from './Dialog'
 import 'twin.macro'
-import { LightButton } from '../CompStore'
+import { LightButton } from '../my-mui/Misc'
 
 interface DeleteDialogProps {
   handleDelete: (...args: any) => void

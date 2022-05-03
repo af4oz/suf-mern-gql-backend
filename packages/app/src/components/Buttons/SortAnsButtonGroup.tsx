@@ -1,5 +1,5 @@
 import { AnsSortBy } from '../../types'
-import { VButton as Button, VButtonGroup as ButtonGroup } from '../CompStore'
+import { VButton as Button, ButtonGroup } from '../my-mui/Misc'
 
 interface SortAnsBarProps {
   sortBy: AnsSortBy

@@ -1,12 +1,13 @@
 import React, { ComponentProps, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
-import { InputAdornment, IconButton, TextField } from './CompStore'
-
 import { MdSearch as SearchIcon } from 'react-icons/md'
 import { IoMdArrowBack as ArrowBackIcon } from 'react-icons/io'
 
 import tw from 'twin.macro' // eslint-disable-line no-unused-vars
+import IconButton from './my-mui/IconButton'
+import InputAdornment from './my-mui/InputAdornment'
+import TextField from './my-mui/TextField'
 
 interface SearchBarProps extends ComponentProps<'div'> {
   setSearchOpen?: (...args: any) => void
@@ -46,7 +47,7 @@ const SearchBar = ({ setSearchOpen, ...rest }: SearchBarProps) => {
           fullWidth
           InputProps={{
             startAdornment: (
-              <InputAdornment tw="font-size[1.5em]">
+              <InputAdornment tw="font-size[1.5em] text-gray-600">
                 <SearchIcon />
               </InputAdornment>
             ),

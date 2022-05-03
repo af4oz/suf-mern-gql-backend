@@ -4,9 +4,10 @@ import Comment from '.'
 import * as yup from 'yup'
 import { yupResolver } from '@hookform/resolvers/yup'
 
-import { LightButton, TextField } from '../CompStore'
+import { LightButton } from '../my-mui/Misc'
 import 'twin.macro'
 import { Author, Question } from '../../generated/graphql'
+import TextField from '../my-mui/TextField'
 
 const validationSchema = yup.object({
   commentBody: yup.string().min(15, 'Must be at least 15 characters'),

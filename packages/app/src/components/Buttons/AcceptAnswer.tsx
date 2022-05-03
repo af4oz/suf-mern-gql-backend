@@ -1,6 +1,7 @@
 import AcceptedIcon from '~~/svg/accepted.svg?component'
 
-import { Checkbox, SvgIcon } from '../CompStore'
+import { SvgIcon } from '../my-mui/Misc'
+import Checkbox from '../my-mui/Checkbox'
 import 'twin.macro'
 
 interface Props {

@@ -5,12 +5,10 @@ import { formatDateAgo, getErrorMsg } from '../utils/helperFuncs'
 
 import { MdSearch as SearchIcon } from 'react-icons/md'
 import tw from 'twin.macro'
-import {
-  TextField,
-  Avatar,
-  Link,
-  InputAdornment,
-} from '../components/CompStore'
+import { Link } from '../components/my-mui/Misc'
+import InputAdornment from '~~/components/my-mui/InputAdornment'
+import Avatar from '~~/components/my-mui/Avatar'
+import TextField from '~~/components/my-mui/TextField'
 import { useFetchAllUsersQuery } from '../generated/graphql'
 
 const AllUsersPage = () => {
@@ -41,7 +39,7 @@ const AllUsersPage = () => {
           ),
         }}
       />
-      {!loading && data ? (
+      {!loading && data && (
         <div tw="flex mt-6 flex-wrap">
           {data.getAllUsers
             .filter((u) =>
@@ -65,7 +63,8 @@ const AllUsersPage = () => {
               </div>
             ))}
         </div>
-      ) : (
+      )}
+      {loading && (
         <div style={{ minWidth: '100%' }}>
           <LoadingSpinner />
         </div>

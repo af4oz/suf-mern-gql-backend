@@ -8,7 +8,8 @@
     "preview": "vite preview",
     "predeploy": "rm -rf build && npm run build",
     "generate": "graphql-codegen --config codegen.yml",
-    "analyze": "source-map-explorer 'dist/assets/*.js'"
+    "analyze": "source-map-explorer 'dist/assets/*.js'",
+    "ts:build": "tsc"
   },
   "dependencies": {
     "@apollo/client": "^3.4.16",

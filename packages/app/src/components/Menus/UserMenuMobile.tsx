@@ -5,7 +5,11 @@ import { IoMdMore as MoreVertIcon } from 'react-icons/io'
 import { MdAccountCircle as AccountCircleIcon } from 'react-icons/md'
 import { IoMdPower as PowerIcon } from 'react-icons/io'
 
-import { Menu, MenuItem, IconButton, SvgIcon, Avatar } from '../CompStore'
+import MenuItem from '../my-mui/Menu/Item'
+import Menu from '../my-mui/Menu'
+import IconButton from '../my-mui/IconButton'
+import Avatar from '../my-mui/Avatar'
+import { SvgIcon } from '../my-mui/Misc'
 
 import 'twin.macro'
 import { Author } from '~~/generated/graphql'

@@ -9,8 +9,8 @@ import SofLogo from '~~/svg/stack-overflow.svg'
 
 import { MdSearch as SearchIcon } from 'react-icons/md'
 
-import { IconButton } from '../CompStore'
 import tw, { styled } from 'twin.macro' // eslint-disable-line no-unused-vars
+import IconButton from '../my-mui/IconButton'
 
 const AppBar = styled.div(() => [
   tw`w-full flex flex-col flex-shrink-0 z-index[1100] box-border sticky top-0 left-auto right-0 color[inherit] border-solid border-t-4 border-t-pink-500 shadow-sm border-b-[1px] border-b-gray-500 bg-white`,

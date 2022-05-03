@@ -11,7 +11,9 @@ import AuthFormOnButton from './Auth/AuthFormOnButton'
 import * as yup from 'yup'
 
 import tw from 'twin.macro' // eslint-disable-line no-unused-vars
-import { LightButton, TextField, Tag } from './CompStore'
+import { LightButton } from './my-mui/Misc'
+import TextField from './my-mui/TextField'
+import Tag from './my-mui/Tag'
 import { Answer, Author, Question, VoteType } from '../generated/graphql'
 
 const validationSchema = yup.object({

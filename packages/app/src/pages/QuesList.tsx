@@ -10,7 +10,8 @@ import LoadingSpinner from '../components/LoadingSpinner'
 import { filterDuplicates, getErrorMsg } from '../utils/helperFuncs'
 
 import tw, { styled } from 'twin.macro'
-import { Divider, Button } from '../components/CompStore'
+import { Button } from '../components/my-mui/Misc'
+import Divider from '~~/components/my-mui/Divider'
 import {
   FetchQuestionsQuery,
   FetchQuestionsQueryVariables,

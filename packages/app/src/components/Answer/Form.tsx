@@ -7,7 +7,8 @@ import { yupResolver } from '@hookform/resolvers/yup'
 import { getErrorMsg } from '~~/utils/helperFuncs'
 
 import 'twin.macro'
-import { TextField, Button, Link } from '../CompStore'
+import { Button, Link } from '../my-mui/Misc'
+import TextField from '../my-mui/TextField'
 import Tag from '../Tag'
 import {
   FetchQuestionDocument,

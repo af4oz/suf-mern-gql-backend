@@ -6,7 +6,7 @@ import { useAppContext } from '../context/state'
 import { formatDateAgo, getErrorMsg } from '../utils/helperFuncs'
 
 import tw, { styled } from 'twin.macro'
-import { Divider } from '../components/CompStore'
+import Divider from '~~/components/my-mui/Divider'
 import { useFetchUserLazyQuery, User } from '../generated/graphql'
 
 const UserInfo = styled.div`

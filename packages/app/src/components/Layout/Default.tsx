@@ -1,5 +1,5 @@
 import React, { ReactNode } from 'react'
-import { Paper } from '../CompStore'
+import Paper from '../my-mui/Paper'
 import NavBar from '../Navs/NavBar'
 
 interface DefaultProps {

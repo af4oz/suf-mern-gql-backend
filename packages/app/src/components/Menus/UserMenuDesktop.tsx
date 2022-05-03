@@ -1,7 +1,10 @@
 import { useState } from 'react'
 import AuthFormOnButton from '../Auth/AuthFormOnButton'
 
-import { Menu, MenuItem, Avatar, EmptyLink, SvgIcon } from '../CompStore'
+import Menu from '../my-mui/Menu'
+import MenuItem from '../my-mui/Menu/Item'
+import Avatar from '../my-mui/Avatar'
+import { EmptyLink, SvgIcon } from '../my-mui/Misc'
 import { MdAccountCircle as AccountCircleIcon } from 'react-icons/md'
 import { IoMdPower as PowerIcon } from 'react-icons/io'
 import { MdKeyboardArrowDown as ArrowDownIcon } from 'react-icons/md'

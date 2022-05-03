@@ -7,7 +7,9 @@ import DownvoteIcon from '~~/svg/downvote.svg?component'
 import { BsFillPersonFill as PersonAddIcon } from 'react-icons/bs'
 import { IoMdExit as ExitToAppIcon } from 'react-icons/io'
 
-import { SvgIcon, Button, IconButton, Link, MenuItem } from '../CompStore'
+import { SvgIcon, Button, Link } from '../my-mui/Misc'
+import IconButton from '../my-mui/IconButton'
+import MenuItem from '../my-mui/Menu/Item'
 import { Dialog, DialogTitle, DialogContent } from '../Dialogs/Dialog'
 import 'twin.macro'
 
@@ -97,7 +99,7 @@ const AuthFormOnButton = ({ closeMenu, buttonType }: AuthFormOnButtonProps) => {
       )
     } else {
       return (
-        <div>
+        <div tw="inline-flex">
           <Button tw="text-sm mr-3" onClick={handleLoginModal}>
             Log In
           </Button>

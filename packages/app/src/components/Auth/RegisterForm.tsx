@@ -21,14 +21,10 @@ import {
 } from '../../generated/graphql'
 import SofLogo from '~~/svg/stack-overflow.svg'
 import { getErrorMsg } from '~~/utils/helperFuncs'
-import {
-  Button,
-  EmptyLink,
-  IconButton,
-  InputAdornment,
-  SvgIcon,
-  TextField,
-} from '../CompStore'
+import { Button, EmptyLink, SvgIcon } from '../my-mui/Misc'
+import IconButton from '../my-mui/IconButton'
+import TextField from '../my-mui/TextField'
+import InputAdornment from '../my-mui/InputAdornment'
 import AlertError from '../AlertError'
 
 const validationSchema = yup.object({

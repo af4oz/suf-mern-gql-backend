@@ -3,7 +3,7 @@ import PostedByUser from '../PostedByUser'
 import tw from 'twin.macro' //eslint-disable-line no-unused-vars
 import { Question as IQuestion } from '../../generated/graphql'
 
-import { Tag } from '../CompStore'
+import Tag from '../my-mui/Tag'
 
 const StatsContainer = tw.div`ml-0 mr-1 sm:(ml-2 mr-3) text-center text-xs`
 

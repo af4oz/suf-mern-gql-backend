@@ -1,5 +1,5 @@
 import { ReactNode } from 'react'
-import { Alert } from './CompStore'
+import Alert from './my-mui/Alert'
 
 interface AlertErrorProps {
   errorMsg: ReactNode

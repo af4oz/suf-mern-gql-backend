@@ -20,27 +20,28 @@ const RightSidePanel = () => {
 
   return (
     <Grid>
-      <div tw="hidden md:block min-height[35vh] p-2 bg-purple-100 bg-opacity-75 rounded-sm border-purple-600">
-        <Heading>Top Tags</Heading>
-        {!loading && data ? (
-          <Tags col>
-            {data.getAllTags.slice(0, 26).map((t) => (
-              <Tag
-                label={
-                  t.tagName.length > 13
-                    ? t.tagName.slice(0, 13) + '...'
-                    : t.tagName
-                }
-                key={t.tagName}
-                to={`/tags/${t.tagName}`}
-                count={t.count}
-              />
-            ))}
-          </Tags>
-        ) : (
-          <LoadingSpinner size="large" />
-        )}
-      </div>
+      {!loading && data && (
+        <>
+          <div tw="hidden md:block min-height[35vh] p-2 bg-yellow-200 rounded-sm border-purple-600">
+            <Heading>Top Tags</Heading>
+            <Tags col>
+              {data.getAllTags.slice(0, 26).map((t) => (
+                <Tag
+                  label={
+                    t.tagName.length > 13
+                      ? t.tagName.slice(0, 13) + '...'
+                      : t.tagName
+                  }
+                  key={t.tagName}
+                  to={`/tags/${t.tagName}`}
+                  count={t.count}
+                />
+              ))}
+            </Tags>
+          </div>
+        </>
+      )}
+      {loading && <LoadingSpinner size="large" />}
     </Grid>
   )
 }

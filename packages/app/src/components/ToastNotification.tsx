@@ -1,6 +1,6 @@
 import { useAppContext } from '../context/state'
-
-import { Alert, Snackbar } from './CompStore'
+import Alert from './my-mui/Alert'
+import { Snackbar } from './my-mui/Snackbar'
 
 const ToastNotification = () => {
   const { notification, clearNotif } = useAppContext()

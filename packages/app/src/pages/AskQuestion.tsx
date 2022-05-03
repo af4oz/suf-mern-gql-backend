@@ -1,3 +1,4 @@
+import 'twin.macro'
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useForm } from 'react-hook-form'
@@ -7,13 +8,10 @@ import * as yup from 'yup'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { getErrorMsg } from '../utils/helperFuncs'
 
-import 'twin.macro'
-import {
-  TextField,
-  Button,
-  ChipWithClose,
-  Autocomplete,
-} from '../components/CompStore'
+import TextField from '~~/components/my-mui/TextField'
+import { ChipWithClose } from '~~/components/my-mui/Chips'
+import Autocomplete from '~~/components/my-mui/AutoComplete'
+import { Button } from '../components/my-mui/Misc'
 import {
   useAddQuestionMutation,
   useUpdateQuestionMutation,

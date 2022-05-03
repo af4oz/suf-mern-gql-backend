@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react'
 import DeleteDialog from '../Dialogs/DeleteDialog'
 import { formatDayTime } from '~~/utils/helperFuncs'
-import { Link, TextField, LightButton } from '../CompStore'
+import { Link, LightButton } from '../my-mui/Misc'
+import TextField from '../my-mui/TextField'
 
 import 'twin.macro'
 import { Author, Comment as IComment } from '~~/generated/graphql'

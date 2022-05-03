@@ -6,7 +6,9 @@ import { MdClear as CloseIcon } from 'react-icons/md'
 import { GoGlobe as PublicIcon } from 'react-icons/go'
 import { MdLocalOffer as LocalOfferIcon } from 'react-icons/md'
 import { MdPeopleAlt as PeopleIcon } from 'react-icons/md'
-import { MenuItem, IconButton, Menu } from '../CompStore'
+import MenuItem from '../my-mui/Menu/Item'
+import IconButton from '../my-mui/IconButton'
+import Menu from '../my-mui/Menu'
 
 import 'twin.macro'
 

@@ -1,7 +1,7 @@
 import LoadingSpinner from '../LoadingSpinner'
 import { MdAutorenew as AutorenewIcon } from 'react-icons/md'
 import tw from 'twin.macro' // eslint-disable-line no-unused-vars
-import { Button } from '../CompStore'
+import { Button } from '../my-mui/Misc'
 
 interface LoadMoreButtonProps {
   handleLoadPosts: (...args: any) => void

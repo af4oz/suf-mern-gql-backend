@@ -7,7 +7,7 @@ import {
   useState,
 } from 'react'
 import ReactDOM from 'react-dom'
-import { IconButton } from '../CompStore'
+import IconButton from '../my-mui/IconButton'
 import { MdClear as CloseIcon } from 'react-icons/md'
 import tw, { styled } from 'twin.macro'
 import useModal from '~~/hooks/useModal'
