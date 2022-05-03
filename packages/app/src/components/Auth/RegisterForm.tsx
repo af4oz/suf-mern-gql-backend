@@ -34,7 +34,7 @@ import AlertError from '../AlertError'
 const validationSchema = yup.object({
   username: yup
     .string()
-    .required('Required')
+    .required('username is required')
     .max(20, 'Must be at most 20 characters')
     .min(3, 'Must be at least 3 characters')
     .matches(
@@ -43,11 +43,11 @@ const validationSchema = yup.object({
     ),
   password: yup
     .string()
-    .required('Required')
+    .required('password is required')
     .min(6, 'Must be at least 6 characters'),
   confirmPassword: yup
     .string()
-    .required('Required')
+    .required('password confirmation is required')
     .min(6, 'Must be at least 6 characters'),
 })
 

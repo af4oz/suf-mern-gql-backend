@@ -28,8 +28,8 @@ import {
 import ErrorMessage from '../AlertError'
 
 const validationSchema = yup.object({
-  username: yup.string().required('Required'),
-  password: yup.string().required('Required'),
+  username: yup.string().required('username is required'),
+  password: yup.string().required('password is required'),
 })
 
 interface LoginFormProps {
