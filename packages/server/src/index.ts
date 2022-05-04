@@ -28,8 +28,10 @@ async function bootstrap() {
     })
 
     // Start the server
-    const { url } = await server.listen(PORT || 4000)
-    console.log(`Server is running, GraphQL Playground available at ${url}`)
+    const { url } = await server.listen(PORT)
+    console.log(
+      `Server is running, GraphQL Playground available at ${url} and port: ${PORT}`
+    )
   } catch (err) {
     console.error(err)
   }

@@ -1,7 +1,7 @@
 import { AuthenticationError } from 'apollo-server'
 import jwt, { JwtPayload } from 'jsonwebtoken'
 import { TContext } from '../types'
-import { SECRET } from './config'
+import { JWT_SECRET } from './config'
 
 const authChecker = (context: TContext) => {
   const token = context.req.headers.authorization
@@ -9,9 +9,9 @@ const authChecker = (context: TContext) => {
     throw new AuthenticationError('No auth token found. Authorization denied.')
   }
 
-  if (!SECRET) throw new Error('please provide valid jwt token!')
+  if (!JWT_SECRET) throw new Error('please provide valid jwt token!')
   try {
-    const decodedUser = jwt.verify(token, SECRET)
+    const decodedUser = jwt.verify(token, JWT_SECRET)
     return decodedUser as JwtPayload
   } catch (err) {
     if (err instanceof Error) {

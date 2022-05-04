@@ -1,24 +1,20 @@
 {
-  "name": "suf",
+  "name": "suf-backend",
   "version": "1.0.0",
   "description": "Fullstack [Stack Overflow](https://stackoverflow.com/) clone (QnA site) made with MERN + GraphQL",
   "private": "true",
+  "workspaces": [
+    "packages/*"
+  ],
   "scripts": {
     "format": "prettier --write \"**/*.{js,jsx,json,md,ts,tsx}\"",
-    "app": "pnpm -F ./packages/app --",
-    "server": "pnpm -F ./packages/server --"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/afroz1198/stack-underflow-mern-gql.git"
+    "server": "yarn workspace @suf-backend/server",
+    "start": "yarn server start",
+    "build": "yarn server build"
   },
   "keywords": [],
   "author": "",
   "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/afroz1198/stack-underflow-mern-gql/issues"
-  },
-  "homepage": "https://github.com/afroz1198/stack-underflow-mern-gql#readme",
   "devDependencies": {
     "concurrently": "^6.0.0",
     "husky": "^5.1.3",

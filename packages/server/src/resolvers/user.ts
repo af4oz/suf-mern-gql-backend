@@ -17,7 +17,7 @@ import AnswerService from '../services/AnswerService'
 import QuestionService from '../services/QuestionService'
 import { TContext } from '../types'
 import authChecker from '../utils/authChecker'
-import { SECRET } from '../utils/config'
+import { JWT_SECRET } from '../utils/config'
 import errorHandler from '../utils/errorHandler'
 import { loginValidator, registerValidator } from '../utils/validators'
 
@@ -114,7 +114,7 @@ export class UserResolver {
       {
         id: savedUser._id,
       },
-      SECRET as string
+      JWT_SECRET as string
     )
 
     return {
@@ -153,7 +153,7 @@ export class UserResolver {
       {
         id: user._id,
       },
-      SECRET as string
+      JWT_SECRET as string
     )
 
     return {

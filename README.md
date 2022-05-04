@@ -10,12 +10,13 @@
 
 **Update 5: (29/10/2021)** Replaced constant growing arrays with mongoose virtuals.
 
+**Update 6: (4/05/2022)** Moving to Hybrid(poly repo + mono repo) structure to reduce code,build management issues, also I am not using tools like Nx,turborepo,bazel which would mitigate those issues.
+
 ## Future
 
 1. <strike>Automate Graphql Testing</strike> ✔️
 2. <strike>Replace constant growing arrays in schema as mongoose document sizelimit is **16MB** </strike>. ✔️
 3. Use transactions in mutation resolvers which involves multiple mutating db requests.
-4. Add Dark Mode.
 
 ## Usage
 
@@ -26,46 +27,20 @@ Create a .env file in server directory and add the following:
 ```
 MONGODB_URI = "Your Mongo URI"
 PORT = 4000
-SECRET = "Your JWT secret"
+JWT_SECRET = "Your JWT secret"
 
-```
-
-#### Client:
-
-Open client/src/backendUrl.js & change "backend" variable to `"http://localhost:4000"`
-
-```
-cd client
-npm install
-npm start
 ```
 
 #### Server:
 
-Note: Make sure that you have installed 'nodemon' as global package.
-
 ```
-cd server
-npm install
-npm run dev
+yarn install
+yarn server dev
 ```
 
 Fullstack [Stack Overflow](https://stackoverflow.com/) clone (QnA site) made with MERN + GraphQL
 
 ## Built using
-
-#### Front-end
-
-- [ReactJS](https://reactjs.org/) - Frontend framework
-- [Apollo Client](https://www.apollographql.com/docs/react/) - State management library to manage both local and remote data with GraphQL
-- [Context API w/ hooks](https://reactjs.org/docs/context.html) - For state of user, toast notifs, theme etc.
-- [React Router](https://reactrouter.com/) - For general routing & navigation
-- [React Hook Form](https://react-hook-form.com/) - For flexible forms
-- ~~[Material-UI w/ lots of CSS customisations](https://material-ui.com/)~~ now using [twin.macro](https://github.com/ben-rogerson/twin.macro)- CSS-in-JS library
-- [Yup](https://github.com/jquense/yup) - For form validation
-- [date-fns](https://date-fns.org/) - For manipulating & formatting of dates
-
-#### Back-end
 
 - [Node.js](https://nodejs.org/en/) - Runtime environment for JS
 - [Apollo Server](https://www.apollographql.com/docs/apollo-server/) - To build a self-documenting GraphQL API server
@@ -95,21 +70,3 @@ Fullstack [Stack Overflow](https://stackoverflow.com/) clone (QnA site) made wit
 - Formatted dates for adding/updating questions/answers/comments
 - <strike>Dark mode toggle w/ local storage save</strike>
 - Proper responsive UI for all screens
-
-## Screenshots
-
-#### Desktop/Tablet
-
-![Desktop-1](https://github.com/amand33p/stack-underflow-mern-gql/blob/master/screenshots/desktop-1.jpg)
-![Desktop-2](https://github.com/amand33p/stack-underflow-mern-gql/blob/master/screenshots/desktop-2.jpg)
-![Desktop-3](https://github.com/amand33p/stack-underflow-mern-gql/blob/master/screenshots/desktop-3.jpg)
-![Desktop-4](https://github.com/amand33p/stack-underflow-mern-gql/blob/master/screenshots/desktop-4.jpg)
-![Desktop-5](https://github.com/amand33p/stack-underflow-mern-gql/blob/master/screenshots/desktop-5.jpg)
-
-#### Mobile
-
-![Mobile-1](https://github.com/amand33p/stack-underflow-mern-gql/blob/master/screenshots/mobile-1.jpg)
-![Mobile-2](https://github.com/amand33p/stack-underflow-mern-gql/blob/master/screenshots/mobile-2.jpg)
-![Mobile-3](https://github.com/amand33p/stack-underflow-mern-gql/blob/master/screenshots/mobile-3.jpg)
-![Mobile-4](https://github.com/amand33p/stack-underflow-mern-gql/blob/master/screenshots/mobile-4.jpg)
-![Mobile-5](https://github.com/amand33p/stack-underflow-mern-gql/blob/master/screenshots/mobile-5.jpg)

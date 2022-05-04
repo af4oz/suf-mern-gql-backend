@@ -1,5 +1,5 @@
 {
-  "name": "@suf/server",
+  "name": "@suf-backend/server",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -7,14 +7,14 @@
     "watch:ts": "tsc -w",
     "watch:js": "nodemon -r dotenv/config build/index.js dotenv_config_path=./.env.dev",
     "build": "tsc",
-    "start": "node -r dotenv/config build/index.js dotenv_config_path=./.env.prod",
+    "start": "node build/index.js",
     "start:dev": "node -r dotenv/config build/index.js dotenv_config_path=./.env.dev",
     "start:ts": "ts-node -r dotenv/config src/index.ts dotenv_config_path=./.env.dev",
     "start:test": "ts-node -r dotenv/config src/index.ts dotenv_config_path=./.env.test",
     "test": "jest --runInBand"
   },
-  "author": "Amandeep",
-  "license": "ISC",
+  "author": "Afroz",
+  "license": "MIT",
   "dependencies": {
     "@typegoose/typegoose": "^9.1.0",
     "apollo-server": "^3.6.7",
