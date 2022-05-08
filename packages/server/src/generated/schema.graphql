@@ -33,6 +33,11 @@ type Comment {
   updatedAt: DateTime!
 }
 
+enum CommentParentType {
+  Answer
+  Question
+}
+
 """
 A date-time string at UTC, such as 2007-12-03T10:15:30Z, compliant with the `date-time` format outlined in section 5.6 of the RFC 3339 profile of the ISO 8601 standard for representation of dates and times using the Gregorian calendar.
 """
@@ -47,15 +52,12 @@ type LoggedUser {
 
 type Mutation {
   acceptAnswer(ansId: ID!, quesId: ID!): Question!
-  addAnsComment(ansId: ID!, body: String!): [Comment!]!
-  addQuesComment(body: String!, quesId: ID!): [Comment!]!
-  deleteAnsComment(ansId: ID!, commentId: ID!): ID!
+  addComment(body: String!, parentId: ID!, parentType: CommentParentType!): Comment!
   deleteAnswer(ansId: ID!, quesId: ID!): ID!
-  deleteQuesComment(commentId: ID!, quesId: ID!): ID!
+  deleteComment(commentId: ID!): ID!
   deleteQuestion(quesId: ID!): ID!
-  editAnsComment(ansId: ID!, body: String!, commentId: ID!): [Comment!]!
   editAnswer(ansId: ID!, body: String!, quesId: ID!): [Answer!]!
-  editQuesComment(body: String!, commentId: ID!, quesId: ID!): [Comment!]!
+  editComment(body: String!, commentId: ID!): Comment!
   editQuestion(body: String!, quesId: ID!, tags: [String!]!, title: String!): Question!
   login(password: String!, username: String!): LoggedUser!
   postAnswer(body: String!, quesId: ID!): [Answer!]!

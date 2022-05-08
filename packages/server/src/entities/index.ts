@@ -25,7 +25,6 @@ export enum SortByType {
   OLDEST,
 }
 registerEnumType(SortByType, { name: 'SortByType' })
-registerEnumType(VoteType, { name: 'VoteType' })
 
 @ObjectType()
 export class LoggedUser {
