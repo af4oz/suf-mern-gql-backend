@@ -7,7 +7,7 @@ import {
 import { ObjectId } from 'mongodb'
 import { Schema } from 'mongoose'
 import { Field, Float, ID, Int, ObjectType } from 'type-graphql'
-import { Author, VoteType } from './'
+import { Author, VoteType } from './common'
 import { Ref } from '../types'
 import schemaCleaner from '../utils/schemaCleaner'
 import { Answer } from './Answer'

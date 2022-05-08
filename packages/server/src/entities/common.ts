@@ -58,7 +58,6 @@ export class Author {
   @Field()
   username: string
 }
-
 @ObjectType()
 export class NextPrevPage {
   @Field()

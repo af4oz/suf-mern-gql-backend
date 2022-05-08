@@ -15,7 +15,7 @@ import {
   Resolver,
   Root,
 } from 'type-graphql'
-import { PaginatedQuesList, SortByType, VoteType } from '../entities'
+import { PaginatedQuesList, SortByType, VoteType } from '../entities/common'
 import { AnswerModel } from '../entities/Answer'
 import { CommentModel } from '../entities/Comment'
 import { Question, QuestionModel } from '../entities/Question'

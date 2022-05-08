@@ -8,7 +8,7 @@ import { ObjectId } from 'mongodb'
 import { Types } from 'mongoose'
 import { Field, ID, ObjectType } from 'type-graphql'
 import schemaCleaner from '../utils/schemaCleaner'
-import { VoteType } from './'
+import { VoteType } from './common'
 
 @modelOptions({
   schemaOptions: {

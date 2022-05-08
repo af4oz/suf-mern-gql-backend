@@ -1,4 +1,4 @@
-import { NextPrevPage } from '../entities'
+import { NextPrevPage } from '../entities/common'
 
 export const paginateResults = (
   page: number,

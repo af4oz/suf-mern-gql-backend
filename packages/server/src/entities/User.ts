@@ -1,7 +1,6 @@
 import {
   getModelForClass,
   modelOptions,
-  plugin,
   prop,
   Severity,
 } from '@typegoose/typegoose'
@@ -10,7 +9,7 @@ import { ObjectId } from 'mongodb'
 import { Field, ID, Int, ObjectType } from 'type-graphql'
 import { Ref } from '../types'
 import schemaCleaner from '../utils/schemaCleaner'
-import { RoleType } from './'
+import { RoleType } from './common'
 import { Answer } from './Answer'
 import { Question } from './Question'
 

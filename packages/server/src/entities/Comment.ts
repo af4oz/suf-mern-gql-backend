@@ -6,10 +6,10 @@ import {
 } from '@typegoose/typegoose'
 import { ObjectId } from 'mongodb'
 import { Schema, Types } from 'mongoose'
-import { Field, ID, ObjectType } from 'type-graphql'
+import { Field, ID, ObjectType, registerEnumType } from 'type-graphql'
 import { Ref } from '../types'
 import schemaCleaner from '../utils/schemaCleaner'
-import { Author } from './'
+import { Author } from './common'
 import { User } from './User'
 
 @modelOptions({
@@ -46,3 +46,12 @@ export class Comment {
 }
 
 export const CommentModel = getModelForClass(Comment)
+
+export enum CommentParentType {
+  Question = 'question',
+  Answer = 'answer',
+}
+
+registerEnumType(CommentParentType, {
+  name: 'CommentParentType',
+})

@@ -1,5 +1,5 @@
 import { Query, Resolver } from 'type-graphql'
-import { Tag } from '../entities'
+import { Tag } from '../entities/common'
 import { QuestionModel } from '../entities/Question'
 import errorHandler from '../utils/errorHandler'
 

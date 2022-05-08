@@ -8,10 +8,10 @@ import {
   Resolver,
   Root,
 } from 'type-graphql'
-import { VoteType } from '../entities'
 import { Answer, AnswerModel } from '../entities/Answer'
 import { AnswerVotesModel } from '../entities/AnswerVotes'
 import { CommentModel } from '../entities/Comment'
+import { VoteType } from '../entities/common'
 import { Question, QuestionModel } from '../entities/Question'
 import { UserModel } from '../entities/User'
 import { TContext } from '../types'
@@ -53,45 +53,41 @@ export class AnswerResolver {
       throw new UserInputError('Answer must be atleast 30 characters long.')
     }
 
-    try {
-      const user = await UserModel.findById(loggedUser.id)
-      if (!user) {
-        throw new UserInputError(
-          `User with ID: ${loggedUser.id} does not exist in DB.`
-        )
-      }
-      const question = await QuestionModel.findById(quesId)
-      if (!question) {
-        throw new UserInputError(
-          `Question with ID: ${quesId} does not exist in DB.`
-        )
-      }
-      const answer = new AnswerModel({
-        body,
-        author: user._id,
-        question: question._id,
-      })
-      await answer.save()
-
-      const populatedQues = await question.populate({
-        path: 'answers',
-        model: AnswerModel,
-        populate: [
-          {
-            path: 'author',
-            model: UserModel,
-          },
-          {
-            path: 'comments',
-            model: CommentModel,
-          },
-        ],
-      })
-
-      return populatedQues.answers as Answer[]
-    } catch (err) {
-      throw new Error(errorHandler(err))
+    const user = await UserModel.findById(loggedUser.id)
+    if (!user) {
+      throw new UserInputError(
+        `User with ID: ${loggedUser.id} does not exist in DB.`
+      )
     }
+    const question = await QuestionModel.findById(quesId)
+    if (!question) {
+      throw new UserInputError(
+        `Question with ID: ${quesId} does not exist in DB.`
+      )
+    }
+    const answer = new AnswerModel({
+      body,
+      author: user._id,
+      question: question._id,
+    })
+    await answer.save()
+
+    const populatedQues = await question.populate({
+      path: 'answers',
+      model: AnswerModel,
+      populate: [
+        {
+          path: 'author',
+          model: UserModel,
+        },
+        {
+          path: 'comments',
+          model: CommentModel,
+        },
+      ],
+    })
+
+    return populatedQues.answers as Answer[]
   }
   @Mutation((returns) => ID)
   async deleteAnswer(

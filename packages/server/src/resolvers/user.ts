@@ -11,7 +11,7 @@ import {
   Resolver,
   Root,
 } from 'type-graphql'
-import { LoggedUser } from '../entities'
+import { LoggedUser } from '../entities/common'
 import { RecentActivity, User, UserModel } from '../entities/User'
 import AnswerService from '../services/AnswerService'
 import QuestionService from '../services/QuestionService'
