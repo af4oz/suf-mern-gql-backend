@@ -43,7 +43,7 @@ export class Question {
   @prop({ type: () => [String], required: true, trim: true })
   tags: [string]
 
-  @Field((type) => [Comment], { nullable: 'items' })
+  @Field((type) => [Comment])
   @prop({
     ref: () => (doc: DocumentType<Question>) => doc.from!,
     foreignField: () => 'parentId',
@@ -53,7 +53,7 @@ export class Question {
   })
   comments?: Ref<Comment>[]
 
-  @Field((type) => [Answer], { nullable: 'items' })
+  @Field((type) => [Answer])
   @prop({
     ref: () => 'Answer',
     foreignField: 'question',

@@ -39,7 +39,7 @@ export class Answer {
   @prop({ required: true, tirm: true, minlength: 30 })
   body: string
 
-  @Field((type) => [Comment], { nullable: 'items' })
+  @Field((type) => [Comment])
   @prop({
     ref: () => (doc: DocumentType<Answer>) => doc.from!,
     foreignField: () => 'parentId',

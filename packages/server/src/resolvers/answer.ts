@@ -69,6 +69,7 @@ export class AnswerResolver {
       body,
       author: user._id,
       question: question._id,
+      comments: [],
     })
     await answer.save()
 

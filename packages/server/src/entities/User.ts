@@ -60,7 +60,7 @@ export class User {
   @prop({ default: 'user' })
   role: RoleType
 
-  @Field((type) => [Question], { nullable: 'items' })
+  @Field((type) => [Question])
   @prop({
     ref: () => Question,
     foreignField: 'author',
@@ -68,7 +68,7 @@ export class User {
   })
   questions: Ref<Question>[]
 
-  @Field((type) => [Answer], { nullable: 'items' })
+  @Field((type) => [Answer])
   @prop({
     ref: () => Answer,
     foreignField: 'author',
@@ -84,10 +84,10 @@ export class User {
   @prop({ default: 1 })
   rep: number
 
-  @Field((type) => [RecentActivity], { nullable: 'items' })
+  @Field((type) => [RecentActivity])
   recentQuestions: RecentActivity[]
 
-  @Field((type) => [RecentActivity], { nullable: 'items' })
+  @Field((type) => [RecentActivity])
   recentAnswers: RecentActivity[]
 
   @Field(() => Int)

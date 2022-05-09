@@ -7,7 +7,7 @@ type Answer {
   _id: ID!
   author: Author!
   body: String!
-  comments: [Comment]!
+  comments: [Comment!]!
   createdAt: DateTime!
   points: Int!
   updatedAt: DateTime!
@@ -91,10 +91,10 @@ type Question {
   _id: ID!
   acceptedAnswer: ID
   answerCount: Int!
-  answers: [Answer]!
+  answers: [Answer!]!
   author: Author!
   body: String!
-  comments: [Comment]!
+  comments: [Comment!]!
   createdAt: DateTime!
   hotAlgo: Float!
   points: Int!
@@ -138,11 +138,11 @@ type Tag {
 
 type User {
   _id: ID!
-  answers: [Answer]!
+  answers: [Answer!]!
   createdAt: DateTime!
-  questions: [Question]!
-  recentAnswers: [RecentActivity]!
-  recentQuestions: [RecentActivity]!
+  questions: [Question!]!
+  recentAnswers: [RecentActivity!]!
+  recentQuestions: [RecentActivity!]!
   rep: Int!
   role: RoleType!
   totalAnswers: Int!

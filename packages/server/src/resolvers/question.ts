@@ -232,6 +232,8 @@ export class QuestionResolver {
         body,
         tags,
         author: author._id,
+        answers: [],
+        comments: [],
       })
       const savedQues = await newQuestion.save()
       const populatedQues = await savedQues.populate('author', 'username')
