@@ -39,7 +39,12 @@ export class CommentResolver {
           parentId: question._id,
         })
 
-        return comment
+        const populatedComment = await comment.populate({
+          path: 'author',
+          model: UserModel,
+        })
+
+        return populatedComment
       }
       case CommentParentType.Answer: {
         const answer = await AnswerModel.findById(parentId)
@@ -53,8 +58,11 @@ export class CommentResolver {
           author: new ObjectId(loggedUser.id),
           parentId: answer._id,
         })
-
-        return comment
+        const populatedComment = await comment.populate({
+          path: 'author',
+          model: UserModel,
+        })
+        return populatedComment
       }
       default:
         throw new UserInputError('Invalid CommentParentType!')
@@ -112,8 +120,13 @@ export class CommentResolver {
 
     comment.body = body
     comment.updatedAt = new Date()
-    const updated = await comment.save()
+    await comment.save()
 
-    return updated
+    const populatedComment = await comment.populate({
+      path: 'author',
+      model: UserModel,
+    })
+
+    return populatedComment
   }
 }
