@@ -1,4 +1,4 @@
-import { AuthenticationError, UserInputError } from 'apollo-server'
+import { UserInputError, ForbiddenError } from 'apollo-server'
 import {
   Arg,
   Ctx,
@@ -120,7 +120,7 @@ export class AnswerResolver {
       }
 
       if (targetAnswer.author.toString() !== user._id.toString()) {
-        throw new AuthenticationError('Access is denied.')
+        throw new ForbiddenError("You can not delete other's answer.")
       }
 
       await targetAnswer.delete()
@@ -159,7 +159,7 @@ export class AnswerResolver {
       }
 
       if (answer.author.toString() !== loggedUser.id.toString()) {
-        throw new AuthenticationError('Access is denied.')
+        throw new ForbiddenError("You can not edit other's answer.")
       }
       answer.body = body
       answer.updatedAt = new Date()
@@ -222,7 +222,7 @@ export class AnswerResolver {
         )
       }
 
-      if (answer._id.toString() === user._id.toString()) {
+      if (answer.author.toString() === user._id.toString()) {
         throw new UserInputError("You can't vote for your own post.")
       }
 
