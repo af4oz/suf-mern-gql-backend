@@ -12,7 +12,7 @@ import { Tag, TagModel } from '../entities/Tag'
 
 @ArgsType()
 class GetAllTagsArgs {
-  @Field((type) => Int)
+  @Field((type) => Int, { defaultValue: 0 })
   limit: number
 
   @Field((type) => ID, { nullable: true })
@@ -23,7 +23,7 @@ class GetAllTagsArgs {
 }
 @ObjectType()
 class GetAllTagsResult {
-  @Field((type) => [Tag], { nullable: 'items' })
+  @Field((type) => [Tag])
   tags: Tag[]
 
   @Field()

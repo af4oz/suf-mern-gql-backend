@@ -45,7 +45,7 @@ scalar DateTime
 
 type GetAllTagsResult {
   nextCursor: String!
-  tags: [Tag]!
+  tags: [Tag!]!
 }
 
 type LoggedUser {
@@ -84,7 +84,7 @@ type PaginatedQuesList {
 }
 
 type Query {
-  getAllTags(cursor: ID, filterBySearch: String, limit: Int!): [Tag!]!
+  getAllTags(cursor: ID, filterBySearch: String, limit: Int!): GetAllTagsResult!
   getAllUsers: [User!]!
   getQuestions(filterBySearch: String, filterByTag: String, limit: Int!, page: Int!, sortBy: QuestionSortBy!): PaginatedQuesList!
   getUser(username: String!): User!
