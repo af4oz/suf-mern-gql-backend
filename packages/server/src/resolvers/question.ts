@@ -1,4 +1,4 @@
-import { AuthenticationError, UserInputError } from 'apollo-server'
+import { UserInputError, ForbiddenError } from 'apollo-server'
 import { PopulateOptions } from 'mongoose'
 import {
   Arg,
@@ -9,13 +9,18 @@ import {
   FieldResolver,
   Float,
   ID,
-  Int,
   Mutation,
+  ObjectType,
   Query,
   Resolver,
   Root,
 } from 'type-graphql'
-import { PaginatedQuesList, SortByType, VoteType } from '../entities/common'
+import {
+  BasicPaginationArgs,
+  NextPrevPage,
+  QuestionSortBy,
+  VoteType,
+} from '../entities/common'
 import { AnswerModel } from '../entities/Answer'
 import { CommentModel } from '../entities/Comment'
 import { Question, QuestionModel } from '../entities/Question'
@@ -28,6 +33,8 @@ import getUser from '../utils/getUser'
 import errorHandler from '../utils/errorHandler'
 import { paginateResults } from '../utils/helperFuncs'
 import { questionValidator } from '../utils/validators'
+import { TagModel } from '../entities/Tag'
+import { getChangedTags } from '../utils'
 
 let popQuestion: PopulateOptions[] = [
   {
@@ -67,21 +74,27 @@ let popQuestion: PopulateOptions[] = [
 ]
 
 @ArgsType()
-class GetQuestionsArgs {
-  @Field((type) => SortByType)
-  sortBy: SortByType
-
-  @Field((type) => Int)
-  page: number
-
-  @Field((type) => Int)
-  limit: number
+class GetQuestionsArgs extends BasicPaginationArgs {
+  @Field((type) => QuestionSortBy)
+  sortBy: QuestionSortBy
 
   @Field({ nullable: true })
   filterByTag?: string
 
   @Field({ nullable: true })
   filterBySearch?: string
+}
+
+@ObjectType()
+export class PaginatedQuesList {
+  @Field((type) => [Question], { nullable: 'items' })
+  questions: Question[]
+
+  @Field({ nullable: true })
+  next?: NextPrevPage
+
+  @Field({ nullable: true })
+  previous?: NextPrevPage
 }
 
 @Resolver((of) => Question)
@@ -126,16 +139,16 @@ export class QuestionResolver {
 
     let sortQuery
     switch (sortBy) {
-      case SortByType.VOTES:
+      case QuestionSortBy.VOTES:
         sortQuery = { points: -1 }
         break
-      case SortByType.VIEWS:
+      case QuestionSortBy.VIEWS:
         sortQuery = { views: -1 }
         break
-      case SortByType.NEWEST:
+      case QuestionSortBy.NEWEST:
         sortQuery = { createdAt: -1 }
         break
-      case SortByType.OLDEST:
+      case QuestionSortBy.OLDEST:
         sortQuery = { createdAt: 1 }
         break
       default:
@@ -236,6 +249,30 @@ export class QuestionResolver {
         comments: [],
       })
       const savedQues = await newQuestion.save()
+
+      // update tags collection
+      await Promise.all(
+        tags.map(async (tag) => {
+          await TagModel.updateOne(
+            {
+              name: {
+                $regex: new RegExp(tag, 'i'),
+              },
+            },
+            {
+              $setOnInsert: {
+                name: tag,
+              },
+              $inc: {
+                questionCount: 1,
+              },
+            },
+            {
+              upsert: true,
+            }
+          )
+        })
+      )
       const populatedQues = await savedQues.populate('author', 'username')
 
       return populatedQues
@@ -263,9 +300,29 @@ export class QuestionResolver {
         throw new UserInputError(`Question with ID: ${quesId} does not exist!`)
       }
       if (question.author.toString() !== user._id.toString()) {
-        throw new AuthenticationError('Access is denied.')
+        throw new ForbiddenError("You can not delete other's question!")
       }
 
+      // update tags collection
+      await Promise.all(
+        question.tags.map(async (tag) => {
+          await TagModel.updateOne(
+            {
+              questionCount: {
+                $gt: 0,
+              },
+              name: {
+                $regex: new RegExp(tag, 'i'),
+              },
+            },
+            {
+              $inc: {
+                questionCount: -1,
+              },
+            }
+          )
+        })
+      )
       await question.delete()
 
       return quesId
@@ -301,14 +358,63 @@ export class QuestionResolver {
         throw new UserInputError(`Question with ID: ${quesId} does not exist!`)
       }
       if (question.author.toString() !== loggedUser.id.toString()) {
-        throw new AuthenticationError('Access is denied.')
+        throw new ForbiddenError("You can not edit other's question!")
       }
 
+      const changedTags = getChangedTags(question.tags, tags)
+
+      await Promise.all(
+        changedTags.added.map(async (tag) => {
+          await TagModel.updateOne(
+            {
+              name: {
+                $regex: tag,
+                $options: 'i',
+              },
+            },
+            {
+              $setOnInsert: {
+                name: tag,
+              },
+              $inc: {
+                questionCount: 1,
+              },
+            },
+            {
+              upsert: true,
+            }
+          )
+        })
+      )
+      await Promise.all(
+        changedTags.removed.map(async (tag) => {
+          await TagModel.updateOne(
+            {
+              questionCount: {
+                $gt: 0,
+              },
+              name: {
+                $regex: tag,
+                $options: 'i',
+              },
+            },
+            {
+              $setOnInsert: {
+                name: tag,
+              },
+              $inc: {
+                questionCount: -1,
+              },
+            }
+          )
+        })
+      )
       const updatedQues = await QuestionModel.findByIdAndUpdate(
         quesId,
         updatedQuesObj,
         { new: true }
-      ).populate(popQuestion)
+      ).populate(popQuestion) // Todo: donot populate, just send the question data
+
       if (!updatedQues) {
         throw new Error(`something went wrong!`)
       }
@@ -340,7 +446,7 @@ export class QuestionResolver {
       }
 
       if (question.author.toString() === user._id.toString()) {
-        throw new UserInputError("You can't vote for your own post.")
+        throw new ForbiddenError("You can't vote for your own post.")
       }
 
       const quesAuthor = await UserModel.findById(question.author)
@@ -400,7 +506,7 @@ export class QuestionResolver {
       await quesAuthor.save()
       await question.save()
 
-      const populatedQues = await question.populate(popQuestion)
+      const populatedQues = await question.populate(popQuestion) // Todo: donot populate, just send the question data
 
       return populatedQues
     } catch (err) {

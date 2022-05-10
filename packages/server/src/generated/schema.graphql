@@ -43,6 +43,11 @@ A date-time string at UTC, such as 2007-12-03T10:15:30Z, compliant with the `dat
 """
 scalar DateTime
 
+type GetAllTagsResult {
+  nextCursor: String!
+  tags: [Tag]!
+}
+
 type LoggedUser {
   _id: ID!
   role: String!
@@ -79,9 +84,9 @@ type PaginatedQuesList {
 }
 
 type Query {
-  getAllTags: [Tag!]!
+  getAllTags(cursor: ID, filterBySearch: String, limit: Int!): [Tag!]!
   getAllUsers: [User!]!
-  getQuestions(filterBySearch: String, filterByTag: String, limit: Int!, page: Int!, sortBy: SortByType!): PaginatedQuesList!
+  getQuestions(filterBySearch: String, filterByTag: String, limit: Int!, page: Int!, sortBy: QuestionSortBy!): PaginatedQuesList!
   getUser(username: String!): User!
   viewQuestion(quesId: ID!): Question!
   whoami: User!
@@ -105,6 +110,14 @@ type Question {
   voted: VoteType
 }
 
+enum QuestionSortBy {
+  HOT
+  NEWEST
+  OLDEST
+  VIEWS
+  VOTES
+}
+
 type QuestionVotes {
   quesId: ID!
   userId: ID!
@@ -123,17 +136,10 @@ enum RoleType {
   USER
 }
 
-enum SortByType {
-  HOT
-  NEWEST
-  OLDEST
-  VIEWS
-  VOTES
-}
-
 type Tag {
-  count: Float!
-  tagName: String!
+  _id: ID!
+  name: String!
+  questionCount: Int!
 }
 
 type User {

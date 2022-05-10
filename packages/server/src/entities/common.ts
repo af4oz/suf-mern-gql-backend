@@ -1,5 +1,11 @@
-import { Field, ID, ObjectType, registerEnumType } from 'type-graphql'
-import { Question } from './Question'
+import {
+  ArgsType,
+  Field,
+  ID,
+  Int,
+  ObjectType,
+  registerEnumType,
+} from 'type-graphql'
 
 export enum RoleType {
   USER = 'user',
@@ -17,14 +23,14 @@ registerEnumType(VoteType, {
   name: 'VoteType',
 })
 
-export enum SortByType {
+export enum QuestionSortBy {
   HOT,
   VOTES,
   VIEWS,
   NEWEST,
   OLDEST,
 }
-registerEnumType(SortByType, { name: 'SortByType' })
+registerEnumType(QuestionSortBy, { name: 'QuestionSortBy' })
 
 @ObjectType()
 export class LoggedUser {
@@ -39,15 +45,6 @@ export class LoggedUser {
 
   @Field()
   role: RoleType
-}
-
-@ObjectType()
-export class Tag {
-  @Field()
-  tagName: string
-
-  @Field()
-  count: number
 }
 
 @ObjectType()
@@ -66,14 +63,12 @@ export class NextPrevPage {
   @Field()
   limit: number
 }
-@ObjectType()
-export class PaginatedQuesList {
-  @Field((type) => [Question], { nullable: 'items' })
-  questions: Question[]
 
-  @Field({ nullable: true })
-  next?: NextPrevPage
+@ArgsType()
+export class BasicPaginationArgs {
+  @Field((type) => Int)
+  page: number
 
-  @Field({ nullable: true })
-  previous?: NextPrevPage
+  @Field((type) => Int)
+  limit: number
 }

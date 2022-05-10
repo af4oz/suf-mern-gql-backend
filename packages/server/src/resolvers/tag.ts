@@ -1,30 +1,70 @@
-import { Query, Resolver } from 'type-graphql'
-import { Tag } from '../entities/common'
-import { QuestionModel } from '../entities/Question'
-import errorHandler from '../utils/errorHandler'
+import {
+  Args,
+  ArgsType,
+  Field,
+  ID,
+  ObjectType,
+  Int,
+  Query,
+  Resolver,
+} from 'type-graphql'
+import { Tag, TagModel } from '../entities/Tag'
 
+@ArgsType()
+class GetAllTagsArgs {
+  @Field((type) => Int)
+  limit: number
+
+  @Field((type) => ID, { nullable: true })
+  cursor: string
+
+  @Field({ nullable: true })
+  filterBySearch?: string
+}
+@ObjectType()
+class GetAllTagsResult {
+  @Field((type) => [Tag], { nullable: 'items' })
+  tags: Tag[]
+
+  @Field()
+  nextCursor: string
+}
 @Resolver()
 export class TagResolver {
-  @Query((returns) => [Tag])
-  async getAllTags(): Promise<Tag[]> {
-    try {
-      const tagsFromQues = await QuestionModel.find({}).select('tags')
-      const tagsArray = tagsFromQues.map((t) => t.tags).flat()
+  @Query((returns) => GetAllTagsResult)
+  async getAllTags(
+    @Args() { limit, cursor, filterBySearch }: GetAllTagsArgs
+  ): Promise<GetAllTagsResult> {
+    const _limit = Number(limit) || 10
 
-      let result: Tag[] = []
-      tagsArray.forEach((tag) => {
-        const found = result.find((r) => r.tagName === tag)
-
-        if (!found) {
-          result.push({ tagName: tag, count: 1 })
-        } else {
-          result[result.indexOf(found)].count++
-        }
+    let findQuery = {}
+    if (filterBySearch) {
+      findQuery = {
+        name: {
+          $regex: filterBySearch,
+          $options: 'i',
+        },
+      }
+    }
+    const tags = await TagModel.find({
+      ...(cursor
+        ? {
+            _id: {
+              $gt: cursor,
+            },
+          }
+        : {}),
+      ...findQuery,
+    })
+      .sort({
+        _id: -1,
       })
+      .limit(_limit)
 
-      return result.sort((a, b) => b.count - a.count)
-    } catch (err) {
-      throw new Error(errorHandler(err))
+    return {
+      tags,
+      nextCursor:
+        tags.length && tags.length === limit ? tags[tags.length - 1].id : '',
     }
   }
 }
