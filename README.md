@@ -1,6 +1,11 @@
-# Stack Underflow | SOF Clone | MERN-GraphQL
+# Stack Underflow | Backend
 
-**Update 1:** This project is a fork from [amand33p](https://github.com/amand33p). I have been making some efforts to replace `material-ui` with `twin.macro` just to learn react, CSS and make reusable components myself. It's been a great journey so far and I learned a lot from `material-ui`, they did solid work with their lib and also used a tonne of `useRef` 😅 to opt-out of react default rendering behaviour.
+> Here's [frontend repo](https://github.com/zkindest/suf-mern-gql-frontend)
+
+**TODO:**
+1. Use transactions in mutation resolvers which involves multiple mutating db requests.
+
+**Update 1:** Replace `material-ui` with `twin.macro` just to practice react, CSS and make reusable components. It's hard to get it all correct (flexibility, performance etc)
 
 **Update 2:** Migrated Server codebase to **Typescript** using `type-graphql`, `typegoose`.
 
@@ -12,11 +17,7 @@
 
 **Update 6: (4/05/2022)** Moving to Hybrid(poly repo + mono repo) structure to reduce code,build management issues, also I am not using tools like Nx,turborepo,bazel which would mitigate those issues.
 
-## Future
-
-1. <strike>Automate Graphql Testing</strike> ✔️
-2. <strike>Replace constant growing arrays in schema as mongoose document sizelimit is **16MB** </strike>. ✔️
-3. Use transactions in mutation resolvers which involves multiple mutating db requests.
+**Update 7:** Improve existing data model.
 
 ## Usage
 
@@ -38,7 +39,6 @@ yarn install
 yarn server dev
 ```
 
-Fullstack [Stack Overflow](https://stackoverflow.com/) clone (QnA site) made with MERN + GraphQL
 
 ## Built using
 
@@ -52,21 +52,3 @@ Fullstack [Stack Overflow](https://stackoverflow.com/) clone (QnA site) made wit
 - [Bcrypt.js](https://www.npmjs.com/package/bcryptjs) - For hashing passwords
 - [Mongoose Unique Validator](https://www.npmjs.com/package/mongoose-unique-validator) - Plugin for better error handling of unique fields within Mongoose schema.
 - [Dotenv](https://www.npmjs.com/package/dotenv) - To load environment variables from a .env file
-
-## Features
-
-- Authentication (login/register with username-password)
-- CRUD questions, answers & comments
-- Upvote/downvote questions & answers
-- Tags for organising questions
-- Page views - A view is registered whenever the question page is opened
-- Pages for added tags, registered users & more
-- Sorting of questions on basis of hot, votes, views, newest & oldest
-- Search questions over the server on basis of question title & body
-- Pagination of posts in the form of "Load More" button
-- Error management to prevent app crashes
-- Toast notifications for actions: adding questions, deleting comments etc.
-- Loading spinners for relevant fetching processes
-- Formatted dates for adding/updating questions/answers/comments
-- <strike>Dark mode toggle w/ local storage save</strike>
-- Proper responsive UI for all screens
