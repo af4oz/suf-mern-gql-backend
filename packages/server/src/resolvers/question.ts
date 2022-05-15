@@ -17,7 +17,6 @@ import {
 } from 'type-graphql'
 import {
   BasicPaginationArgs,
-  NextPrevPage,
   QuestionSortBy,
   VoteType,
 } from '../entities/common'
@@ -31,7 +30,6 @@ import { TContext } from '../types'
 import authChecker from '../utils/authChecker'
 import getUser from '../utils/getUser'
 import errorHandler from '../utils/errorHandler'
-import { paginateResults } from '../utils/helperFuncs'
 import { questionValidator } from '../utils/validators'
 import { TagModel } from '../entities/Tag'
 import { getChangedTags } from '../utils'
@@ -75,8 +73,8 @@ let popQuestion: PopulateOptions[] = [
 
 @ArgsType()
 class GetQuestionsArgs extends BasicPaginationArgs {
-  @Field((type) => QuestionSortBy)
-  sortBy: QuestionSortBy
+  @Field((type) => QuestionSortBy, { nullable: true })
+  sortBy?: QuestionSortBy
 
   @Field({ nullable: true })
   filterByTag?: string
@@ -90,11 +88,14 @@ export class PaginatedQuesList {
   @Field((type) => [Question], { nullable: 'items' })
   questions: Question[]
 
-  @Field({ nullable: true })
-  next?: NextPrevPage
+  @Field()
+  totalCount: number
 
-  @Field({ nullable: true })
-  previous?: NextPrevPage
+  @Field()
+  currentPage: number
+
+  @Field()
+  pageSize: number
 }
 
 @Resolver((of) => Question)
@@ -132,7 +133,13 @@ export class QuestionResolver {
   @Query(() => PaginatedQuesList)
   async getQuestions(
     @Args()
-    { sortBy, page, limit, filterByTag, filterBySearch }: GetQuestionsArgs
+    {
+      sortBy = QuestionSortBy.NEWEST,
+      page,
+      limit,
+      filterByTag,
+      filterBySearch,
+    }: GetQuestionsArgs
   ): Promise<PaginatedQuesList> {
     const _page = Number(page)
     const _limit = Number(limit)
@@ -179,18 +186,18 @@ export class QuestionResolver {
 
     try {
       const quesCount = await QuestionModel.find(findQuery).countDocuments()
-      const paginated = paginateResults(_page, _limit, quesCount)
       const questions = await QuestionModel.find(findQuery)
         .sort(sortQuery)
         .limit(_limit)
-        .skip(paginated.startIndex)
+        .skip((_page - 1) * _limit)
         .populate('author', 'username')
         .populate('answerCount')
 
       const paginatedQues = {
-        previous: paginated.results.previous,
+        totalCount: quesCount,
+        currentPage: _page,
+        pageSize: _limit,
         questions,
-        next: paginated.results.next,
       }
 
       return paginatedQues

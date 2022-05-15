@@ -12,7 +12,7 @@ import { Tag, TagModel } from '../entities/Tag'
 
 @ArgsType()
 class GetAllTagsArgs {
-  @Field((type) => Int, { defaultValue: 0 })
+  @Field((type) => Int, { defaultValue: 10 })
   limit: number
 
   @Field((type) => ID, { nullable: true })

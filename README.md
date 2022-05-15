@@ -3,6 +3,7 @@
 > Here's [frontend repo](https://github.com/zkindest/suf-mern-gql-frontend)
 
 **TODO:**
+
 1. Use transactions in mutation resolvers which involves multiple mutating db requests.
 
 **Update 1:** Replace `material-ui` with `twin.macro` just to practice react, CSS and make reusable components. It's hard to get it all correct (flexibility, performance etc)
@@ -21,24 +22,14 @@
 
 ## Usage
 
-#### Env variable:
-
-Create a .env file in server directory and add the following:
-
-```
-MONGODB_URI = "Your Mongo URI"
-PORT = 4000
-JWT_SECRET = "Your JWT secret"
-
-```
-
 #### Server:
 
-```
+Be sure check `env.example` and provide required `.env` files.
+
+```sh
 yarn install
 yarn server dev
 ```
-
 
 ## Built using
 

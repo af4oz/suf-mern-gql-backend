@@ -2,7 +2,7 @@ import { PORT } from './utils/config'
 import { ApolloServer } from 'apollo-server'
 import { createSchema } from './createSchema'
 import connectToDB from './db'
-import { IS_PROD } from './constants'
+import { FRONTEND_URL, IS_PROD } from './constants'
 import {
   ApolloServerPluginLandingPageGraphQLPlayground,
   ApolloServerPluginLandingPageProductionDefault,
@@ -19,7 +19,10 @@ async function bootstrap() {
     const server = new ApolloServer({
       schema,
       context: ({ req }) => ({ req }),
-
+      cors: {
+        origin: FRONTEND_URL,
+        credentials: true,
+      },
       plugins: [
         IS_PROD
           ? ApolloServerPluginLandingPageProductionDefault()

@@ -78,15 +78,16 @@ type NextPrevPage {
 }
 
 type PaginatedQuesList {
-  next: NextPrevPage
-  previous: NextPrevPage
+  currentPage: Float!
+  pageSize: Float!
   questions: [Question]!
+  totalCount: Float!
 }
 
 type Query {
-  getAllTags(cursor: ID, filterBySearch: String, limit: Int!): GetAllTagsResult!
+  getAllTags(cursor: ID, filterBySearch: String, limit: Int = 10): GetAllTagsResult!
   getAllUsers: [User!]!
-  getQuestions(filterBySearch: String, filterByTag: String, limit: Int!, page: Int!, sortBy: QuestionSortBy!): PaginatedQuesList!
+  getQuestions(filterBySearch: String, filterByTag: String, limit: Int!, page: Int!, sortBy: QuestionSortBy): PaginatedQuesList!
   getUser(username: String!): User!
   viewQuestion(quesId: ID!): Question!
   whoami: User!
