@@ -1,5 +1,9 @@
 export const IS_PROD = process.env.NODE_ENV === 'production'
 
-export const FRONTEND_URLS = JSON.parse(
-  process.env.FRONTEND_URLS || '[]'
-) as string[]
+export const FRONTEND_URLS = IS_PROD
+  ? [
+      'https://suf-mern-gql-frontend.vercel.app',
+      'https://suf-mern-gql-frontend-zkindest.vercel.app',
+      'https://suf-mern-gql-frontend-git-main-zkindest.vercel.app',
+    ]
+  : ['http://localhost:3000']
