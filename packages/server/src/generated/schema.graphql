@@ -81,6 +81,9 @@ type PaginatedQuesList {
   currentPage: Float!
   pageSize: Float!
   questions: [Question]!
+  search: String
+  sortBy: QuestionSortBy!
+  tag: String
   totalCount: Float!
 }
 

@@ -96,6 +96,15 @@ export class PaginatedQuesList {
 
   @Field()
   pageSize: number
+
+  @Field({ nullable: true })
+  tag?: string
+
+  @Field((type) => QuestionSortBy)
+  sortBy: QuestionSortBy
+
+  @Field({ nullable: true })
+  search?: string
 }
 
 @Resolver((of) => Question)
@@ -198,6 +207,9 @@ export class QuestionResolver {
         currentPage: _page,
         pageSize: _limit,
         questions,
+        tag: filterByTag,
+        search: filterBySearch,
+        sortBy,
       }
 
       return paginatedQues
