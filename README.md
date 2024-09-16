@@ -4,7 +4,7 @@
 
 **TODO:**
 
-1. Use transactions in mutation resolvers which involves multiple mutating db requests.
+1. Use transactions in mutation resolvers that has multiple mutating db requests.
 
 **Update 1:** Replace `material-ui` with `twin.macro` just to practice react, CSS and make reusable components. It's hard to get it all correct (flexibility, performance etc)
 
