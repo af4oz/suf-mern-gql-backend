@@ -1,24 +1,20 @@
 # Stack Underflow | Backend
 
-> Here's [frontend repo](https://github.com/zkindest/suf-mern-gql-frontend)
+> Here's [frontend repo](https://github.com/af4oz/suf-mern-gql-frontend)
 
 **TODO:**
 
-1. Use transactions in mutation resolvers that has multiple mutating db requests.
+1. Use transactions in mutation resolvers that involve multiple mutating database requests.
 
-**Update 1:** Replace `material-ui` with `twin.macro` just to practice react, CSS and make reusable components. It's hard to get it all correct (flexibility, performance etc)
+**Update 1:** Migrated Server codebase to **Typescript** using `type-graphql`, `typegoose`.
 
-**Update 2:** Migrated Server codebase to **Typescript** using `type-graphql`, `typegoose`.
+**Update 2: (27/10/2021)** Automated Graphql Testing using `jest`, `ts-jest`, `isomorphic-fetch`.
 
-**Update 3:** Migrated Client codebase to **Typescript** using `graphql`, `@graphql-codegen` 💚 ,`definitelyTyped` libs.
+**Update 3: (29/10/2021)** Replaced constant growing arrays with mongoose virtuals.
 
-**Update 4: (27/10/2021)** Automated Graphql Testing using `jest`, `ts-jest`, `isomorphic-fetch`.
+**Update 4: (4/05/2022)** Moving to Hybrid(poly repo + mono repo) structure to reduce code,build management issues, also I am not using tools like Nx,turborepo,bazel which would mitigate those issues.
 
-**Update 5: (29/10/2021)** Replaced constant growing arrays with mongoose virtuals.
-
-**Update 6: (4/05/2022)** Moving to Hybrid(poly repo + mono repo) structure to reduce code,build management issues, also I am not using tools like Nx,turborepo,bazel which would mitigate those issues.
-
-**Update 7:** Improve existing data model.
+**Update 5:** Improve code and data models.
 
 ## Usage
 
