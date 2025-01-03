@@ -28,7 +28,7 @@ Be sure check `env.example` and provide required `.env` files.
 
 ```sh
 yarn install
-yarn server dev
+yarn server start:dev
 ```
 
 ## Built using
