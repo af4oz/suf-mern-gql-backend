@@ -9,35 +9,29 @@ import {
 } from 'apollo-server-core'
 
 async function bootstrap() {
-  try {
-    await connectToDB()
+  await connectToDB()
 
-    // Create GraphQL server
-    const schema = await createSchema()
+  // Create GraphQL server
+  const schema = await createSchema()
 
-    // Create GraphQL server
-    const server = new ApolloServer({
-      schema,
-      context: ({ req }) => ({ req }),
-      cors: {
-        origin: FRONTEND_URLS,
-        credentials: true,
-      },
-      plugins: [
-        IS_PROD
-          ? ApolloServerPluginLandingPageProductionDefault()
-          : ApolloServerPluginLandingPageGraphQLPlayground(),
-      ],
-    })
+  // Create GraphQL server
+  const server = new ApolloServer({
+    schema,
+    context: ({ req }) => ({ req }),
+    cors: {
+      origin: FRONTEND_URLS,
+      credentials: true,
+    },
+    plugins: [
+      IS_PROD
+        ? ApolloServerPluginLandingPageProductionDefault()
+        : ApolloServerPluginLandingPageGraphQLPlayground(),
+    ],
+  })
 
-    // Start the server
-    const { url } = await server.listen(PORT)
-    console.log(
-      `Server is running, GraphQL Playground available at ${url} and port: ${PORT}`
-    )
-  } catch (err) {
-    console.error(err)
-  }
+  server.listen({ port: PORT }).then(({ url, port }) => {
+    console.log(`🚀 Server ready at ${url}${port ? 'on port ' + port : ''}`)
+  })
 }
 
 bootstrap()
