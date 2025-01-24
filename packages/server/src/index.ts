@@ -30,7 +30,7 @@ async function bootstrap() {
   })
 
   server.listen({ port: PORT }).then(({ url, port }) => {
-    console.log(`🚀 Server ready at ${url}${port ? 'on port ' + port : ''}`)
+    console.log(`🚀 Server ready at ${url}`)
   })
 }
 
