@@ -1,18 +1,32 @@
 {
   "$schema": "https://codesandbox.io/schemas/tasks.json",
-  // "setupTasks": ["yarn install", "yarn build"],
   "setupTasks": [
-    {
+    "yarn install",
+    "yarn server build",
+    "yarn server start:mongo",
+    "yarn server start:dev"
+  ],
+  "tasks": {
+    "install": {
       "name": "Install Dependencies",
-      "command": "yarn install"
+      "command": "yarn install",
+      "runAtStart": true
     },
-    {
+    "build": {
       "name": "Build App",
-      "command": "yarn build"
+      "command": "yarn server build"
     },
-    {
-      "name": "Start Docker Mongo &  Run Dev Server",
-      "command": "docker-compose up -d && yarn start:dev"
+    "start:mongo": {
+      "name": "Start MongoDB",
+      "command": "yarn server start:mongo"
+    },
+    "kill:mongo": {
+      "name": "Kill MongoDB Process",
+      "command": "yarn server kill:mongo"
+    },
+    "start:dev": {
+      "name": "Start Development Server",
+      "command": "yarn server start:dev"
     }
-  ]
+  }
 }
