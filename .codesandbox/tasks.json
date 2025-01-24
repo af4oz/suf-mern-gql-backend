@@ -13,14 +13,6 @@
       "name": "Build App",
       "command": "yarn server build"
     },
-    "start:mongo": {
-      "name": "Start MongoDB",
-      "command": "yarn server start:mongo"
-    },
-    "kill:mongo": {
-      "name": "Kill MongoDB Process",
-      "command": "yarn server kill:mongo"
-    },
     "start:dev": {
       "name": "Start Development Server",
       "command": "yarn server start:dev"
