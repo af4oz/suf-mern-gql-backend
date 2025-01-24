@@ -10,6 +10,7 @@
     "format": "prettier --write \"**/*.{js,jsx,json,md,ts,tsx}\"",
     "server": "yarn workspace @suf-backend/server",
     "start": "yarn server start",
+    "start:dev": "yarn server start:dev",
     "build": "yarn server build"
   },
   "keywords": [],

@@ -1,0 +1,19 @@
+{
+  "$schema": "https://codesandbox.io/schemas/tasks.json",
+  // "setupTasks": ["yarn install", "yarn build"],
+  "setupTasks": ["install-dependencies", "build-app", "start-dev"],
+  "tasks": {
+    "install-dependencies": {
+      "name": "Install Dependencies",
+      "command": "yarn install"
+    },
+    "build-app": {
+      "name": "Build App",
+      "command": "yarn build"
+    },
+    "start-dev": {
+      "name": "Start Docker Mongo &  Run Dev Server",
+      "command": "docker-compose up -d && yarn start:dev"
+    }
+  }
+}

@@ -6,6 +6,8 @@ This repository contains Back-end code(Apollo-Server, Mongodb, Graphql, etc) of 
 
 #### Server:
 
+[![Edit af4oz/suf-mern-gql-backend/main](https://codesandbox.io/static/img/play-codesandbox.svg)](https://codesandbox.io/p/github/af4oz/suf-mern-gql-backend/main?embed=1)
+
 Be sure to check [packages/server/env.example](./packages//server/env.example) and provide required `.env.dev/.env.test` files in [packages/server](./packages/server/) directory. Run the commands in below order from [project root directory](./).
 
 ```sh
