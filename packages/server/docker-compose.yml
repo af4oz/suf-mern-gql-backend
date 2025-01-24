@@ -11,7 +11,8 @@ services:
       MONGO_INITDB_ROOT_USERNAME: root
       MONGO_INITDB_ROOT_PASSWORD: example
 
-  # Un-Comment below if you need a Mongodb Web-UI based database viewer
+  # Un-Comment below if you need a Web-UI based database viewer for MongoDB
+  # Reference: https://hub.docker.com/_/mongo-express
   # mongo-express:
   #   image: mongo-express
   #   restart: always
