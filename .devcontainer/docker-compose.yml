@@ -1,8 +1,7 @@
 version: '3.8'
 services:
-  devcontainer:
-    image: mcr.microsoft.com/devcontainers/base:ubuntu
-    network_mode: service:db
+  app:
+    image: mcr.microsoft.com/devcontainers/javascript-node:18
     command: sleep infinity
   db:
     image: mongo
