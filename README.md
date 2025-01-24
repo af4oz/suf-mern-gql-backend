@@ -6,7 +6,7 @@ This repository contains Back-end code(Apollo-Server, Mongodb, Graphql, etc) of 
 
 #### Server:
 
-Be sure to check `packages/server/env.example` and provide required `.env.dev/.env.test` files in `packages/server` directory. Run the commands in below order from <ins>project root directory</ins>.
+Be sure to check [packages/server/env.example](./packages//server/env.example) and provide required `.env.dev/.env.test` files in [packages/server](./packages/server/) directory. Run the commands in below order from [project root directory](./).
 
 ```sh
 # Install Project deps and build the project
