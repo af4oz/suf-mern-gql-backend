@@ -1,11 +1,9 @@
 {
   "$schema": "https://codesandbox.io/schemas/tasks.json",
-  "setupTasks": [
-    // "yarn install",
-    // "yarn server build",
-    // "yarn server start:mongo",
-    // "yarn server start:dev"
-  ],
+  // These tasks will run in order when initializing your CodeSandbox project.
+  "setupTasks": [],
+
+  // These tasks can be run from CodeSandbox. Running one will open a log in the app.
   "tasks": {
     "install": {
       "name": "Install Dependencies",
