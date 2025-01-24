@@ -2,7 +2,6 @@ version: '3.8'
 services:
   app:
     image: mcr.microsoft.com/devcontainers/javascript-node:18
-    command: sleep infinity
   db:
     image: mongo
     restart: always
