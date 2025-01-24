@@ -9,8 +9,7 @@
   "tasks": {
     "install": {
       "name": "Install Dependencies",
-      "command": "yarn install",
-      "runAtStart": true
+      "command": "yarn install"
     },
     "build": {
       "name": "Build App",
