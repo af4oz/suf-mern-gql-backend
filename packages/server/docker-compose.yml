@@ -6,6 +6,8 @@ services:
     image: mongo
     restart: always
     ports:
+      # Access MongoDB via localhost:27017
+      # Full URL: mongodb://root:example@localhost:27017/
       - 27017:27017
     environment:
       MONGO_INITDB_ROOT_USERNAME: root

@@ -6,19 +6,29 @@ This repository contains Back-end code(Apollo-Server, Mongodb, Graphql, etc) of 
 
 #### Server:
 
-Be sure to check [packages/server/env.example](./packages//server/env.example) and provide required `.env.dev/.env.test` files in [packages/server](./packages/server/) directory. Run the commands in below order from [project root directory](./).
+**Please Read:** Be sure to check [packages/server/env.example](./packages//server/env.example) and add required `.env.dev or .env.test` files in [packages/server](./packages/server/) directory. Run the commands in below <ins>order</ins> from [project root directory](./).
+
+[![Edit af4oz/suf-mern-gql-backend/main](https://codesandbox.io/static/img/play-codesandbox.svg)](https://codesandbox.io/p/github/af4oz/suf-mern-gql-backend/main?embed=1)
 
 ```sh
-# Install Project deps and build the project
+# Install Dependencies
 yarn install
+
+# DON'T FORGET: Add the Environment variables
+
+# Build App
 yarn server build
 
-# Start a local instance of MongoDB
-docker-compose up # check `packages/server/docker-compose.yml` for more information
+# Start MongoDB
+yarn server start:mongo # check `packages/server/docker-compose.yml` for more information
 
-# Start the server
+# Start Development Server
 yarn server start:dev # development server runs with `.env.dev` variables
+# or
 yarn server start:test # test server runs with `.env.test` variables
+
+# Kill MongoDB Process
+yarn server kill:mongo
 ```
 
 ## Built using
