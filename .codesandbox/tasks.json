@@ -1,10 +1,10 @@
 {
   "$schema": "https://codesandbox.io/schemas/tasks.json",
   "setupTasks": [
-    "yarn install",
-    "yarn server build",
-    "yarn server start:mongo",
-    "yarn server start:dev"
+    // "yarn install",
+    // "yarn server build",
+    // "yarn server start:mongo",
+    // "yarn server start:dev"
   ],
   "tasks": {
     "install": {
