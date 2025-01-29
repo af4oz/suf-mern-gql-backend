@@ -7,11 +7,11 @@ services:
     restart: always
     ports:
       # Access MongoDB via localhost:27017
-      # Full URL: mongodb://root:example@localhost:27017/
+      # Full URL: mongodb://@mongo:27017/
       - 27017:27017
-    environment:
-      MONGO_INITDB_ROOT_USERNAME: root
-      MONGO_INITDB_ROOT_PASSWORD: example
+    # environment:
+    #   MONGO_INITDB_ROOT_USERNAME: root
+    #   MONGO_INITDB_ROOT_PASSWORD: example
 
   # Un-Comment below if you need a Web-UI based database viewer for MongoDB
   # Reference: https://hub.docker.com/_/mongo-express
