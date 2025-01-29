@@ -1,6 +1,6 @@
-FROM mcr.microsoft.com/devcontainers/javascript-node:1-18-bullseye
+FROM mcr.microsoft.com/devcontainers/javascript-node:1-20-bullseye
 
-# [Optional] Uncomment to install MongoDB command line tools - though mongo-database-tools not available on arm64
+# Install MongoDB command line tools - though mongo-database-tools not available on arm64
 # ARG MONGO_TOOLS_VERSION=6.0
 # RUN . /etc/os-release \
 #     && curl -sSL "https://www.mongodb.org/static/pgp/server-${MONGO_TOOLS_VERSION}.asc" | gpg --dearmor > /usr/share/keyrings/mongodb-archive-keyring.gpg \
