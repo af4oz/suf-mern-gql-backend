@@ -13,6 +13,8 @@
 
   // These tasks can be run from CodeSandbox. Running one will open a log in the app.
   "tasks": {
+    // NOTE: Below not working, something's broken from CodeSandbox side,
+    // Problem: It doesn't connect to db server properly 
     // "yarn start:dev": {
     //   "name": "Start Development server",
     //   "command": "yarn start:dev",
