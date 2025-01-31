@@ -6,9 +6,18 @@ This repository contains Back-end code(eg: Apollo-Server, Mongodb, Graphql, Type
 
 You can choose either **one** of the below setup procedures:
 
-#### Codesandbox Setup (**Recommended** 👍)
+#### Codesandbox Setup
 
-[![Edit af4oz/suf-mern-gql-backend/main](https://codesandbox.io/static/img/play-codesandbox.svg)](https://codesandbox.io/p/github/af4oz/suf-mern-gql-backend/main?embed=1)
+- **Step 1:**
+
+  [![Edit af4oz/suf-mern-gql-backend/main](https://codesandbox.io/static/img/play-codesandbox.svg)](https://codesandbox.io/p/github/af4oz/suf-mern-gql-backend/main?embed=1)
+
+  Wait for VM bootup process....
+
+- **Step 2:** Create a local branch on your codesandbox account.
+
+- **Step 3:**  
+  Run `yarn server start:dev`
 
 #### Local setup
 
