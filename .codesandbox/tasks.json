@@ -16,10 +16,13 @@
     "yarn start:dev": {
       "name": "Start Development server",
       "command": "yarn start:dev",
-      "runAtStart": true,
+      "runAtStart": false,
       "preview": {
         "port": 4000
       }
+      // "restartOn": {
+      //   "files": ["yarn.lock", "packages/server/*"]
+      // }
     }
   }
 }
