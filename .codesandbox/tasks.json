@@ -13,16 +13,16 @@
 
   // These tasks can be run from CodeSandbox. Running one will open a log in the app.
   "tasks": {
-    "yarn start:dev": {
-      "name": "Start Development server",
-      "command": "yarn start:dev",
-      "runAtStart": false,
-      "preview": {
-        "port": 4000
-      }
-      // "restartOn": {
-      //   "files": ["yarn.lock", "packages/server/*"]
-      // }
-    }
+    // "yarn start:dev": {
+    //   "name": "Start Development server",
+    //   "command": "yarn start:dev",
+    //   "runAtStart": false,
+    //   "preview": {
+    //     "port": 4000
+    //   }
+    //   // "restartOn": {
+    //   //   "files": ["yarn.lock", "packages/server/*"]
+    //   // }
+    // }
   }
 }
