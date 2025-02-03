@@ -1,6 +1,5 @@
 # Stack Underflow | Backend
-
-This repository contains Back-end code(eg: Apollo-Server, Mongodb, Graphql, Typegoose, Type-graphql,.etc) for one of my projects.
+An attempt at building a Backend for Stackoverflow clone using type-graphql, mongoose, and others.
 
 ## How to run this program?
 
